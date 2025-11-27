@@ -8,16 +8,12 @@ export function Experience() {
   return (
     <motion.section
       id="experience"
-      className="py-24"
+      className="mb-24 scroll-mt-24 lg:mb-36 lg:scroll-mt-24"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <h2 className="mb-10 flex items-center text-2xl font-bold text-white dark:text-white">
-        <span className="mr-2 font-mono text-xl text-accent">02.</span>
-        Where I&apos;ve Worked
-      </h2>
       <div className="group/list">
         {experiences.map((exp, index) => (
           <motion.div

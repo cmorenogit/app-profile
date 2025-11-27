@@ -8,7 +8,7 @@ export const featuredProjects: Project[] = [
     technologies: ["TypeScript", "LangChain", "Claude API", "Node.js"],
     githubUrl: "https://github.com/cmorenogit/agentes-hub",
     liveUrl: null,
-    image: "/images/projects/agentes-hub.png",
+    image: null,
   },
   {
     title: "prompt-hub",
@@ -17,7 +17,7 @@ export const featuredProjects: Project[] = [
     technologies: ["TypeScript", "Next.js", "PostgreSQL"],
     githubUrl: "https://github.com/cmorenogit/prompt-hub",
     liveUrl: null,
-    image: "/images/projects/prompt-hub.png",
+    image: null,
   },
   {
     title: "prism",
@@ -26,7 +26,7 @@ export const featuredProjects: Project[] = [
     technologies: ["TypeScript", "Shell", "Multiple LLM APIs"],
     githubUrl: "https://github.com/cmorenogit/prism",
     liveUrl: null,
-    image: "/images/projects/prism.png",
+    image: null,
   },
   {
     title: "Apprecio Rewards Platform",
@@ -35,6 +35,6 @@ export const featuredProjects: Project[] = [
     technologies: ["TypeScript", "NestJS", "React", "PostgreSQL", "AWS"],
     githubUrl: null,
     liveUrl: null,
-    image: "/images/projects/apprecio-platform.png",
+    image: null,
   },
 ];

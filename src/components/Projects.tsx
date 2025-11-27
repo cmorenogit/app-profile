@@ -9,18 +9,13 @@ export function Projects() {
   return (
     <motion.section
       id="projects"
-      className="py-24"
+      className="mb-24 scroll-mt-24 lg:mb-36 lg:scroll-mt-24"
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
     >
-      <h2 className="mb-10 flex items-center text-2xl font-bold text-white dark:text-white">
-        <span className="mr-2 font-mono text-xl text-accent">03.</span>
-        Featured Projects
-      </h2>
-
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="flex flex-col gap-4">
         {featuredProjects.map((project, index) => (
           <motion.div
             key={index}
@@ -34,12 +29,15 @@ export function Projects() {
         ))}
       </div>
 
-      <div className="mt-12 text-center">
+      <div className="mt-12">
         <Link
           href="/archive"
-          className="inline-block font-mono text-sm text-accent transition-colors hover:underline"
+          className="group inline-flex items-center font-medium text-white hover:text-accent"
         >
-          View Full Project Archive →
+          View Full Project Archive
+          <span className="ml-1 transition-transform group-hover:translate-x-1">
+            →
+          </span>
         </Link>
       </div>
     </motion.section>
