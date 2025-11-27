@@ -11,9 +11,4 @@ export const socialLinks: SocialLink[] = [
     url: "https://linkedin.com/in/morenodev",
     icon: "linkedin",
   },
-  {
-    name: "Email",
-    url: "mailto:morenodev@gmail.com",
-    icon: "mail",
-  },
 ];
