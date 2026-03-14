@@ -1,0 +1,29 @@
+---
+import { featuredProjects } from '@/data/projects';
+import ProjectCard from './ProjectCard.astro';
+---
+
+<section
+  id="projects"
+  class="fade-in mb-24 scroll-mt-24 lg:mb-36 lg:scroll-mt-24"
+>
+  <div class="flex flex-col gap-4">
+    {featuredProjects.map((project) => (
+      <div class="fade-in-item">
+        <ProjectCard project={project} />
+      </div>
+    ))}
+  </div>
+
+  <div class="mt-12">
+    <a
+      href="/archive"
+      class="group inline-flex items-center font-medium text-white hover:text-accent"
+    >
+      View Full Project Archive
+      <span class="ml-1 transition-transform group-hover:translate-x-1">
+        →
+      </span>
+    </a>
+  </div>
+</section>

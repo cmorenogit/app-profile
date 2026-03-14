@@ -1,0 +1,42 @@
+---
+import { archiveProjects } from '@/data/archive';
+
+const externalLinkSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg>';
+---
+
+<table class="w-full border-collapse text-left">
+  <thead class="sticky top-0 z-10 border-b border-navy-lightest bg-navy px-6 py-5">
+    <tr>
+      <th class="py-4 pr-8 text-sm font-semibold text-slate">Year</th>
+      <th class="py-4 pr-8 text-sm font-semibold text-slate">Project</th>
+      <th class="hidden py-4 pr-8 text-sm font-semibold text-slate lg:table-cell">Made at</th>
+      <th class="hidden py-4 pr-8 text-sm font-semibold text-slate sm:table-cell">Built with</th>
+      <th class="py-4 text-sm font-semibold text-slate">Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    {archiveProjects.map((project) => (
+      <tr class="border-b border-navy-lightest/50 transition-colors hover:bg-navy-light/50">
+        <td class="py-4 pr-8 font-mono text-sm text-slate">{project.year}</td>
+        <td class="py-4 pr-8 font-medium text-white">{project.title}</td>
+        <td class="hidden py-4 pr-8 text-sm text-slate lg:table-cell">{project.madeAt || "—"}</td>
+        <td class="hidden py-4 pr-8 text-sm text-slate sm:table-cell">{project.technologies.join(" · ")}</td>
+        <td class="py-4">
+          {project.url ? (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-slate transition-colors hover:text-accent"
+              aria-label={`View ${project.title}`}
+            >
+              <Fragment set:html={externalLinkSvg} />
+            </a>
+          ) : (
+            <span class="text-navy-lightest">—</span>
+          )}
+        </td>
+      </tr>
+    ))}
+  </tbody>
+</table>

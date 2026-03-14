@@ -1,0 +1,89 @@
+---
+import '@fontsource/geist-sans/400.css';
+import '@fontsource/geist-sans/500.css';
+import '@fontsource/geist-sans/700.css';
+import '@fontsource/geist-mono/400.css';
+import '@/styles/global.css';
+
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Cesar Moreno",
+  jobTitle: "Senior Full Stack Engineer",
+  url: "https://cesarmoreno.dev",
+  sameAs: [
+    "https://linkedin.com/in/morenodev",
+    "https://github.com/cmorenogit",
+  ],
+  worksFor: {
+    "@type": "Organization",
+    name: "Apprecio",
+  },
+  knowsAbout: [
+    "TypeScript",
+    "JavaScript",
+    "AI Agents",
+    "Microservices",
+    "Node.js",
+    "React",
+  ],
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="Full Stack Developer, AI Agents, TypeScript, Node.js, React, Microservices, LLM, Automation" />
+    <meta name="author" content="Cesar Moreno" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:url" content="https://cesarmoreno.dev" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content="Building AI agents that automate complex workflows" />
+    <meta property="og:site_name" content="Cesar Moreno" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content="Building AI agents that automate complex workflows" />
+
+    <!-- JSON-LD -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body class="antialiased">
+    <slot />
+
+    <script>
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              const items = entry.target.querySelectorAll('.fade-in-item');
+              items.forEach((item, i) => {
+                setTimeout(() => item.classList.add('visible'), i * 100);
+              });
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.1 }
+      );
+      document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+    </script>
+  </body>
+</html>

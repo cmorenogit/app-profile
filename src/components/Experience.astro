@@ -1,0 +1,17 @@
+---
+import { experiences } from '@/data/experience';
+import ExperienceItem from './ExperienceItem.astro';
+---
+
+<section
+  id="experience"
+  class="fade-in mb-24 scroll-mt-24 lg:mb-36 lg:scroll-mt-24"
+>
+  <div class="group/list">
+    {experiences.map((exp) => (
+      <div class="fade-in-item">
+        <ExperienceItem experience={exp} />
+      </div>
+    ))}
+  </div>
+</section>

@@ -17,10 +17,9 @@
   --color-accent-hover: #57e2c2;
 
   /* Fonts */
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: 'Geist Sans', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
 }
-
 
 body {
   background-color: var(--color-navy);
@@ -50,4 +49,27 @@ body {
 ::selection {
   background-color: var(--color-accent);
   color: var(--color-navy);
+}
+
+/* Fade-in animations */
+.fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-in-item {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-in-item.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
