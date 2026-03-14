@@ -3,7 +3,7 @@ import type { Experience } from "@/types";
 export const experiences: Experience[] = [
   {
     period: "2020 — Present",
-    title: "Senior Full Stack Developer",
+    title: "Full Stack Engineer · AI",
     company: "Apprecio",
     companyUrl: "https://apprecio.com",
     location: "Santiago, Chile (Remote)",
