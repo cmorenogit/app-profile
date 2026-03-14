@@ -5,19 +5,19 @@ const externalLinkSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="18" heig
 ---
 
 <table class="w-full border-collapse text-left">
-  <thead class="sticky top-0 z-10 border-b border-navy-lightest bg-navy px-6 py-5">
+  <thead class="sticky top-0 z-10 border-b border-accent/10 bg-navy/95 backdrop-blur-sm">
     <tr>
-      <th class="py-4 pr-8 text-sm font-semibold text-slate">Year</th>
-      <th class="py-4 pr-8 text-sm font-semibold text-slate">Project</th>
-      <th class="hidden py-4 pr-8 text-sm font-semibold text-slate lg:table-cell">Made at</th>
-      <th class="hidden py-4 pr-8 text-sm font-semibold text-slate sm:table-cell">Built with</th>
-      <th class="py-4 text-sm font-semibold text-slate">Link</th>
+      <th class="py-4 pr-8 text-xs font-bold uppercase tracking-wider text-slate">Year</th>
+      <th class="py-4 pr-8 text-xs font-bold uppercase tracking-wider text-slate">Project</th>
+      <th class="hidden py-4 pr-8 text-xs font-bold uppercase tracking-wider text-slate lg:table-cell">Made at</th>
+      <th class="hidden py-4 pr-8 text-xs font-bold uppercase tracking-wider text-slate sm:table-cell">Built with</th>
+      <th class="py-4 text-xs font-bold uppercase tracking-wider text-slate">Link</th>
     </tr>
   </thead>
   <tbody>
     {archiveProjects.map((project) => (
-      <tr class="border-b border-navy-lightest/50 transition-colors hover:bg-navy-light/50">
-        <td class="py-4 pr-8 font-mono text-sm text-slate">{project.year}</td>
+      <tr class="border-b border-navy-lightest/30 transition-[background-color] duration-200 ease-out hover:bg-navy-light/40">
+        <td class="py-4 pr-8 font-mono text-sm text-accent/70">{project.year}</td>
         <td class="py-4 pr-8 font-medium text-white">{project.title}</td>
         <td class="hidden py-4 pr-8 text-sm text-slate lg:table-cell">{project.madeAt || "—"}</td>
         <td class="hidden py-4 pr-8 text-sm text-slate sm:table-cell">{project.technologies.join(" · ")}</td>
@@ -27,7 +27,7 @@ const externalLinkSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="18" heig
               href={project.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="text-slate transition-colors hover:text-accent"
+              class="text-slate transition-colors duration-200 hover:text-accent"
               aria-label={`View ${project.title}`}
             >
               <Fragment set:html={externalLinkSvg} />

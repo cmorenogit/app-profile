@@ -3,21 +3,21 @@ import type { ArchiveProject } from "@/types";
 export const archiveProjects: ArchiveProject[] = [
   {
     year: 2025,
-    title: "agentes-hub",
+    title: "Agentes Hub",
     madeAt: "Personal",
     technologies: ["TypeScript", "LangChain", "Claude API"],
     url: "https://github.com/cmorenogit/agentes-hub",
   },
   {
     year: 2025,
-    title: "prompt-hub",
+    title: "Prompt Hub",
     madeAt: "Personal",
     technologies: ["TypeScript", "Next.js"],
     url: "https://github.com/cmorenogit/prompt-hub",
   },
   {
     year: 2025,
-    title: "prism",
+    title: "Prism",
     madeAt: "Personal",
     technologies: ["TypeScript", "Shell", "LLM APIs"],
     url: "https://github.com/cmorenogit/prism",

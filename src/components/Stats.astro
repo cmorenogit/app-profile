@@ -1,0 +1,18 @@
+---
+const stats = [
+  { number: '13+', label: 'Years Experience' },
+  { number: '6', label: 'Countries' },
+  { number: '40%', label: 'Delivery Boost' },
+];
+---
+
+<section class="fade-in mb-24 scroll-mt-24 lg:mb-36">
+  <div class="stats-grid">
+    {stats.map((stat) => (
+      <div class="stat-card">
+        <div class="stat-number">{stat.number}</div>
+        <div class="stat-label">{stat.label}</div>
+      </div>
+    ))}
+  </div>
+</section>

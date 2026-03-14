@@ -1,0 +1,695 @@
+  ℹ Page redirected within same domain:
+    From: https://brittanychiang.com
+    To:   https://brittanychiang.com/
+  ✓ Page loaded
+  ✓ Body content rendered
+  ✓ Hydration complete (8s)
+  ✓ Main content detected
+  ✓ Human behavior simulated
+  ✓ Page fully loaded and stable
+  ✓ Content validated: 4635 chars
+
+  Extracting design tokens...
+
+  ✓ Colors: 3 found
+  ✓ Typography: 22 styles
+  ✓ Spacing: 10 values
+  ✓ Border radius: 3 values
+  ⚠ Borders: 0 found
+  ⚠ Shadows: 0 found
+  ⚠ Buttons: 0 variants
+  ⚠ Inputs: 0 styles
+  ✓ Links: 4 styles
+  ✓ Breakpoints: 6 detected
+  ⚠ Icon systems: 0 detected
+  ✓ Frameworks: 3 detected
+
+  ✓ Hover/focus: 18 state colors found
+  ✓ Dark mode: +3 colors
+
+✔ Brand extraction complete!
+
+{
+  "url": "https://brittanychiang.com/",
+  "extractedAt": "2026-03-14T19:40:11.255Z",
+  "logo": null,
+  "favicons": [
+    {
+      "type": "icon",
+      "url": "https://brittanychiang.com/favicon/android-chrome-512x512.png",
+      "sizes": "512x192"
+    },
+    {
+      "type": "icon",
+      "url": "https://brittanychiang.com/favicon/android-chrome-192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "type": "apple-touch-icon",
+      "url": "https://brittanychiang.com/favicon/apple-touch-icon.png",
+      "sizes": "180x180"
+    },
+    {
+      "type": "icon",
+      "url": "https://brittanychiang.com/favicon/favicon-32x32.png",
+      "sizes": "32x32"
+    },
+    {
+      "type": "icon",
+      "url": "https://brittanychiang.com/favicon/favicon-16x16.png",
+      "sizes": "16x16"
+    },
+    {
+      "type": "apple-touch-icon",
+      "url": "https://brittanychiang.com/favicon/apple-touch-icon.png",
+      "sizes": "180x180"
+    },
+    {
+      "type": "og:image",
+      "url": "https://brittanychiang.com/og.png",
+      "sizes": null
+    },
+    {
+      "type": "favicon.ico",
+      "url": "https://brittanychiang.com/favicon.ico",
+      "sizes": null
+    }
+  ],
+  "colors": {
+    "semantic": {},
+    "palette": [
+      {
+        "color": "rgb(226, 232, 240)",
+        "normalized": "#e2e8f0",
+        "count": 145,
+        "confidence": "high",
+        "sources": [
+          "inline-flex"
+        ],
+        "lch": "lch(91.76% 4.6 263.5)",
+        "oklch": "oklch(92.88% 0.013 255.51)"
+      },
+      {
+        "color": "rgba(45, 212, 191, 0.1)",
+        "normalized": "#2dd4bf",
+        "count": 37,
+        "confidence": "high",
+        "sources": [],
+        "lch": "lch(76.92% 45.52 181.72)",
+        "oklch": "oklch(78.45% 0.133 181.91)"
+      },
+      {
+        "color": "rgb(100, 116, 139)",
+        "normalized": "#64748b",
+        "count": 12,
+        "confidence": "medium",
+        "sources": [
+          "z-10"
+        ],
+        "lch": "lch(48.34% 14.51 268.68)",
+        "oklch": "oklch(55.44% 0.041 257.42)"
+      },
+      {
+        "color": "rgb(98, 228, 210)",
+        "normalized": "#62e4d2",
+        "count": 1,
+        "confidence": "medium",
+        "sources": [
+          "hover/focus"
+        ]
+      },
+      {
+        "color": "rgb(104, 234, 214)",
+        "normalized": "#68ead6",
+        "count": 1,
+        "confidence": "medium",
+        "sources": [
+          "hover/focus"
+        ]
+      },
+      {
+        "color": "rgb(105, 234, 214)",
+        "normalized": "#69ead6",
+        "count": 1,
+        "confidence": "medium",
+        "sources": [
+          "hover/focus"
+        ]
+      },
+      {
+        "color": "rgb(103, 232, 213)",
+        "normalized": "#67e8d5",
+        "count": 1,
+        "confidence": "medium",
+        "sources": [
+          "hover/focus"
+        ]
+      }
+    ],
+    "cssVariables": {
+      "--tw-ring-color": {
+        "value": "rgba(59,130,246,.5)",
+        "lch": "lch(55.63% 66.77 285.23 / 0.5)",
+        "oklch": "oklch(62.31% 0.188 259.81 / 0.5)"
+      }
+    }
+  },
+  "typography": {
+    "styles": [
+      {
+        "context": "heading-1",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "48px (3.00rem)",
+        "weight": 700,
+        "lineHeight": "1.00",
+        "spacing": "-1.2px",
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "48px (3.00rem)",
+        "weight": 700,
+        "lineHeight": "1.00",
+        "spacing": "-1.2px",
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "heading-1",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "20px (1.25rem)",
+        "weight": 500,
+        "lineHeight": "1.40",
+        "spacing": "-0.5px",
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "heading-1",
+        "family": "Times",
+        "fallbacks": null,
+        "size": "16px (1.00rem)",
+        "weight": 400,
+        "lineHeight": "1.63",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "heading-1",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 400,
+        "lineHeight": "1.50",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 400,
+        "lineHeight": "1.63",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 500,
+        "lineHeight": "1.63",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "heading-1",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 500,
+        "lineHeight": "1.63",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 600,
+        "lineHeight": "1.25",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "heading-1",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 600,
+        "lineHeight": "1.25",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "button",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "16px (1.00rem)",
+        "weight": 500,
+        "lineHeight": "1.63",
+        "spacing": null,
+        "transform": null
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "14px (0.88rem)",
+        "weight": 700,
+        "lineHeight": "1.43",
+        "spacing": "1.4px",
+        "transform": "uppercase",
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "14px (0.88rem)",
+        "weight": 700,
+        "lineHeight": "1.43",
+        "spacing": "1.4px",
+        "transform": "uppercase",
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "14px (0.88rem)",
+        "weight": 400,
+        "lineHeight": "1.50",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "14px (0.88rem)",
+        "weight": 500,
+        "lineHeight": "1.43",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "14px (0.88rem)",
+        "weight": 500,
+        "lineHeight": "1.43",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "14px (0.88rem)",
+        "weight": 600,
+        "lineHeight": "1.71",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "12px (0.75rem)",
+        "weight": 700,
+        "lineHeight": "1.33",
+        "spacing": "1.2px",
+        "transform": "uppercase",
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "12px (0.75rem)",
+        "weight": 400,
+        "lineHeight": "1.33",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "link",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "12px (0.75rem)",
+        "weight": 400,
+        "lineHeight": "1.33",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "12px (0.75rem)",
+        "weight": 600,
+        "lineHeight": "1.33",
+        "spacing": "0.3px",
+        "transform": "uppercase",
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      },
+      {
+        "context": "caption",
+        "family": "__inter_20b187",
+        "fallbacks": "__inter_Fallback_20b187, ui-sans-serif, system-ui, -apple-system, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol, Noto Color Emoji",
+        "size": "12px (0.75rem)",
+        "weight": 500,
+        "lineHeight": "1.67",
+        "spacing": null,
+        "transform": null,
+        "fontFeatures": "\"cv02\", \"cv11\", \"ss03\""
+      }
+    ],
+    "sources": {
+      "googleFonts": [],
+      "adobeFonts": false,
+      "variableFonts": false
+    }
+  },
+  "spacing": {
+    "scaleType": "8px",
+    "commonValues": [
+      {
+        "px": "1px",
+        "rem": "0.06rem",
+        "count": 2,
+        "numericValue": 1
+      },
+      {
+        "px": "4px",
+        "rem": "0.25rem",
+        "count": 90,
+        "numericValue": 4
+      },
+      {
+        "px": "8px",
+        "rem": "0.50rem",
+        "count": 71,
+        "numericValue": 8
+      },
+      {
+        "px": "12px",
+        "rem": "0.75rem",
+        "count": 9,
+        "numericValue": 12
+      },
+      {
+        "px": "16px",
+        "rem": "1.00rem",
+        "count": 6,
+        "numericValue": 16
+      },
+      {
+        "px": "32px",
+        "rem": "2.00rem",
+        "count": 1,
+        "numericValue": 32
+      },
+      {
+        "px": "48px",
+        "rem": "3.00rem",
+        "count": 16,
+        "numericValue": 48
+      },
+      {
+        "px": "64px",
+        "rem": "4.00rem",
+        "count": 1,
+        "numericValue": 64
+      },
+      {
+        "px": "96px",
+        "rem": "6.00rem",
+        "count": 4,
+        "numericValue": 96
+      },
+      {
+        "px": "144px",
+        "rem": "9.00rem",
+        "count": 4,
+        "numericValue": 144
+      }
+    ]
+  },
+  "borderRadius": {
+    "values": [
+      {
+        "value": "4px",
+        "count": 23,
+        "elements": [
+          "a",
+          "span",
+          "img"
+        ],
+        "confidence": "high",
+        "numericValue": 4
+      },
+      {
+        "value": "6px",
+        "count": 14,
+        "elements": [
+          "div"
+        ],
+        "confidence": "high",
+        "numericValue": 6
+      },
+      {
+        "value": "9999px",
+        "count": 37,
+        "elements": [
+          "div"
+        ],
+        "confidence": "high",
+        "numericValue": 9999
+      }
+    ]
+  },
+  "borders": {
+    "combinations": [
+      {
+        "width": "2px",
+        "style": "solid",
+        "color": "rgba(226, 232, 240, 0.1)",
+        "count": 8,
+        "elements": [
+          "img"
+        ],
+        "confidence": "medium"
+      }
+    ]
+  },
+  "shadows": [],
+  "components": {
+    "buttons": [],
+    "inputs": {
+      "text": [],
+      "checkbox": [],
+      "radio": [],
+      "select": []
+    },
+    "links": [
+      {
+        "color": "rgb(15, 23, 42)",
+        "textDecoration": "none",
+        "fontWeight": "700",
+        "states": {
+          "default": {
+            "color": "rgb(15, 23, 42)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "inherit"
+          }
+        }
+      },
+      {
+        "color": "rgb(226, 232, 240)",
+        "textDecoration": "none",
+        "fontWeight": "700",
+        "states": {
+          "default": {
+            "color": "rgb(226, 232, 240)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "inherit"
+          }
+        }
+      },
+      {
+        "color": "rgb(148, 163, 184)",
+        "textDecoration": "none",
+        "fontWeight": "400",
+        "states": {
+          "default": {
+            "color": "rgb(148, 163, 184)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "rgb(226 232 240/var(--tw-text-opacity))"
+          }
+        }
+      },
+      {
+        "color": "rgb(203, 213, 225)",
+        "textDecoration": "none",
+        "fontWeight": "500",
+        "states": {
+          "default": {
+            "color": "rgb(203, 213, 225)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "inherit"
+          }
+        }
+      },
+      {
+        "color": "rgb(15, 23, 42)",
+        "textDecoration": "none",
+        "fontWeight": "700",
+        "states": {
+          "default": {
+            "color": "rgb(15, 23, 42)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "inherit"
+          }
+        },
+        "source": "dark-mode"
+      },
+      {
+        "color": "rgb(226, 232, 240)",
+        "textDecoration": "none",
+        "fontWeight": "700",
+        "states": {
+          "default": {
+            "color": "rgb(226, 232, 240)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "inherit"
+          }
+        },
+        "source": "dark-mode"
+      },
+      {
+        "color": "rgb(148, 163, 184)",
+        "textDecoration": "none",
+        "fontWeight": "400",
+        "states": {
+          "default": {
+            "color": "rgb(148, 163, 184)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "rgb(226 232 240/var(--tw-text-opacity))"
+          }
+        },
+        "source": "dark-mode"
+      },
+      {
+        "color": "rgb(203, 213, 225)",
+        "textDecoration": "none",
+        "fontWeight": "500",
+        "states": {
+          "default": {
+            "color": "rgb(203, 213, 225)",
+            "textDecoration": "none"
+          },
+          "hover": {
+            "color": "inherit"
+          }
+        },
+        "source": "dark-mode"
+      }
+    ],
+    "badges": {
+      "all": [],
+      "byVariant": {
+        "error": [],
+        "warning": [],
+        "success": [],
+        "info": [],
+        "neutral": []
+      }
+    }
+  },
+  "breakpoints": [
+    {
+      "px": "360px"
+    },
+    {
+      "px": "640px"
+    },
+    {
+      "px": "768px"
+    },
+    {
+      "px": "1024px"
+    },
+    {
+      "px": "1280px"
+    },
+    {
+      "px": "1536px"
+    }
+  ],
+  "iconSystem": [],
+  "frameworks": [
+    {
+      "name": "Tailwind CSS",
+      "confidence": "high",
+      "evidence": "arbitrary values (e.g., top-[117px]), responsive/state modifiers"
+    },
+    {
+      "name": "PrimeReact/Vue/NG",
+      "confidence": "high",
+      "evidence": "76 Prime components"
+    },
+    {
+      "name": "Fluent UI",
+      "confidence": "high",
+      "evidence": "70 Fluent components"
+    }
+  ]
+}

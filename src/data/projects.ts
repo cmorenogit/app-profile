@@ -2,27 +2,27 @@ import type { Project } from "@/types";
 
 export const featuredProjects: Project[] = [
   {
-    title: "agentes-hub",
+    title: "Agentes Hub",
     description:
-      "Hub of AI agents for task automation. Includes agents for code analysis, PR review, and development process optimization.",
+      "Multi-agent system that automates PR code reviews with security-focused analysis. Supports Claude, GPT-4, and Gemini with 97.5% token savings through intelligent caching.",
     technologies: ["TypeScript", "LangChain", "Claude API", "Node.js"],
     githubUrl: "https://github.com/cmorenogit/agentes-hub",
     liveUrl: null,
     image: null,
   },
   {
-    title: "prompt-hub",
+    title: "Prompt Hub",
     description:
-      "Collection and management system for optimized prompts. Organized by use case with versioning and performance tracking.",
+      "Centralized prompt management with versioning and performance tracking. Built to eliminate prompt drift across teams and AI workflows.",
     technologies: ["TypeScript", "Next.js", "PostgreSQL"],
     githubUrl: "https://github.com/cmorenogit/prompt-hub",
     liveUrl: null,
     image: null,
   },
   {
-    title: "prism",
+    title: "Prism",
     description:
-      "Multi-AI model debate system. Leverages Claude, GPT, and Gemini to generate improved analyses through structured debates.",
+      "CLI tool that orchestrates structured debates between Claude, GPT, and Gemini. Six analysis modes produce bias-reduced insights through multi-perspective synthesis.",
     technologies: ["TypeScript", "Shell", "Multiple LLM APIs"],
     githubUrl: "https://github.com/cmorenogit/prism",
     liveUrl: null,
@@ -31,7 +31,7 @@ export const featuredProjects: Project[] = [
   {
     title: "Apprecio Rewards Platform",
     description:
-      "Unified rewards platform integrating loyalty, campaigns, analytics, and business workflows. Deployed across multiple LATAM countries.",
+      "Multi-tenant rewards platform serving 6 LATAM countries. Integrates loyalty programs, campaigns, and business analytics with real-time data processing.",
     technologies: ["TypeScript", "NestJS", "React", "PostgreSQL", "AWS"],
     githubUrl: null,
     liveUrl: null,
