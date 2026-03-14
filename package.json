@@ -16,6 +16,7 @@
     "@fontsource/geist-sans": "^5.2.5",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.4",
+    "groq-sdk": "^1.1.1",
     "lucide-react": "^0.577.0",
     "playwright": "^1.58.2",
     "react": "^19.2.4",

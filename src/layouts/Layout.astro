@@ -4,6 +4,7 @@ import '@fontsource/geist-sans/500.css';
 import '@fontsource/geist-sans/700.css';
 import '@fontsource/geist-mono/400.css';
 import '@/styles/global.css';
+import { ChatWidget } from '@/components/ChatWidget';
 
 interface Props {
   title: string;
@@ -69,6 +70,7 @@ const jsonLd = {
   </head>
   <body class="antialiased">
     <slot />
+    <ChatWidget client:load />
 
     <script>
       const observer = new IntersectionObserver(
