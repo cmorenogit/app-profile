@@ -4,7 +4,7 @@ import { getPortfolioContext } from "@/lib/portfolio-context";
 
 export const prerender = false;
 
-const RATE_LIMIT_MAX = 20;
+const RATE_LIMIT_MAX = import.meta.env.DEV ? 100 : 20;
 const RATE_LIMIT_WINDOW = 86400000; // 24 hours
 const MAX_MESSAGE_LENGTH = 500;
 const MAX_HISTORY = 6;
