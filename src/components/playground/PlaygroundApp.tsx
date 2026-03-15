@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { SentimentDemo } from "./SentimentDemo";
 import { SummaryDemo } from "./SummaryDemo";
 import { ImageDemo } from "./ImageDemo";
@@ -28,6 +28,13 @@ type DemoId = (typeof demos)[number]["id"];
 
 export function PlaygroundApp() {
   const [activeDemo, setActiveDemo] = useState<DemoId | null>(null);
+  const demoPanelRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeDemo && demoPanelRef.current) {
+      demoPanelRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [activeDemo]);
 
   return (
     <div>
@@ -74,6 +81,7 @@ export function PlaygroundApp() {
       {/* Active demo panel */}
       {activeDemo && (
         <div
+          ref={demoPanelRef}
           style={{
             marginTop: "24px",
             padding: "24px",
