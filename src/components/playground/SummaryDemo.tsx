@@ -1,0 +1,144 @@
+import { useState, useRef } from "react";
+import { DemoShell } from "./DemoShell";
+
+const EXAMPLE_TEXT = `Artificial intelligence has transformed the software industry in fundamental ways. What once required teams of specialized engineers working for months can now be accomplished in days with the help of AI-powered tools. Code generation, automated testing, and intelligent debugging have become standard practices. However, the most significant impact has been in how developers think about problem-solving — shifting from writing every line manually to orchestrating AI agents that handle repetitive tasks while humans focus on architecture and creative decisions.`;
+
+export function SummaryDemo() {
+  const [input, setInput] = useState("");
+  const [summary, setSummary] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isModelLoading, setIsModelLoading] = useState(false);
+  const pipelineRef = useRef<any>(null);
+
+  const loadModel = async () => {
+    if (pipelineRef.current) return pipelineRef.current;
+    setIsModelLoading(true);
+    const { pipeline } = await import("@huggingface/transformers");
+    const pipe = await pipeline("summarization", "Xenova/distilbart-cnn-6-6", {
+      device: "wasm",
+    });
+    pipelineRef.current = pipe;
+    setIsModelLoading(false);
+    return pipe;
+  };
+
+  const summarize = async (text?: string) => {
+    const value = (text || input).trim();
+    if (!value || value.split(/\s+/).length < 15) return;
+    if (text) setInput(text);
+    setIsLoading(true);
+    setSummary("");
+    try {
+      const pipe = await loadModel();
+      const output = await pipe(value, { max_new_tokens: 80, min_length: 10 });
+      setSummary((output as any)[0]?.summary_text || "Could not generate summary.");
+    } catch (err) {
+      console.error("Summary error:", err);
+      setSummary("Error generating summary. Try a longer text.");
+    }
+    setIsLoading(false);
+  };
+
+  const wordCount = input.trim().split(/\s+/).filter(Boolean).length;
+  const tooShort = wordCount > 0 && wordCount < 15;
+
+  return (
+    <DemoShell
+      title="Text Summary"
+      howItWorks="A DistilBART model reads your text and generates a concise summary capturing the key points. Requires at least 15 words of input. Runs entirely in your browser."
+      modelName="distilbart-cnn-6-6"
+      isLoading={isModelLoading}
+      loadingText="Loading summarization model... (first time takes ~15s)"
+    >
+      {/* Example */}
+      <div style={{ marginBottom: "16px" }}>
+        <button
+          onClick={() => summarize(EXAMPLE_TEXT)}
+          disabled={isLoading}
+          style={{
+            padding: "6px 12px",
+            borderRadius: "6px",
+            border: "1px solid rgba(100, 255, 218, 0.1)",
+            background: "rgba(17, 34, 64, 0.5)",
+            color: "#a8b2d1",
+            fontSize: "12px",
+            cursor: isLoading ? "not-allowed" : "pointer",
+            transition: "border-color 0.2s",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.25)")}
+          onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.1)")}
+        >
+          Try example: AI impact on software development
+        </button>
+      </div>
+
+      {/* Input */}
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+        placeholder="Paste a paragraph (at least 15 words) to summarize..."
+        maxLength={2000}
+        rows={5}
+        style={{
+          width: "100%",
+          background: "rgba(17, 34, 64, 0.5)",
+          border: `1px solid ${tooShort ? "rgba(255, 107, 107, 0.3)" : "rgba(100, 255, 218, 0.1)"}`,
+          borderRadius: "8px",
+          padding: "12px",
+          color: "#e6f1ff",
+          fontSize: "14px",
+          fontFamily: "inherit",
+          resize: "vertical",
+          outline: "none",
+          transition: "border-color 0.2s",
+          boxSizing: "border-box",
+          marginBottom: "8px",
+        }}
+        onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.25)")}
+        onBlur={(e) => (e.currentTarget.style.borderColor = tooShort ? "rgba(255, 107, 107, 0.3)" : "rgba(100, 255, 218, 0.1)")}
+      />
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
+        <span style={{ color: tooShort ? "#ff6b6b" : "#8892b0", fontSize: "12px" }}>
+          {wordCount} words {tooShort && "— need at least 15"}
+        </span>
+      </div>
+
+      <button
+        onClick={() => summarize()}
+        disabled={isLoading || tooShort || !input.trim()}
+        style={{
+          padding: "10px 24px",
+          borderRadius: "8px",
+          border: "1px solid rgba(100, 255, 218, 0.2)",
+          background: isLoading || tooShort || !input.trim() ? "rgba(100, 255, 218, 0.03)" : "rgba(100, 255, 218, 0.1)",
+          color: isLoading || tooShort || !input.trim() ? "#233554" : "#64ffda",
+          fontSize: "14px",
+          fontWeight: 500,
+          cursor: isLoading || tooShort || !input.trim() ? "not-allowed" : "pointer",
+          transition: "background 0.2s",
+          marginBottom: "16px",
+        }}
+      >
+        {isLoading ? "Summarizing..." : "Summarize"}
+      </button>
+
+      {/* Result */}
+      {summary && (
+        <div style={{
+          padding: "20px",
+          borderRadius: "10px",
+          border: "1px solid rgba(100, 255, 218, 0.15)",
+          background: "rgba(100, 255, 218, 0.05)",
+        }}>
+          <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+            Summary
+          </span>
+          <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
+            {summary}
+          </p>
+        </div>
+      )}
+    </DemoShell>
+  );
+}

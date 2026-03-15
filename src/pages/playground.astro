@@ -1,0 +1,38 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { SpotlightCursor } from '@/components/SpotlightCursor';
+import { PlaygroundApp } from '@/components/playground/PlaygroundApp';
+---
+
+<Layout
+  title="AI Playground | Cesar Moreno"
+  description="Interactive AI demos running entirely in your browser. No server, no data collection — powered by Transformers.js."
+>
+  <SpotlightCursor client:load />
+  <main class="mx-auto max-w-5xl px-6 py-24 md:px-12 lg:px-24">
+    <a
+      href="/"
+      class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-accent transition-colors hover:text-accent-hover"
+    >
+      <span class="transition-transform group-hover:-translate-x-1">←</span>
+      Back to home
+    </a>
+
+    <h1 class="text-4xl font-bold sm:text-5xl">
+      <span class="gradient-text">AI Playground</span>
+    </h1>
+    <p class="mt-4 max-w-2xl text-lg text-slate-light">
+      Interactive AI models running <span class="font-medium text-white">entirely in your browser</span>.
+      No data is sent to any server — everything processes locally on your device.
+    </p>
+
+    <div class="mt-4 inline-flex items-center gap-2 rounded-full border border-accent/15 bg-accent/5 px-3 py-1.5 text-xs text-accent">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      100% private — runs on your device
+    </div>
+
+    <div class="mt-12">
+      <PlaygroundApp client:only="react" />
+    </div>
+  </main>
+</Layout>

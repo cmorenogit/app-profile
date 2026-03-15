@@ -16,15 +16,20 @@ import ProjectCard from './ProjectCard.astro';
     ))}
   </div>
 
-  <div class="mt-12">
+  <div class="mt-12 flex flex-col gap-4 sm:flex-row sm:gap-8">
     <a
       href="/archive"
       class="group inline-flex items-center font-medium text-white hover:text-accent transition-colors"
     >
       View Full Project Archive
-      <span class="ml-1 transition-transform group-hover:translate-x-2">
-        →
-      </span>
+      <span class="ml-1 transition-transform group-hover:translate-x-2">→</span>
+    </a>
+    <a
+      href="/playground"
+      class="group inline-flex items-center font-medium text-accent-secondary hover:text-accent transition-colors"
+    >
+      Try AI Playground
+      <span class="ml-1 transition-transform group-hover:translate-x-2">→</span>
     </a>
   </div>
 </section>
