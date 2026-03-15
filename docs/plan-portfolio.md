@@ -19,7 +19,7 @@
 9. [Contenido Específico](#9-contenido-específico)
 10. [Checklist de Validación](#10-checklist-de-validación)
 
----
+
 
 ## 1. CONTEXTO DEL PROYECTO
 

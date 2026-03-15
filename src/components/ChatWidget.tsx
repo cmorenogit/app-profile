@@ -162,7 +162,23 @@ export function ChatWidget() {
 
   // Chat panel
   return (
+    <>
+    <style>{`
+      @media (max-width: 640px) {
+        .chat-panel {
+          width: 100% !important;
+          max-width: 100% !important;
+          height: 100dvh !important;
+          max-height: 100dvh !important;
+          border-radius: 0 !important;
+          border: none !important;
+          padding-top: env(safe-area-inset-top, 0px);
+          padding-bottom: env(safe-area-inset-bottom, 0px);
+        }
+      }
+    `}</style>
     <div
+      className="chat-panel"
       style={{
         position: "fixed",
         bottom: "0",
@@ -170,11 +186,11 @@ export function ChatWidget() {
         zIndex: 50,
         width: "100%",
         maxWidth: "400px",
-        height: "100dvh",
+        height: "auto",
         maxHeight: "500px",
         display: "flex",
         flexDirection: "column",
-        background: "rgba(10, 25, 47, 0.95)",
+        background: "rgba(10, 25, 47, 0.98)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
         border: "1px solid rgba(100, 255, 218, 0.1)",
@@ -239,6 +255,8 @@ export function ChatWidget() {
           display: "flex",
           flexDirection: "column",
           gap: "12px",
+          minHeight: "200px",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {messages.length === 0 && (
@@ -376,9 +394,11 @@ export function ChatWidget() {
       <div
         style={{
           padding: "12px 16px",
+          paddingBottom: "calc(12px + env(safe-area-inset-bottom, 0px))",
           borderTop: "1px solid rgba(100, 255, 218, 0.08)",
           display: "flex",
           gap: "8px",
+          flexShrink: 0,
         }}
       >
         <input
@@ -397,7 +417,7 @@ export function ChatWidget() {
             borderRadius: "8px",
             padding: "10px 14px",
             color: "#e6f1ff",
-            fontSize: "13px",
+            fontSize: "16px",
             outline: "none",
             fontFamily: "inherit",
             transition: "border-color 0.2s",
@@ -428,5 +448,6 @@ export function ChatWidget() {
         </button>
       </div>
     </div>
+    </>
   );
 }
