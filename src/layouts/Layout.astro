@@ -5,6 +5,7 @@ import '@fontsource/geist-sans/700.css';
 import '@fontsource/geist-mono/400.css';
 import '@/styles/global.css';
 import { ChatWidget } from '@/components/ChatWidget';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -76,11 +77,7 @@ const jsonLd = {
   <body class="antialiased">
     <slot />
     <ChatWidget client:load />
-
-    <script>
-      import { inject } from '@vercel/analytics';
-      inject();
-    </script>
+    <Analytics />
 
     <script>
       const observer = new IntersectionObserver(
