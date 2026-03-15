@@ -74,6 +74,11 @@ const jsonLd = {
     <ChatWidget client:load />
 
     <script>
+      import { inject } from '@vercel/analytics';
+      inject();
+    </script>
+
+    <script>
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
