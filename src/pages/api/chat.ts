@@ -9,6 +9,11 @@ const RATE_LIMIT_WINDOW = 86400000; // 24 hours
 const MAX_MESSAGE_LENGTH = 500;
 const MAX_HISTORY = 6;
 const MAX_TOKENS = 300;
+const MAX_BODY_SIZE = 10000; // 10KB max request body
+const ALLOWED_ORIGINS = [
+  "https://cesarmoreno.dev",
+  "https://app-profile-morenodev.vercel.app",
+];
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -31,12 +36,12 @@ function checkRateLimit(ip: string): boolean {
 
 function sanitizeInput(text: string): string {
   return text
-    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "") // control chars
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "")
     .trim();
 }
 
 function detectPromptInjection(message: string): boolean {
-  const lower = message.toLowerCase();
+  const lower = message.toLowerCase().normalize("NFKD");
   const patterns = [
     "ignore previous",
     "ignore above",
@@ -71,8 +76,22 @@ function detectPromptInjection(message: string): boolean {
     "|>",
     "```system",
     "###",
+    "ignora las instrucciones",
+    "olvida tus instrucciones",
+    "nuevas instrucciones",
+    "modo desarrollador",
   ];
   return patterns.some((p) => lower.includes(p));
+}
+
+function jsonResponse(data: object, status: number, corsOrigin: string) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": corsOrigin,
+    },
+  });
 }
 
 const SYSTEM_PROMPT = `You are a professional AI assistant embedded in Cesar Moreno's portfolio website. Your ONLY purpose is to answer questions about Cesar's professional skills, experience, projects, and technical expertise.
@@ -120,63 +139,86 @@ The following is the ONLY source of truth. Do not invent or assume information b
 `;
 
 export const POST: APIRoute = async ({ request, clientAddress }) => {
+  // CORS check
+  const origin = request.headers.get("origin") || "";
+  const corsOrigin = import.meta.env.DEV
+    ? "*"
+    : ALLOWED_ORIGINS.includes(origin)
+      ? origin
+      : ALLOWED_ORIGINS[0];
+
+  if (!import.meta.env.DEV && origin && !ALLOWED_ORIGINS.includes(origin)) {
+    return jsonResponse({ error: "Forbidden." }, 403, corsOrigin);
+  }
+
   const ip = clientAddress || "unknown";
 
   if (!checkRateLimit(ip)) {
-    return new Response(
-      JSON.stringify({ error: "Rate limit exceeded. Try again tomorrow." }),
-      { status: 429, headers: { "Content-Type": "application/json" } }
+    return jsonResponse(
+      { error: "Rate limit exceeded. Try again tomorrow." },
+      429,
+      corsOrigin
     );
   }
 
-  const apiKey = import.meta.env.GROQ_API_KEY;
+  const apiKey = import.meta.env.GROQ_API_KEY || process.env.GROQ_API_KEY;
   if (!apiKey) {
-    return new Response(
-      JSON.stringify({ error: "Chat is not configured." }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    return jsonResponse({ error: "Chat is not configured." }, 500, corsOrigin);
+  }
+
+  // Body size check
+  const contentLength = parseInt(request.headers.get("content-length") || "0");
+  if (contentLength > MAX_BODY_SIZE) {
+    return jsonResponse({ error: "Request too large." }, 413, corsOrigin);
   }
 
   let body: { message: string; history?: { role: string; content: string }[] };
   try {
     body = await request.json();
   } catch {
-    return new Response(
-      JSON.stringify({ error: "Invalid request." }),
-      { status: 400, headers: { "Content-Type": "application/json" } }
-    );
+    return jsonResponse({ error: "Invalid request." }, 400, corsOrigin);
   }
 
   const { message: rawMessage, history = [] } = body;
 
-  if (!rawMessage || typeof rawMessage !== "string" || rawMessage.length > MAX_MESSAGE_LENGTH) {
-    return new Response(
-      JSON.stringify({ error: "Message is required (max 500 chars)." }),
-      { status: 400, headers: { "Content-Type": "application/json" } }
+  if (
+    !rawMessage ||
+    typeof rawMessage !== "string" ||
+    rawMessage.length > MAX_MESSAGE_LENGTH
+  ) {
+    return jsonResponse(
+      { error: "Message is required (max 500 chars)." },
+      400,
+      corsOrigin
     );
   }
 
   const message = sanitizeInput(rawMessage);
 
   if (!message) {
-    return new Response(
-      JSON.stringify({ error: "Invalid message." }),
-      { status: 400, headers: { "Content-Type": "application/json" } }
-    );
+    return jsonResponse({ error: "Invalid message." }, 400, corsOrigin);
   }
 
-  // Detect prompt injection attempts
   if (detectPromptInjection(message)) {
-    return new Response(
-      JSON.stringify({ error: "I can only answer questions about Cesar's professional portfolio." }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+    return jsonResponse(
+      {
+        error:
+          "I can only answer questions about Cesar's professional portfolio.",
+      },
+      200,
+      corsOrigin
     );
   }
 
-  // Also check history for injection
+  // Validate and sanitize history — runtime role check
   const safeHistory = history
     .slice(-MAX_HISTORY)
-    .filter((msg) => !detectPromptInjection(msg.content))
+    .filter(
+      (msg) =>
+        (msg.role === "user" || msg.role === "assistant") &&
+        typeof msg.content === "string" &&
+        !detectPromptInjection(msg.content)
+    )
     .map((msg) => ({
       role: msg.role as "user" | "assistant",
       content: sanitizeInput(msg.content).slice(0, MAX_MESSAGE_LENGTH),
@@ -203,16 +245,26 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
     const encoder = new TextEncoder();
     const readable = new ReadableStream({
       async start(controller) {
-        for await (const chunk of stream) {
-          const text = chunk.choices[0]?.delta?.content || "";
-          if (text) {
-            controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({ text })}\n\n`)
-            );
+        try {
+          for await (const chunk of stream) {
+            const text = chunk.choices[0]?.delta?.content || "";
+            if (text) {
+              controller.enqueue(
+                encoder.encode(`data: ${JSON.stringify({ text })}\n\n`)
+              );
+            }
           }
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+        } catch {
+          controller.enqueue(
+            encoder.encode(
+              `data: ${JSON.stringify({ text: " [Error generating response]" })}\n\n`
+            )
+          );
+          controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+        } finally {
+          controller.close();
         }
-        controller.enqueue(encoder.encode("data: [DONE]\n\n"));
-        controller.close();
       },
     });
 
@@ -221,13 +273,17 @@ export const POST: APIRoute = async ({ request, clientAddress }) => {
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",
+        "Access-Control-Allow-Origin": corsOrigin,
       },
     });
-  } catch (error) {
-    console.error("Groq API error:", error);
-    return new Response(
-      JSON.stringify({ error: "Failed to generate response." }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : String(error);
+    const errStatus = (error as { status?: number })?.status;
+    console.error("Groq API error:", { message: errMsg, status: errStatus });
+    return jsonResponse(
+      { error: "Failed to generate response. Please try again later." },
+      500,
+      corsOrigin
     );
   }
 };

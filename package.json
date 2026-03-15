@@ -20,7 +20,6 @@
     "astro": "^6.0.4",
     "groq-sdk": "^1.1.1",
     "lucide-react": "^0.577.0",
-    "playwright": "^1.58.2",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "tailwindcss": "^4.2.1"
@@ -28,6 +27,7 @@
   "devDependencies": {
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
+    "playwright": "^1.58.2",
     "typescript": "^5.9.3",
     "vitest": "^4.1.0"
   }
