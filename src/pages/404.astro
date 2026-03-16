@@ -1,0 +1,29 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { SpotlightCursor } from '@/components/SpotlightCursor';
+---
+
+<Layout
+  title="404 — Page Not Found | Cesar Moreno"
+  description="The page you're looking for doesn't exist."
+>
+  <SpotlightCursor client:load />
+  <main class="flex min-h-screen items-center justify-center px-6">
+    <div class="text-center">
+      <p class="font-mono text-sm text-accent tracking-widest mb-4">404</p>
+      <h1 class="text-5xl font-bold tracking-tight sm:text-7xl">
+        <span class="gradient-text">Page not found</span>
+      </h1>
+      <p class="mt-4 max-w-md mx-auto text-slate-light leading-relaxed">
+        The page you're looking for doesn't exist or has been moved.
+      </p>
+      <a
+        href="/"
+        class="group mt-8 inline-flex items-center gap-2 font-mono text-sm text-accent transition-colors hover:text-accent-hover"
+      >
+        <span class="transition-transform group-hover:-translate-x-1">&larr;</span>
+        Back to home
+      </a>
+    </div>
+  </main>
+</Layout>
