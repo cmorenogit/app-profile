@@ -1,53 +1,31 @@
 {
   "schema_version": "1.0",
   "server": {
-    "name": "Cesar Moreno Portfolio",
-    "description": "Full Stack Engineer · AI — Portfolio with interactive AI demos and professional context",
-    "url": "https://cesarmoreno.dev",
-    "transport": "https",
+    "name": "cesarmoreno-portfolio",
+    "description": "Cesar Moreno's portfolio — Full Stack Engineer · AI. Query professional data via MCP protocol.",
+    "url": "https://cesarmoreno.dev/api/mcp",
+    "transport": "streamable-http",
     "protocol_version": "2024-11-05"
   },
   "capabilities": {
-    "tools": true,
-    "resources": true
+    "tools": true
   },
   "tools": [
     {
       "name": "get_about",
-      "description": "Get Cesar Moreno's professional bio, role, and background"
+      "description": "Get Cesar Moreno's professional bio, role, highlights, and contact links"
     },
     {
       "name": "get_experience",
-      "description": "Get Cesar Moreno's work experience timeline"
+      "description": "Get work experience timeline with roles, companies, and technologies"
     },
     {
       "name": "get_projects",
-      "description": "Get Cesar Moreno's featured projects with descriptions and tech stack"
+      "description": "Get featured and archived projects with descriptions, tech stack, and links"
     },
     {
       "name": "get_tech_stack",
-      "description": "Get Cesar Moreno's technology expertise by category"
-    },
-    {
-      "name": "chat",
-      "description": "Ask questions about Cesar Moreno's experience, projects, or skills"
-    }
-  ],
-  "resources": [
-    {
-      "name": "portfolio",
-      "uri": "https://cesarmoreno.dev",
-      "description": "Main portfolio website"
-    },
-    {
-      "name": "playground",
-      "uri": "https://cesarmoreno.dev/playground",
-      "description": "Interactive AI demos running in-browser (sentiment analysis, text summary, image classification)"
-    },
-    {
-      "name": "archive",
-      "uri": "https://cesarmoreno.dev/archive",
-      "description": "Complete list of all projects"
+      "description": "Get technology expertise organized by category"
     }
   ],
   "contact": {
