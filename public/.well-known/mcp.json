@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "server": {
+    "name": "Cesar Moreno Portfolio",
+    "description": "Full Stack Engineer · AI — Portfolio with interactive AI demos and professional context",
+    "url": "https://cesarmoreno.dev",
+    "transport": "https",
+    "protocol_version": "2024-11-05"
+  },
+  "capabilities": {
+    "tools": true,
+    "resources": true
+  },
+  "tools": [
+    {
+      "name": "get_about",
+      "description": "Get Cesar Moreno's professional bio, role, and background"
+    },
+    {
+      "name": "get_experience",
+      "description": "Get Cesar Moreno's work experience timeline"
+    },
+    {
+      "name": "get_projects",
+      "description": "Get Cesar Moreno's featured projects with descriptions and tech stack"
+    },
+    {
+      "name": "get_tech_stack",
+      "description": "Get Cesar Moreno's technology expertise by category"
+    },
+    {
+      "name": "chat",
+      "description": "Ask questions about Cesar Moreno's experience, projects, or skills"
+    }
+  ],
+  "resources": [
+    {
+      "name": "portfolio",
+      "uri": "https://cesarmoreno.dev",
+      "description": "Main portfolio website"
+    },
+    {
+      "name": "playground",
+      "uri": "https://cesarmoreno.dev/playground",
+      "description": "Interactive AI demos running in-browser (sentiment analysis, text summary, image classification)"
+    },
+    {
+      "name": "archive",
+      "uri": "https://cesarmoreno.dev/archive",
+      "description": "Complete list of all projects"
+    }
+  ],
+  "contact": {
+    "github": "https://github.com/cmorenogit",
+    "linkedin": "https://linkedin.com/in/morenodev"
+  }
+}

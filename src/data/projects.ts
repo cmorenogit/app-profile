@@ -29,6 +29,15 @@ export const featuredProjects: Project[] = [
     image: null,
   },
   {
+    title: "Claude Statusline",
+    description:
+      "Rich two-line statusline for Claude Code CLI. Shows context usage, API rate limits with visual bars, git branch, session duration, and lines changed. Optimized with batched JSON parsing.",
+    technologies: ["Bash", "Shell", "Node.js", "npm"],
+    githubUrl: "https://github.com/cmorenogit/claude-statusline",
+    liveUrl: "https://www.npmjs.com/package/@cmorenogit/claude-statusline",
+    image: null,
+  },
+  {
     title: "Apprecio Rewards Platform",
     description:
       "Multi-tenant rewards platform serving 6 LATAM countries. Integrates loyalty programs, campaigns, and business analytics with real-time data processing.",
