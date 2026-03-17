@@ -1,0 +1,37 @@
+{
+  "$schema": "https://modelcontextprotocol.io/schemas/server-card/v1.0",
+  "version": "1.0",
+  "protocolVersion": "2024-11-05",
+  "serverInfo": {
+    "name": "cesarmoreno-portfolio",
+    "version": "1.0.0",
+    "description": "Cesar Moreno — Full Stack Engineer · AI. 13+ years building intelligent systems, multi-agent orchestration, and scalable platforms across LATAM.",
+    "homepage": "https://cesarmoreno.dev"
+  },
+  "capabilities": {
+    "tools": false,
+    "resources": true,
+    "prompts": false
+  },
+  "resources": [
+    {
+      "name": "portfolio",
+      "uri": "https://cesarmoreno.dev",
+      "description": "Main portfolio — about, experience, featured projects"
+    },
+    {
+      "name": "playground",
+      "uri": "https://cesarmoreno.dev/playground",
+      "description": "Interactive AI demos running in-browser (sentiment analysis, text summarization, image classification) via Transformers.js"
+    },
+    {
+      "name": "archive",
+      "uri": "https://cesarmoreno.dev/archive",
+      "description": "Complete list of all projects (2016–2025)"
+    }
+  ],
+  "contact": {
+    "github": "https://github.com/cmorenogit",
+    "linkedin": "https://linkedin.com/in/morenodev"
+  }
+}
