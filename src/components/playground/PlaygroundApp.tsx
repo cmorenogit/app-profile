@@ -2,6 +2,9 @@ import { useState, useRef, useEffect } from "react";
 import { SentimentDemo } from "./SentimentDemo";
 import { SummaryDemo } from "./SummaryDemo";
 import { ImageDemo } from "./ImageDemo";
+import { RAGDemo } from "./RAGDemo";
+import { WhisperDemo } from "./WhisperDemo";
+import { useDevice } from "./useDevice";
 
 const demos = [
   {
@@ -22,6 +25,18 @@ const demos = [
     description: "Identifies what's in a photo",
     icon: "🖼️",
   },
+  {
+    id: "rag",
+    title: "RAG Explorer",
+    description: "Semantic search with embeddings and cosine similarity",
+    icon: "🔍",
+  },
+  {
+    id: "whisper",
+    title: "Speech-to-Text",
+    description: "Transcribe audio from your microphone with Whisper",
+    icon: "🎙️",
+  },
 ] as const;
 
 type DemoId = (typeof demos)[number]["id"];
@@ -29,6 +44,7 @@ type DemoId = (typeof demos)[number]["id"];
 export function PlaygroundApp() {
   const [activeDemo, setActiveDemo] = useState<DemoId | null>(null);
   const demoPanelRef = useRef<HTMLDivElement>(null);
+  const { device, isDetecting, isWebGPU } = useDevice();
 
   useEffect(() => {
     if (activeDemo && demoPanelRef.current) {
@@ -38,8 +54,32 @@ export function PlaygroundApp() {
 
   return (
     <div>
+      {/* Device badge */}
+      {!isDetecting && (
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          padding: "4px 12px",
+          borderRadius: "6px",
+          background: isWebGPU ? "rgba(100, 255, 218, 0.08)" : "rgba(136, 146, 176, 0.08)",
+          border: `1px solid ${isWebGPU ? "rgba(100, 255, 218, 0.15)" : "rgba(136, 146, 176, 0.12)"}`,
+          fontSize: "12px",
+          color: isWebGPU ? "#64ffda" : "#8892b0",
+          fontFamily: "'Geist Mono', monospace",
+          marginBottom: "20px",
+        }}>
+          {isWebGPU ? "⚡ WebGPU accelerated" : "🔧 Running on WASM (CPU)"}
+          {isWebGPU && (
+            <span style={{ color: "#8892b0", fontSize: "11px" }}>
+              — GPU-powered inference
+            </span>
+          )}
+        </div>
+      )}
+
       {/* Demo selector grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
         {demos.map((demo) => (
           <button
             key={demo.id}
@@ -52,7 +92,7 @@ export function PlaygroundApp() {
               cursor: "pointer",
               textAlign: "left",
               transition: "border-color 0.3s ease, background 0.3s ease, transform 0.2s ease",
-              transform: activeDemo === demo.id ? "scale(1)" : "scale(1)",
+              transform: "scale(1)",
             }}
             onMouseEnter={(e) => {
               if (activeDemo !== demo.id) {
@@ -93,6 +133,8 @@ export function PlaygroundApp() {
           {activeDemo === "sentiment" && <SentimentDemo />}
           {activeDemo === "summary" && <SummaryDemo />}
           {activeDemo === "image" && <ImageDemo />}
+          {activeDemo === "rag" && <RAGDemo />}
+          {activeDemo === "whisper" && <WhisperDemo />}
         </div>
       )}
     </div>

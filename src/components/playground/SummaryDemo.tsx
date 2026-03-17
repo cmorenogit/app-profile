@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { DemoShell } from "./DemoShell";
+import { useDevice } from "./useDevice";
 
 const EXAMPLE_TEXT = `Artificial intelligence has transformed the software industry in fundamental ways. What once required teams of specialized engineers working for months can now be accomplished in days with the help of AI-powered tools. Code generation, automated testing, and intelligent debugging have become standard practices. However, the most significant impact has been in how developers think about problem-solving — shifting from writing every line manually to orchestrating AI agents that handle repetitive tasks while humans focus on architecture and creative decisions.`;
 
@@ -9,13 +10,14 @@ export function SummaryDemo() {
   const [isLoading, setIsLoading] = useState(false);
   const [isModelLoading, setIsModelLoading] = useState(false);
   const pipelineRef = useRef<any>(null);
+  const { device } = useDevice();
 
   const loadModel = async () => {
     if (pipelineRef.current) return pipelineRef.current;
     setIsModelLoading(true);
     const { pipeline } = await import("@huggingface/transformers");
     const pipe = await pipeline("summarization", "Xenova/distilbart-cnn-6-6", {
-      device: "wasm",
+      device,
     });
     pipelineRef.current = pipe;
     setIsModelLoading(false);
@@ -49,6 +51,7 @@ export function SummaryDemo() {
       modelName="distilbart-cnn-6-6"
       isLoading={isModelLoading}
       loadingText="Loading summarization model... (first time takes ~15s)"
+      device={device}
     >
       {/* Example */}
       <div style={{ marginBottom: "16px" }}>

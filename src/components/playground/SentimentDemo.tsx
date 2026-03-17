@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { DemoShell } from "./DemoShell";
+import { useDevice } from "./useDevice";
 
 interface SentimentResult {
   label: string;
@@ -30,13 +31,14 @@ export function SentimentDemo() {
   const [isLoading, setIsLoading] = useState(false);
   const [isModelLoading, setIsModelLoading] = useState(false);
   const pipelineRef = useRef<any>(null);
+  const { device } = useDevice();
 
   const loadModel = async () => {
     if (pipelineRef.current) return pipelineRef.current;
     setIsModelLoading(true);
     const { pipeline } = await import("@huggingface/transformers");
     const pipe = await pipeline("sentiment-analysis", "Xenova/distilbert-base-uncased-finetuned-sst-2-english", {
-      device: "wasm",
+      device,
     });
     pipelineRef.current = pipe;
     setIsModelLoading(false);
@@ -68,6 +70,7 @@ export function SentimentDemo() {
       howItWorks="A DistilBERT model analyzes your text and classifies its emotional tone as positive, negative, or neutral. Everything runs in your browser via WebAssembly."
       modelName="distilbert-sst2"
       isLoading={isModelLoading}
+      device={device}
     >
       {/* Examples */}
       <div style={{ marginBottom: "16px" }}>

@@ -7,9 +7,10 @@ interface DemoShellProps {
   children: ReactNode;
   isLoading: boolean;
   loadingText?: string;
+  device?: "webgpu" | "wasm";
 }
 
-export function DemoShell({ title, howItWorks, modelName, children, isLoading, loadingText }: DemoShellProps) {
+export function DemoShell({ title, howItWorks, modelName, children, isLoading, loadingText, device }: DemoShellProps) {
   return (
     <div>
       <div style={{ marginBottom: "20px" }}>
@@ -19,20 +20,38 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
         <p style={{ color: "#8892b0", fontSize: "13px", lineHeight: 1.5, margin: "0 0 8px 0" }}>
           <strong style={{ color: "#a8b2d1" }}>How it works:</strong> {howItWorks}
         </p>
-        <span style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "6px",
-          padding: "3px 10px",
-          borderRadius: "6px",
-          background: "rgba(167, 139, 250, 0.1)",
-          border: "1px solid rgba(167, 139, 250, 0.15)",
-          fontSize: "11px",
-          color: "#a78bfa",
-          fontFamily: "'Geist Mono', monospace",
-        }}>
-          Model: {modelName}
-        </span>
+        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+          <span style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "3px 10px",
+            borderRadius: "6px",
+            background: "rgba(167, 139, 250, 0.1)",
+            border: "1px solid rgba(167, 139, 250, 0.15)",
+            fontSize: "11px",
+            color: "#a78bfa",
+            fontFamily: "'Geist Mono', monospace",
+          }}>
+            Model: {modelName}
+          </span>
+          {device && (
+            <span style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "4px",
+              padding: "3px 10px",
+              borderRadius: "6px",
+              background: device === "webgpu" ? "rgba(100, 255, 218, 0.1)" : "rgba(136, 146, 176, 0.1)",
+              border: `1px solid ${device === "webgpu" ? "rgba(100, 255, 218, 0.2)" : "rgba(136, 146, 176, 0.15)"}`,
+              fontSize: "11px",
+              color: device === "webgpu" ? "#64ffda" : "#8892b0",
+              fontFamily: "'Geist Mono', monospace",
+            }}>
+              {device === "webgpu" ? "⚡ WebGPU" : "🔧 WASM"}
+            </span>
+          )}
+        </div>
       </div>
 
       {isLoading && (
