@@ -1,0 +1,42 @@
+# Cesar Moreno — Full Stack Engineer · AI
+
+> I build AI systems that think, act, and scale — from multi-agent orchestration to production platforms across LATAM.
+
+## About
+
+Full Stack Engineer specializing in AI with 13+ years of production experience. Currently at Apprecio, building automation solutions with AI agents across a multi-tenant rewards platform serving 500K+ users in 6 LATAM countries.
+
+## Key Achievements
+
+- 97.5% token cost reduction in AI agent systems through intelligent caching
+- 40% faster product delivery through AI-powered workflow automation
+- 25% microservice performance improvement across 13+ services
+- Multi-tenant platform with full data isolation across 6 countries
+
+## Core Expertise
+
+- AI Agents: Multi-model LLM orchestration (Claude, GPT-4, Gemini), Think→Act→Observe loops
+- Backend: TypeScript, Node.js, NestJS, Express, GraphQL, microservices
+- Frontend: React, Astro, Next.js, Tailwind CSS
+- Databases: PostgreSQL (RLS), Supabase, MongoDB, Redis
+- Cloud: AWS, Vercel, Docker, GitHub Actions
+- Testing: Playwright, Vitest
+
+## Featured Projects
+
+- Agentes Hub: Multi-agent system for automated PR code reviews with 97.5% token savings
+  https://github.com/cmorenogit/agentes-hub
+- Prompt Hub: Centralized prompt management with versioning, reduced drift by 80%
+  https://github.com/cmorenogit/prompt-hub
+- Prism: CLI tool orchestrating structured debates between Claude, GPT, and Gemini
+  https://github.com/cmorenogit/prism
+- Claude Statusline: Rich statusline for Claude Code CLI, published on npm
+  https://github.com/cmorenogit/claude-statusline
+
+## Links
+
+- Portfolio: https://cesarmoreno.dev
+- AI Playground: https://cesarmoreno.dev/playground
+- GitHub: https://github.com/cmorenogit
+- LinkedIn: https://linkedin.com/in/morenodev
+- Uses: https://cesarmoreno.dev/uses
