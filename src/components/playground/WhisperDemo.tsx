@@ -23,7 +23,7 @@ export function WhisperDemo() {
     const { pipeline } = await import("@huggingface/transformers");
     const pipe = await pipeline(
       "automatic-speech-recognition",
-      "onnx-community/whisper-tiny",
+      "onnx-community/whisper-tiny.en",
       { device },
     );
     pipelineRef.current = pipe;
@@ -152,8 +152,8 @@ export function WhisperDemo() {
   return (
     <DemoShell
       title="Speech-to-Text"
-      howItWorks="OpenAI's Whisper model runs entirely in your browser. Supports 99 languages including English and Spanish — auto-detects the spoken language. Record from your microphone or try an example. Audio is transcribed locally without sending data to any server."
-      modelName="whisper-tiny (multilingual)"
+      howItWorks="OpenAI's Whisper model runs entirely in your browser. Record from your microphone or try an example — audio is transcribed locally without sending data to any server."
+      modelName="whisper-tiny.en"
       isLoading={isModelLoading}
       loadingText="Loading Whisper model... (first time takes ~15s, ~40MB download)"
       device={device}
