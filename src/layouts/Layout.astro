@@ -13,6 +13,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, 'https://cesarmoreno.dev');
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -53,6 +54,7 @@ const jsonLd = {
     <meta name="keywords" content="Full Stack Engineer, AI Engineer, AI Agents, LLM Orchestration, TypeScript, Node.js, React, NestJS, Microservices, Automation, Multi-Agent Systems" />
     <meta name="author" content="Cesar Moreno" />
     <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL.href} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
@@ -76,6 +78,17 @@ const jsonLd = {
   </head>
   <body class="antialiased">
     <slot />
+
+    <!-- Back to top (mobile) -->
+    <button
+      id="back-to-top"
+      aria-label="Back to top"
+      class="fixed bottom-20 left-4 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-accent/15 bg-navy-light/90 text-accent backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/10 lg:hidden"
+      style="opacity: 0; pointer-events: none; transform: translateY(8px);"
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
+
     <ChatWidget client:load />
     <Analytics />
 
@@ -96,6 +109,25 @@ const jsonLd = {
         { threshold: 0.1 }
       );
       document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+
+      // Back to top button
+      const btn = document.getElementById('back-to-top');
+      if (btn) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 600) {
+            btn.style.opacity = '1';
+            btn.style.pointerEvents = 'auto';
+            btn.style.transform = 'translateY(0)';
+          } else {
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+            btn.style.transform = 'translateY(8px)';
+          }
+        }, { passive: true });
+        btn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
     </script>
   </body>
 </html>
