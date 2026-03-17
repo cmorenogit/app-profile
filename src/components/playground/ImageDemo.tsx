@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import { DemoShell } from "./DemoShell";
+import { useDevice } from "./useDevice";
 
 interface ClassificationResult {
   label: string;
@@ -14,13 +15,14 @@ export function ImageDemo() {
   const [dragOver, setDragOver] = useState(false);
   const pipelineRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { device } = useDevice();
 
   const loadModel = async () => {
     if (pipelineRef.current) return pipelineRef.current;
     setIsModelLoading(true);
     const { pipeline } = await import("@huggingface/transformers");
     const pipe = await pipeline("image-classification", "Xenova/vit-base-patch16-224", {
-      device: "wasm",
+      device,
     });
     pipelineRef.current = pipe;
     setIsModelLoading(false);
@@ -67,6 +69,7 @@ export function ImageDemo() {
       howItWorks="A Vision Transformer (ViT) model analyzes your image and identifies what it contains, with confidence scores for the top 5 predictions. Runs entirely in your browser."
       modelName="vit-base-patch16-224"
       isLoading={isModelLoading}
+      device={device}
     >
       {/* Drop zone */}
       <div
