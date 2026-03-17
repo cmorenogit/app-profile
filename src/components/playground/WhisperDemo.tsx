@@ -7,10 +7,14 @@ export function WhisperDemo() {
   const [isLoading, setIsLoading] = useState(false);
   const [isModelLoading, setIsModelLoading] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const pipelineRef = useRef<any>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const chunksRef = useRef<Blob[]>([]);
+  const audioContextRef = useRef<AudioContext | null>(null);
+  const sourceNodeRef = useRef<MediaStreamAudioSourceNode | null>(null);
+  const processorRef = useRef<ScriptProcessorNode | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const audioBuffersRef = useRef<Float32Array[]>([]);
   const { device } = useDevice();
 
   const loadModel = async () => {
@@ -28,47 +32,99 @@ export function WhisperDemo() {
   };
 
   const startRecording = async () => {
+    setError(null);
+    setTranscript("");
+    setAudioUrl(null);
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      chunksRef.current = [];
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true },
+      });
+      streamRef.current = stream;
 
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) chunksRef.current.push(e.data);
+      const audioContext = new AudioContext({ sampleRate: 16000 });
+      audioContextRef.current = audioContext;
+
+      const source = audioContext.createMediaStreamSource(stream);
+      sourceNodeRef.current = source;
+
+      // Use ScriptProcessorNode to capture raw PCM audio
+      const processor = audioContext.createScriptProcessor(4096, 1, 1);
+      processorRef.current = processor;
+      audioBuffersRef.current = [];
+
+      processor.onaudioprocess = (e) => {
+        const data = e.inputBuffer.getChannelData(0);
+        audioBuffersRef.current.push(new Float32Array(data));
       };
 
-      mediaRecorder.onstop = async () => {
-        stream.getTracks().forEach((t) => t.stop());
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
-        const url = URL.createObjectURL(blob);
-        setAudioUrl(url);
-        await transcribe(url);
-      };
+      source.connect(processor);
+      processor.connect(audioContext.destination);
 
-      mediaRecorder.start();
       setIsRecording(true);
-      setTranscript("");
-      setAudioUrl(null);
     } catch (err) {
-      console.error("Microphone access denied:", err);
+      const msg = (err as Error).message || "";
+      if (msg.includes("Permission denied") || msg.includes("NotAllowedError")) {
+        setError("Microphone access denied. Please allow microphone permissions and try again.");
+      } else if (msg.includes("NotFoundError")) {
+        setError("No microphone found. Please connect a microphone.");
+      } else {
+        setError("Could not access microphone. Please check your browser permissions.");
+      }
     }
   };
 
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
+  const stopRecording = async () => {
+    setIsRecording(false);
+
+    // Stop processing
+    if (processorRef.current && sourceNodeRef.current) {
+      sourceNodeRef.current.disconnect();
+      processorRef.current.disconnect();
     }
+
+    // Stop media stream
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((t) => t.stop());
+    }
+
+    // Close audio context
+    if (audioContextRef.current) {
+      await audioContextRef.current.close();
+    }
+
+    // Merge audio buffers into a single Float32Array
+    const buffers = audioBuffersRef.current;
+    if (buffers.length === 0) {
+      setError("No audio recorded. Try holding the Record button longer.");
+      return;
+    }
+
+    const totalLength = buffers.reduce((sum, b) => sum + b.length, 0);
+    const merged = new Float32Array(totalLength);
+    let offset = 0;
+    for (const buf of buffers) {
+      merged.set(buf, offset);
+      offset += buf.length;
+    }
+
+    // Create WAV blob for playback
+    const wavBlob = float32ToWav(merged, 16000);
+    const url = URL.createObjectURL(wavBlob);
+    setAudioUrl(url);
+
+    // Transcribe the raw audio data
+    await transcribeAudio(merged);
   };
 
-  const transcribe = async (url: string) => {
+  const transcribeAudio = async (audioData: Float32Array) => {
     setIsLoading(true);
     setTranscript("");
     try {
       const pipe = await loadModel();
-      const output = await pipe(url);
-      setTranscript((output as { text: string }).text || "Could not transcribe audio.");
+      const output = await pipe(audioData);
+      const text = (output as { text: string }).text?.trim();
+      setTranscript(text || "No speech detected. Try speaking louder or closer to the microphone.");
     } catch (err) {
       console.error("Transcription error:", err);
       setTranscript("Error transcribing audio. Try again with a clearer recording.");
@@ -77,6 +133,7 @@ export function WhisperDemo() {
   };
 
   const transcribeExample = async () => {
+    setError(null);
     const url = "https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/jfk.wav";
     setAudioUrl(url);
     setIsLoading(true);
@@ -160,7 +217,7 @@ export function WhisperDemo() {
                 width: "10px",
                 height: "10px",
                 borderRadius: "50%",
-                background: "#64ffda",
+                background: isLoading ? "#233554" : "#64ffda",
                 display: "inline-block",
               }} />
               Record
@@ -184,11 +241,26 @@ export function WhisperDemo() {
               animation: "pulse 1s ease-in-out infinite",
               display: "inline-block",
             }} />
-            Recording...
+            Recording... (click Stop when done)
             <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
           </span>
         )}
       </div>
+
+      {/* Error */}
+      {error && (
+        <div style={{
+          padding: "12px 16px",
+          borderRadius: "8px",
+          background: "rgba(255, 107, 107, 0.08)",
+          border: "1px solid rgba(255, 107, 107, 0.2)",
+          marginBottom: "16px",
+          color: "#ff6b6b",
+          fontSize: "13px",
+        }}>
+          {error}
+        </div>
+      )}
 
       {/* Audio playback */}
       {audioUrl && !isRecording && (
@@ -230,4 +302,37 @@ export function WhisperDemo() {
       )}
     </DemoShell>
   );
+}
+
+// Convert Float32Array PCM to WAV Blob for playback
+function float32ToWav(samples: Float32Array, sampleRate: number): Blob {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+
+  function writeString(offset: number, str: string) {
+    for (let i = 0; i < str.length; i++) {
+      view.setUint8(offset + i, str.charCodeAt(i));
+    }
+  }
+
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true); // PCM
+  view.setUint16(22, 1, true); // mono
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, "data");
+  view.setUint32(40, samples.length * 2, true);
+
+  for (let i = 0; i < samples.length; i++) {
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7fff, true);
+  }
+
+  return new Blob([buffer], { type: "audio/wav" });
 }
