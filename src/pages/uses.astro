@@ -6,73 +6,115 @@ const categories = [
   {
     title: "AI & LLMs",
     items: [
-      { name: "Claude Code", description: "Primary AI coding assistant — CLI-first workflow with MCP servers" },
-      { name: "Claude API (Anthropic)", description: "Multi-agent orchestration, code review agents, RAG systems" },
-      { name: "OpenAI API", description: "GPT-4 for multi-perspective analysis in Prism debates" },
-      { name: "Google Gemini API", description: "Third perspective in multi-model orchestration" },
-      { name: "LangChain / LangGraph", description: "Agent frameworks for Think→Act→Observe loops" },
-      { name: "Transformers.js", description: "In-browser AI models — sentiment, summarization, image classification" },
-      { name: "Groq", description: "Fast inference for chat endpoints" },
+      { name: "Claude Code", description: "Primary AI coding assistant — CLI-first workflow with MCP servers, custom skills, and persistent memory via Engram" },
+      { name: "Claude API (Anthropic)", description: "Multi-agent orchestration, automated PR code reviews, RAG systems. 97.5% token cost reduction through intelligent caching" },
+      { name: "OpenAI API (GPT-4)", description: "Multi-perspective analysis in Prism debates and cross-model validation" },
+      { name: "Google Gemini API", description: "Third perspective in multi-model orchestration pipelines" },
+      { name: "LangChain / LangGraph", description: "Agent frameworks for Think→Act→Observe loops and autonomous workflows" },
+      { name: "Transformers.js", description: "In-browser AI models via WASM/WebGPU — sentiment, summarization, image classification. Zero API cost" },
+      { name: "Groq", description: "Ultra-fast LLM inference for real-time chat endpoints" },
+      { name: "Ollama", description: "Local LLM runtime for offline development and testing" },
     ],
   },
   {
     title: "Languages & Runtimes",
     items: [
-      { name: "TypeScript", description: "Primary language — strict mode in all projects" },
-      { name: "Node.js", description: "Backend runtime for 13+ microservices" },
-      { name: "Deno", description: "Edge functions and modern runtime for Supabase" },
-      { name: "Shell / Bash", description: "CLI tools, automation scripts, claude-statusline" },
+      { name: "TypeScript 5.9", description: "Primary language — strict mode in all new projects" },
+      { name: "Node.js 22", description: "Backend runtime powering 13+ production microservices" },
+      { name: "Deno 2.7", description: "Edge functions and Supabase runtime" },
+      { name: "Python 3.14", description: "ML tooling, scripting, and data processing" },
+      { name: "Shell / Bash", description: "CLI tools, automation scripts, claude-statusline (<50ms render)" },
     ],
   },
   {
     title: "Frontend",
     items: [
-      { name: "Astro", description: "Current framework — islands architecture, minimal JS" },
-      { name: "React 19", description: "Interactive components as Astro islands" },
-      { name: "Tailwind CSS 4", description: "Utility-first styling with Vite plugin" },
-      { name: "Framer Motion", description: "Scroll animations and micro-interactions" },
+      { name: "Astro 6", description: "Current framework — islands architecture, minimal JS, static-first" },
+      { name: "React 19", description: "Interactive components as Astro islands, server components" },
+      { name: "Tailwind CSS 4", description: "Utility-first styling with Vite plugin integration" },
+      { name: "Framer Motion 12", description: "Scroll animations, micro-interactions, whileInView patterns" },
+      { name: "Next.js 16", description: "App Router for complex React applications" },
+      { name: "Vue.js", description: "Legacy dashboards and business intelligence apps" },
+      { name: "Angular 17 SSR", description: "Server-rendered enterprise applications (Engagement platform)" },
     ],
   },
   {
     title: "Backend",
     items: [
-      { name: "NestJS", description: "Enterprise Node.js framework for multi-tenant services" },
-      { name: "Express", description: "Lightweight APIs and microservices" },
-      { name: "GraphQL (Apollo)", description: "API layer for complex data graphs" },
+      { name: "NestJS", description: "Enterprise Node.js framework — multi-tenant services across 6 LATAM countries" },
+      { name: "Express", description: "Lightweight APIs and standalone microservices" },
+      { name: "GraphQL (Apollo)", description: "Complex data graphs for multi-tenant platforms" },
+      { name: "Supabase", description: "Managed PostgreSQL + Auth + Realtime + Edge Functions" },
     ],
   },
   {
     title: "Databases",
     items: [
-      { name: "PostgreSQL", description: "Primary DB with Row-Level Security for multi-tenancy" },
-      { name: "Supabase", description: "Postgres + Auth + Realtime for modern apps" },
-      { name: "MongoDB", description: "Document store for legacy services" },
-      { name: "Redis", description: "Caching, rate limiting, session management" },
+      { name: "PostgreSQL", description: "Primary DB with Row-Level Security for multi-tenant data isolation" },
+      { name: "MongoDB", description: "Document store for legacy services and flexible schemas" },
+      { name: "MySQL", description: "Relational database for high-transaction systems" },
+      { name: "Redis", description: "Caching layer, rate limiting, and session management" },
     ],
   },
   {
     title: "Cloud & DevOps",
     items: [
-      { name: "Vercel", description: "Deployment platform — preview deployments, analytics, edge functions" },
+      { name: "Vercel", description: "Primary deployment — preview deploys, analytics, edge functions, WAF" },
       { name: "AWS", description: "Lambda, S3, CloudFront for production infrastructure" },
-      { name: "Docker", description: "Containerized development and deployment" },
-      { name: "GitHub Actions", description: "CI/CD pipelines for automated testing and deploy" },
+      { name: "Google Cloud", description: "Cloud services and API integrations" },
+      { name: "OrbStack", description: "Fast Docker alternative for containerized development on macOS" },
+      { name: "GitHub Actions", description: "CI/CD pipelines for automated testing and multi-environment deploy" },
     ],
   },
   {
-    title: "Testing",
+    title: "Testing & Quality",
     items: [
-      { name: "Playwright", description: "E2E testing organized by feature modules" },
-      { name: "Vitest", description: "Unit and integration testing" },
+      { name: "Playwright", description: "E2E testing organized by feature modules across multiple browsers" },
+      { name: "Vitest", description: "Unit and integration testing with TypeScript-first config" },
+      { name: "AI Code Review", description: "Custom multi-LLM agents detecting XSS, IDOR, auth bypass, CORS issues" },
     ],
   },
   {
-    title: "Dev Tools",
+    title: "Terminal & Editor",
     items: [
-      { name: "Neovim + tmux", description: "Terminal-first editing with custom config" },
-      { name: "Cursor", description: "AI-assisted IDE for complex refactors" },
-      { name: "Git", description: "Conventional commits, structured PR workflows" },
-      { name: "MCP Servers", description: "Custom Model Context Protocol integrations" },
+      { name: "Ghostty", description: "GPU-accelerated terminal — DankMono Nerd Font, Vesper theme, split panes" },
+      { name: "Zed", description: "Primary editor — fast, Rust-based, with custom themes and keymaps" },
+      { name: "Neovim", description: "Terminal editing with custom config for quick edits" },
+      { name: "tmux", description: "Terminal multiplexer for persistent sessions and agent workflows" },
+      { name: "Zsh + Zim", description: "Shell framework with async autosuggestions and syntax highlighting" },
+    ],
+  },
+  {
+    title: "CLI Productivity",
+    items: [
+      { name: "lazygit", description: "Terminal UI for git — visual staging, rebasing, and conflict resolution" },
+      { name: "delta", description: "Syntax-highlighted diffs with side-by-side mode" },
+      { name: "fzf", description: "Fuzzy finder for files, history, and branch switching" },
+      { name: "ripgrep (rg)", description: "Ultra-fast code search across large codebases" },
+      { name: "fd", description: "Modern find replacement with sensible defaults" },
+      { name: "eza", description: "Modern ls with git integration and tree view" },
+      { name: "bat", description: "cat with syntax highlighting and git diff integration" },
+      { name: "hyperfine", description: "CLI benchmarking for performance testing scripts and tools" },
+    ],
+  },
+  {
+    title: "Workflow & Methodology",
+    items: [
+      { name: "Spec-Driven Development (SDD)", description: "Structured methodology: explore → propose → spec → design → tasks → apply → verify" },
+      { name: "bd (beads)", description: "Issue tracking system — all work tracked via bd, not external tools" },
+      { name: "Engram", description: "Persistent AI memory across sessions — decisions, patterns, architecture" },
+      { name: "MCP Servers", description: "Custom Model Context Protocol integrations for JIRA, Google Workspace, Playwright" },
+      { name: "Conventional Commits", description: "Structured git history: feat:, fix:, refactor:, docs:, chore:" },
+    ],
+  },
+  {
+    title: "Apps & Utilities",
+    items: [
+      { name: "Raycast", description: "Command palette replacing Spotlight — snippets, window management, scripts" },
+      { name: "Bruno", description: "Open-source API client — Postman alternative with git-friendly collections" },
+      { name: "Fork", description: "Visual Git client for complex merge/rebase operations" },
+      { name: "Obsidian", description: "Knowledge base with MCP integration for Claude Code" },
+      { name: "MongoDB Compass", description: "Visual database explorer for MongoDB debugging" },
     ],
   },
 ];
@@ -80,7 +122,7 @@ const categories = [
 
 <Layout
   title="Uses | Cesar Moreno"
-  description="Tools, technologies, and setup I use daily as a Full Stack Engineer specializing in AI."
+  description="Tools, technologies, and setup I use daily as a Full Stack Engineer specializing in AI agents and automation."
 >
   <SpotlightCursor client:load />
   <main class="mx-auto max-w-3xl px-6 py-24 md:px-12 lg:px-24">
@@ -88,7 +130,7 @@ const categories = [
       href="/"
       class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-accent transition-colors hover:text-accent-hover"
     >
-      <span class="transition-transform group-hover:-translate-x-1">←</span>
+      <span class="transition-transform group-hover:-translate-x-1">&larr;</span>
       Back to home
     </a>
 
@@ -97,6 +139,7 @@ const categories = [
     </h1>
     <p class="mt-4 max-w-2xl text-lg text-slate-light">
       Tools and technologies I use daily to build AI systems and ship production software.
+      Inspired by <a href="https://uses.tech" target="_blank" rel="noopener" class="text-accent hover:text-accent-hover transition-colors">uses.tech</a>.
     </p>
 
     <div class="mt-12 space-y-12">
@@ -109,7 +152,7 @@ const categories = [
             {category.items.map((item) => (
               <div class="group rounded-lg px-4 py-3 transition-colors hover:bg-navy-light/50">
                 <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
-                  <span class="font-medium text-white">{item.name}</span>
+                  <span class="shrink-0 font-medium text-white">{item.name}</span>
                   <span class="text-sm text-slate">{item.description}</span>
                 </div>
               </div>
