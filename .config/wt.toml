@@ -1,6 +1,6 @@
 [post-create]
 install = "npm ci"
-env = "cp ../${REPO}/.env .env 2>/dev/null || true"
+env = "cp {{ primary_worktree_path }}/.env .env 2>/dev/null || true"
 
 [pre-merge]
 build = "npm run build"
