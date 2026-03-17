@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DemoShell } from "./DemoShell";
 import { useDevice } from "./useDevice";
 
@@ -42,7 +42,15 @@ export function RAGDemo() {
   const [queryEmbeddingPreview, setQueryEmbeddingPreview] = useState<number[]>([]);
   const pipelineRef = useRef<any>(null);
   const chunkEmbeddingsRef = useRef<number[][] | null>(null);
+  const resultsRef = useRef<HTMLDivElement>(null);
   const { device } = useDevice();
+
+  // Scroll to results when they appear
+  useEffect(() => {
+    if (results.length > 0 && resultsRef.current) {
+      resultsRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [results]);
 
   const loadModel = async () => {
     if (pipelineRef.current) return pipelineRef.current;
@@ -70,8 +78,6 @@ export function RAGDemo() {
     if (!value) return;
     if (text) setInput(text);
     setIsLoading(true);
-    setResults([]);
-    setQueryEmbeddingPreview([]);
 
     try {
       const pipe = await loadModel();
@@ -175,6 +181,32 @@ export function RAGDemo() {
         </button>
       </div>
 
+      {/* Searching indicator */}
+      {isLoading && (
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "10px",
+          padding: "14px 16px",
+          borderRadius: "8px",
+          background: "rgba(100, 255, 218, 0.03)",
+          border: "1px solid rgba(100, 255, 218, 0.08)",
+          marginBottom: "16px",
+        }}>
+          <div style={{
+            width: "16px", height: "16px",
+            border: "2px solid rgba(100, 255, 218, 0.15)",
+            borderTop: "2px solid #64ffda",
+            borderRadius: "50%",
+            animation: "spin 0.8s linear infinite",
+          }} />
+          <span style={{ color: "#a8b2d1", fontSize: "13px" }}>
+            Computing embeddings and searching...
+          </span>
+          <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
+        </div>
+      )}
+
       {/* Query embedding preview */}
       {queryEmbeddingPreview.length > 0 && (
         <div style={{
@@ -209,12 +241,17 @@ export function RAGDemo() {
 
       {/* Results */}
       {results.length > 0 && (
-        <div style={{
-          padding: "20px",
-          borderRadius: "10px",
-          border: "1px solid rgba(100, 255, 218, 0.15)",
-          background: "rgba(100, 255, 218, 0.03)",
-        }}>
+        <div
+          ref={resultsRef}
+          style={{
+            padding: "20px",
+            borderRadius: "10px",
+            border: "1px solid rgba(100, 255, 218, 0.15)",
+            background: "rgba(100, 255, 218, 0.03)",
+            opacity: isLoading ? 0.4 : 1,
+            transition: "opacity 0.3s ease",
+          }}
+        >
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "12px" }}>
             Top matching chunks (by cosine similarity)
           </span>
