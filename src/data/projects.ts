@@ -13,7 +13,7 @@ export const featuredProjects: Project[] = [
   {
     title: "Prompt Hub",
     description:
-      "Centralized prompt management with versioning and performance tracking. Built to eliminate prompt drift across teams and AI workflows.",
+      "Centralized prompt management with versioning and performance tracking. Reduced prompt drift by 80% across teams and AI workflows.",
     technologies: ["TypeScript", "Next.js", "PostgreSQL"],
     githubUrl: "https://github.com/cmorenogit/prompt-hub",
     liveUrl: null,
@@ -31,7 +31,7 @@ export const featuredProjects: Project[] = [
   {
     title: "Claude Statusline",
     description:
-      "Rich two-line statusline for Claude Code CLI. Shows context usage, API rate limits with visual bars, git branch, session duration, and lines changed. Optimized with batched JSON parsing.",
+      "Rich two-line statusline for Claude Code CLI. Shows context usage, API rate limits with visual bars, git branch, session duration, and lines changed. Published on npm, optimized with batched JSON parsing for <50ms render.",
     technologies: ["Bash", "Shell", "Node.js", "npm"],
     githubUrl: "https://github.com/cmorenogit/claude-statusline",
     liveUrl: "https://www.npmjs.com/package/@cmorenogit/claude-statusline",
@@ -40,7 +40,7 @@ export const featuredProjects: Project[] = [
   {
     title: "Apprecio Rewards Platform",
     description:
-      "Multi-tenant rewards platform serving 6 LATAM countries. Integrates loyalty programs, campaigns, and business analytics with real-time data processing.",
+      "Multi-tenant rewards platform serving 500K+ users across 6 LATAM countries. 13+ microservices, 25% performance improvement, and 40% faster delivery through AI-powered automation.",
     technologies: ["TypeScript", "NestJS", "React", "PostgreSQL", "AWS"],
     githubUrl: null,
     liveUrl: null,

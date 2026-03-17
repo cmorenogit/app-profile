@@ -17,28 +17,93 @@ const canonicalURL = new URL(Astro.url.pathname, 'https://cesarmoreno.dev');
 
 const jsonLd = {
   "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Cesar Moreno",
-  jobTitle: "Full Stack Engineer · AI",
-  url: "https://cesarmoreno.dev",
-  sameAs: [
-    "https://linkedin.com/in/morenodev",
-    "https://github.com/cmorenogit",
-  ],
-  worksFor: {
-    "@type": "Organization",
-    name: "Apprecio",
-  },
-  knowsAbout: [
-    "TypeScript",
-    "JavaScript",
-    "AI Agents",
-    "LLM Orchestration",
-    "Multi-Agent Systems",
-    "Microservices",
-    "Node.js",
-    "React",
-    "Automation",
+  "@graph": [
+    {
+      "@type": "ProfilePage",
+      mainEntity: { "@id": "https://cesarmoreno.dev/#person" },
+      url: canonicalURL.href,
+      name: title,
+      description,
+    },
+    {
+      "@type": "Person",
+      "@id": "https://cesarmoreno.dev/#person",
+      name: "Cesar Moreno",
+      jobTitle: "Full Stack Engineer · AI",
+      url: "https://cesarmoreno.dev",
+      image: "https://cesarmoreno.dev/og-image.png",
+      description:
+        "Full Stack Engineer specializing in AI with 13+ years of production experience. Builds intelligent systems from multi-agent orchestration to scalable platforms across LATAM.",
+      sameAs: [
+        "https://linkedin.com/in/morenodev",
+        "https://github.com/cmorenogit",
+      ],
+      worksFor: {
+        "@type": "Organization",
+        name: "Apprecio",
+        url: "https://apprecio.com",
+      },
+      hasOccupation: {
+        "@type": "Occupation",
+        name: "Full Stack Engineer",
+        skills:
+          "TypeScript, AI Agents, LLM Orchestration, Multi-Agent Systems, Node.js, React, NestJS, Microservices, PostgreSQL, AWS",
+      },
+      knowsAbout: [
+        "TypeScript",
+        "JavaScript",
+        "AI Agents",
+        "LLM Orchestration",
+        "Multi-Agent Systems",
+        "Microservices",
+        "Node.js",
+        "React",
+        "Automation",
+        "Astro",
+        "Transformers.js",
+        "WebGPU",
+      ],
+    },
+    {
+      "@type": "ItemList",
+      name: "Featured Projects",
+      url: "https://cesarmoreno.dev/#projects",
+      numberOfItems: 4,
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Agentes Hub",
+          url: "https://github.com/cmorenogit/agentes-hub",
+          description:
+            "Multi-agent system for automated PR code reviews with 97.5% token savings",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Prompt Hub",
+          url: "https://github.com/cmorenogit/prompt-hub",
+          description:
+            "Centralized prompt management with versioning and performance tracking",
+        },
+        {
+          "@type": "ListItem",
+          position: 3,
+          name: "Prism",
+          url: "https://github.com/cmorenogit/prism",
+          description:
+            "CLI tool orchestrating structured debates between Claude, GPT, and Gemini",
+        },
+        {
+          "@type": "ListItem",
+          position: 4,
+          name: "Claude Statusline",
+          url: "https://github.com/cmorenogit/claude-statusline",
+          description:
+            "Rich two-line statusline for Claude Code CLI with context usage and rate limits",
+        },
+      ],
+    },
   ],
 };
 ---

@@ -1,0 +1,122 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import { SpotlightCursor } from '@/components/SpotlightCursor';
+
+const categories = [
+  {
+    title: "AI & LLMs",
+    items: [
+      { name: "Claude Code", description: "Primary AI coding assistant — CLI-first workflow with MCP servers" },
+      { name: "Claude API (Anthropic)", description: "Multi-agent orchestration, code review agents, RAG systems" },
+      { name: "OpenAI API", description: "GPT-4 for multi-perspective analysis in Prism debates" },
+      { name: "Google Gemini API", description: "Third perspective in multi-model orchestration" },
+      { name: "LangChain / LangGraph", description: "Agent frameworks for Think→Act→Observe loops" },
+      { name: "Transformers.js", description: "In-browser AI models — sentiment, summarization, image classification" },
+      { name: "Groq", description: "Fast inference for chat endpoints" },
+    ],
+  },
+  {
+    title: "Languages & Runtimes",
+    items: [
+      { name: "TypeScript", description: "Primary language — strict mode in all projects" },
+      { name: "Node.js", description: "Backend runtime for 13+ microservices" },
+      { name: "Deno", description: "Edge functions and modern runtime for Supabase" },
+      { name: "Shell / Bash", description: "CLI tools, automation scripts, claude-statusline" },
+    ],
+  },
+  {
+    title: "Frontend",
+    items: [
+      { name: "Astro", description: "Current framework — islands architecture, minimal JS" },
+      { name: "React 19", description: "Interactive components as Astro islands" },
+      { name: "Tailwind CSS 4", description: "Utility-first styling with Vite plugin" },
+      { name: "Framer Motion", description: "Scroll animations and micro-interactions" },
+    ],
+  },
+  {
+    title: "Backend",
+    items: [
+      { name: "NestJS", description: "Enterprise Node.js framework for multi-tenant services" },
+      { name: "Express", description: "Lightweight APIs and microservices" },
+      { name: "GraphQL (Apollo)", description: "API layer for complex data graphs" },
+    ],
+  },
+  {
+    title: "Databases",
+    items: [
+      { name: "PostgreSQL", description: "Primary DB with Row-Level Security for multi-tenancy" },
+      { name: "Supabase", description: "Postgres + Auth + Realtime for modern apps" },
+      { name: "MongoDB", description: "Document store for legacy services" },
+      { name: "Redis", description: "Caching, rate limiting, session management" },
+    ],
+  },
+  {
+    title: "Cloud & DevOps",
+    items: [
+      { name: "Vercel", description: "Deployment platform — preview deployments, analytics, edge functions" },
+      { name: "AWS", description: "Lambda, S3, CloudFront for production infrastructure" },
+      { name: "Docker", description: "Containerized development and deployment" },
+      { name: "GitHub Actions", description: "CI/CD pipelines for automated testing and deploy" },
+    ],
+  },
+  {
+    title: "Testing",
+    items: [
+      { name: "Playwright", description: "E2E testing organized by feature modules" },
+      { name: "Vitest", description: "Unit and integration testing" },
+    ],
+  },
+  {
+    title: "Dev Tools",
+    items: [
+      { name: "Neovim + tmux", description: "Terminal-first editing with custom config" },
+      { name: "Cursor", description: "AI-assisted IDE for complex refactors" },
+      { name: "Git", description: "Conventional commits, structured PR workflows" },
+      { name: "MCP Servers", description: "Custom Model Context Protocol integrations" },
+    ],
+  },
+];
+---
+
+<Layout
+  title="Uses | Cesar Moreno"
+  description="Tools, technologies, and setup I use daily as a Full Stack Engineer specializing in AI."
+>
+  <SpotlightCursor client:load />
+  <main class="mx-auto max-w-3xl px-6 py-24 md:px-12 lg:px-24">
+    <a
+      href="/"
+      class="group mb-6 inline-flex items-center gap-2 font-mono text-sm text-accent transition-colors hover:text-accent-hover"
+    >
+      <span class="transition-transform group-hover:-translate-x-1">←</span>
+      Back to home
+    </a>
+
+    <h1 class="text-4xl font-bold sm:text-5xl">
+      <span class="gradient-text">Uses</span>
+    </h1>
+    <p class="mt-4 max-w-2xl text-lg text-slate-light">
+      Tools and technologies I use daily to build AI systems and ship production software.
+    </p>
+
+    <div class="mt-12 space-y-12">
+      {categories.map((category) => (
+        <section>
+          <h2 class="mb-4 font-mono text-sm tracking-widest text-accent uppercase">
+            {category.title}
+          </h2>
+          <div class="space-y-1">
+            {category.items.map((item) => (
+              <div class="group rounded-lg px-4 py-3 transition-colors hover:bg-navy-light/50">
+                <div class="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:gap-3">
+                  <span class="font-medium text-white">{item.name}</span>
+                  <span class="text-sm text-slate">{item.description}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </main>
+</Layout>
