@@ -1,0 +1,13 @@
+change: mobile-playground-fixes
+branch: feature/mobile-playground-fixes
+mode: openspec
+phases:
+  explore: completed
+  propose: completed
+  specs: pending
+  design: pending
+  tasks: pending
+  apply: pending
+  verify: pending
+  archive: pending
+current: specs,design

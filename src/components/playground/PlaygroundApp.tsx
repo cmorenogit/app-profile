@@ -5,6 +5,7 @@ import { ImageDemo } from "./ImageDemo";
 import { RAGDemo } from "./RAGDemo";
 import { WhisperDemo } from "./WhisperDemo";
 import { useDevice } from "./useDevice";
+import { useMobileDetect } from "./useMobileDetect";
 
 const demos = [
   {
@@ -39,12 +40,27 @@ const demos = [
   },
 ] as const;
 
+const MODEL_SIZES: Record<string, number> = {
+  sentiment: 67,
+  summary: 305,
+  image: 88,
+  rag: 23,
+  whisper: 40,
+};
+
 type DemoId = (typeof demos)[number]["id"];
 
 export function PlaygroundApp() {
   const [activeDemo, setActiveDemo] = useState<DemoId | null>(null);
   const demoPanelRef = useRef<HTMLDivElement>(null);
   const { device, isDetecting, isWebGPU } = useDevice();
+  const mobileInfo = useMobileDetect();
+
+  useEffect(() => {
+    if (navigator.storage?.persist) {
+      navigator.storage.persist().catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     if (activeDemo && demoPanelRef.current) {
@@ -54,32 +70,49 @@ export function PlaygroundApp() {
 
   return (
     <div>
-      {/* Device badge */}
+      {/* Device badges */}
       {!isDetecting && (
-        <div style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: "6px",
-          padding: "4px 12px",
-          borderRadius: "6px",
-          background: isWebGPU ? "rgba(100, 255, 218, 0.08)" : "rgba(136, 146, 176, 0.08)",
-          border: `1px solid ${isWebGPU ? "rgba(100, 255, 218, 0.15)" : "rgba(136, 146, 176, 0.12)"}`,
-          fontSize: "12px",
-          color: isWebGPU ? "#64ffda" : "#8892b0",
-          fontFamily: "'Geist Mono', monospace",
-          marginBottom: "20px",
-        }}>
-          {isWebGPU ? "⚡ WebGPU accelerated" : "🔧 Running on WASM (CPU)"}
-          {isWebGPU && (
-            <span style={{ color: "#8892b0", fontSize: "11px" }}>
-              — GPU-powered inference
-            </span>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "8px", marginBottom: "20px" }}>
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            padding: "4px 12px",
+            borderRadius: "6px",
+            background: isWebGPU ? "rgba(100, 255, 218, 0.08)" : "rgba(136, 146, 176, 0.08)",
+            border: `1px solid ${isWebGPU ? "rgba(100, 255, 218, 0.15)" : "rgba(136, 146, 176, 0.12)"}`,
+            fontSize: "12px",
+            color: isWebGPU ? "#64ffda" : "#8892b0",
+            fontFamily: "'Geist Mono', monospace",
+          }}>
+            {isWebGPU ? "⚡ WebGPU accelerated" : "🔧 Running on WASM (CPU)"}
+            {isWebGPU && (
+              <span style={{ color: "#8892b0", fontSize: "11px" }}>
+                — GPU-powered inference
+              </span>
+            )}
+          </div>
+          {mobileInfo.isMobile && (
+            <div style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              padding: "4px 12px",
+              borderRadius: "6px",
+              background: "rgba(167, 139, 250, 0.08)",
+              border: "1px solid rgba(167, 139, 250, 0.12)",
+              fontSize: "12px",
+              color: "#a78bfa",
+              fontFamily: "'Geist Mono', monospace",
+            }}>
+              {mobileInfo.recommendation === "full" ? "📱 all demos" : mobileInfo.recommendation === "mobile" ? "📱 optimized for mobile" : "📱 limited demos"}
+            </div>
           )}
         </div>
       )}
 
       {/* Demo selector grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(220px, 100%), 1fr))", gap: "16px" }}>
         {demos.map((demo) => (
           <button
             key={demo.id}
@@ -114,6 +147,19 @@ export function PlaygroundApp() {
             <p style={{ color: "#8892b0", fontSize: "13px", lineHeight: 1.5, margin: 0 }}>
               {demo.description}
             </p>
+            <span style={{
+              display: "inline-block",
+              padding: "2px 8px",
+              borderRadius: "4px",
+              background: "rgba(136, 146, 176, 0.08)",
+              border: "1px solid rgba(136, 146, 176, 0.1)",
+              fontSize: "11px",
+              color: "#8892b0",
+              fontFamily: "'Geist Mono', monospace",
+              marginTop: "10px",
+            }}>
+              ~{MODEL_SIZES[demo.id]} MB
+            </span>
           </button>
         ))}
       </div>
@@ -124,7 +170,7 @@ export function PlaygroundApp() {
           ref={demoPanelRef}
           style={{
             marginTop: "24px",
-            padding: "24px",
+            padding: "16px",
             borderRadius: "12px",
             border: "1px solid rgba(100, 255, 218, 0.1)",
             background: "rgba(17, 34, 64, 0.4)",
