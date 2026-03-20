@@ -239,7 +239,8 @@ export function WhisperDemo() {
           onClick={transcribeExample}
           disabled={isLoading || isRecording}
           style={{
-            padding: "6px 12px",
+            padding: "10px 16px",
+            minHeight: "44px",
             borderRadius: "6px",
             border: "1px solid rgba(100, 255, 218, 0.1)",
             background: "rgba(17, 34, 64, 0.5)",
@@ -256,7 +257,7 @@ export function WhisperDemo() {
       </div>
 
       {/* Record button */}
-      <div style={{ display: "flex", gap: "12px", alignItems: "center", marginBottom: "16px" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "16px" }}>
         <button
           onClick={isRecording ? stopRecording : startRecording}
           disabled={isLoading}
@@ -272,7 +273,12 @@ export function WhisperDemo() {
             transition: "background 0.2s, border-color 0.2s",
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
             gap: "8px",
+            whiteSpace: "nowrap",
+            minWidth: "fit-content",
+            width: "100%",
+            minHeight: "48px",
           }}
         >
           {isRecording ? (
@@ -283,6 +289,7 @@ export function WhisperDemo() {
                 borderRadius: "2px",
                 background: "#ff6b6b",
                 display: "inline-block",
+                flexShrink: 0,
               }} />
               Stop Recording
             </>
@@ -294,6 +301,7 @@ export function WhisperDemo() {
                 borderRadius: "50%",
                 background: isLoading ? "#233554" : "#64ffda",
                 display: "inline-block",
+                flexShrink: 0,
               }} />
               Record
             </>
@@ -301,11 +309,12 @@ export function WhisperDemo() {
         </button>
 
         {isRecording && (
-          <span style={{
+          <div style={{
             color: "#ff6b6b",
             fontSize: "13px",
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
             gap: "6px",
           }}>
             <span style={{
@@ -315,12 +324,13 @@ export function WhisperDemo() {
               background: "#ff6b6b",
               animation: "pulse 1s ease-in-out infinite",
               display: "inline-block",
+              flexShrink: 0,
             }} />
             {isMobile
               ? `Recording... ${recordingSeconds}s / 30s`
               : "Recording... (click Stop when done)"}
             <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
-          </span>
+          </div>
         )}
       </div>
 
@@ -342,7 +352,7 @@ export function WhisperDemo() {
       {/* Audio playback */}
       {audioUrl && !isRecording && (
         <div style={{ marginBottom: "16px" }}>
-          <audio controls src={audioUrl} style={{ width: "100%", height: "36px" }} />
+          <audio controls src={audioUrl} style={{ width: "100%", maxWidth: "100%", boxSizing: "border-box", height: "36px" }} />
         </div>
       )}
 
@@ -355,6 +365,7 @@ export function WhisperDemo() {
             borderTop: "2px solid #64ffda",
             borderRadius: "50%",
             animation: "spin 0.8s linear infinite",
+            flexShrink: 0,
           }} />
           <span style={{ color: "#a8b2d1", fontSize: "13px" }}>Transcribing audio...</span>
           <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>

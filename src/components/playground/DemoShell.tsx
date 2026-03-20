@@ -39,6 +39,8 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
             fontSize: "11px",
             color: "#a78bfa",
             fontFamily: "'Geist Mono', monospace",
+            flexShrink: 0,
+            whiteSpace: "nowrap",
           }}>
             Model: {modelName}
           </span>
@@ -54,6 +56,8 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
               fontSize: "11px",
               color: device === "webgpu" ? "#64ffda" : "#8892b0",
               fontFamily: "'Geist Mono', monospace",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
             }}>
               {device === "webgpu" ? "⚡ WebGPU" : "🔧 WASM"}
             </span>
@@ -70,6 +74,8 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
               fontSize: "11px",
               color: "#8892b0",
               fontFamily: "'Geist Mono', monospace",
+              flexShrink: 0,
+              whiteSpace: "nowrap",
             }}>
               ~{modelSizeMB} MB
             </span>
@@ -87,6 +93,8 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
           background: "rgba(100, 255, 218, 0.03)",
           border: "1px solid rgba(100, 255, 218, 0.08)",
           marginBottom: "16px",
+          boxSizing: "border-box",
+          overflow: "hidden",
         }}>
           {progress != null && progress > 0 ? (
             <>
@@ -105,7 +113,7 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
                   transition: "width 0.3s ease",
                 }} />
               </div>
-              <span style={{ color: "#a8b2d1", fontSize: "13px" }}>
+              <span style={{ color: "#a8b2d1", fontSize: "13px", textAlign: "center" }}>
                 Downloading model... {loadedBytes != null ? formatMB(loadedBytes) : "0.0"} / {totalBytes != null ? formatMB(totalBytes) : "?"} MB
               </span>
             </>
@@ -114,6 +122,7 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
               <div style={{
                 width: "20px",
                 height: "20px",
+                flexShrink: 0,
                 border: "2px solid rgba(100, 255, 218, 0.15)",
                 borderTop: "2px solid #64ffda",
                 borderRadius: "50%",
