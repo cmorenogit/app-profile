@@ -50,17 +50,26 @@ function detectDevice(): MobileDetectResult {
 
   const isAndroid = /Android/i.test(ua)
 
+  // iOS Safari has ~200-400MB per-tab limit, and model loading peaks at ~3x model size
+  // (fetch buffer + Cache API copy + WASM heap). So effective iOS model budget is ~80MB.
+  // With quantization + cache disabled, peak drops to ~2x, allowing ~100-120MB models.
   const canRunModel = (sizeMB: number): boolean => {
+    if (isIOS) {
+      // iOS with our optimizations (numThreads=1, no cache): peak ~2x model size
+      // Conservative: allow models up to ~100MB (peak ~200MB, under ~300MB tab limit)
+      return sizeMB <= 100
+    }
     if (sizeMB < 50) return true
     if (deviceMemoryGB >= 4) return true
     if (deviceMemoryGB >= 2 && sizeMB < 200) return true
     return false
   }
 
-  const shouldUseMobileModel = deviceMemoryGB < 4
+  // On iOS, always prefer quantized models regardless of deviceMemory heuristic
+  const shouldUseMobileModel = isIOS || deviceMemoryGB < 4
 
   const recommendation: MobileDetectResult["recommendation"] =
-    deviceMemoryGB >= 4 ? "full" : deviceMemoryGB >= 2 ? "mobile" : "fallback"
+    isIOS ? "mobile" : deviceMemoryGB >= 4 ? "full" : deviceMemoryGB >= 2 ? "mobile" : "fallback"
 
   return {
     isMobile,

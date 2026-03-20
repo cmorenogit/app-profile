@@ -20,7 +20,7 @@ export function ImageDemo() {
   const mobileInfo = useMobileDetect();
   const isMobile = mobileInfo.isMobile;
   const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
-    { task: "image-classification", modelId: "Xenova/vit-base-patch16-224", modelSizeMB: 88 },
+    { task: "image-classification", modelId: "Xenova/vit-base-patch16-224", modelSizeMB: 88, mobileDtype: "q8" },
     mobileInfo,
   );
 
