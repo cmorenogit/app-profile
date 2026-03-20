@@ -77,7 +77,9 @@ export function WhisperDemo() {
       "onnx-community/whisper-tiny.en",
       {
         device,
-        dtype: isIOS ? "q8" : undefined,
+        // q4 for iOS: encoder ~8.6MB + decoder ~82.7MB ≈ 91MB total
+        // vs q8: encoder ~9.7MB + decoder ~105MB ≈ 115MB — too close to iOS limit
+        dtype: isIOS ? "q4" : undefined,
       },
     );
     pipelineRef.current = pipe;
@@ -209,9 +211,25 @@ export function WhisperDemo() {
   const transcribeAudio = async (audioData: Float32Array) => {
     setIsLoading(true);
     setTranscript("");
+
+    const isIOS = "ontouchstart" in window &&
+      (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
+
+    // On iOS, cap audio to 15s to reduce memory during inference
+    // Whisper decoder runs up to 448 autoregressive steps with growing KV cache
+    const maxSamples = isIOS ? 16000 * 15 : audioData.length;
+    const clippedAudio = audioData.length > maxSamples
+      ? audioData.slice(0, maxSamples)
+      : audioData;
+
     try {
       const pipe = await loadModel();
-      const output = await pipe(audioData);
+      const output = await pipe(clippedAudio, {
+        // Limit decoder iterations to reduce KV cache memory growth on iOS
+        // 10s of speech ≈ 20-40 tokens; 64 is generous for 15s clips
+        ...(isIOS ? { max_new_tokens: 64, chunk_length_s: 15 } : {}),
+      });
       const text = (output as { text: string }).text?.trim();
       setTranscript(text || "No speech detected. Try speaking louder or closer to the microphone.");
     } catch (err) {
@@ -227,9 +245,16 @@ export function WhisperDemo() {
     setAudioUrl(url);
     setIsLoading(true);
     setTranscript("");
+
+    const isIOS = "ontouchstart" in window &&
+      (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
+
     try {
       const pipe = await loadModel();
-      const output = await pipe(url);
+      const output = await pipe(url, {
+        ...(isIOS ? { max_new_tokens: 64, chunk_length_s: 15 } : {}),
+      });
       setTranscript((output as { text: string }).text || "Could not transcribe audio.");
     } catch (err) {
       console.error("Transcription error:", err);
