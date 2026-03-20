@@ -58,11 +58,27 @@ export function WhisperDemo() {
   const loadModel = async () => {
     if (pipelineRef.current) return pipelineRef.current;
     setIsModelLoading(true);
-    const { pipeline } = await import("@huggingface/transformers");
+    const { env, pipeline } = await import("@huggingface/transformers");
+
+    // iOS Safari: disable multi-threaded WASM (JSC memory spiral, Issue #1242)
+    // and Cache API (eliminates memory copy during download)
+    const isIOS = "ontouchstart" in window &&
+      (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
+    if (isIOS) {
+      if (env.backends?.onnx?.wasm) {
+        env.backends.onnx.wasm.numThreads = 1;
+      }
+      env.useBrowserCache = false;
+    }
+
     const pipe = await pipeline(
       "automatic-speech-recognition",
       "onnx-community/whisper-tiny.en",
-      { device },
+      {
+        device,
+        dtype: isIOS ? "q8" : undefined,
+      },
     );
     pipelineRef.current = pipe;
     setIsModelLoading(false);

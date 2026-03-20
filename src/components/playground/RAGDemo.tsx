@@ -46,7 +46,7 @@ export function RAGDemo() {
 
   const mobileInfo = useMobileDetect();
   const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
-    { task: "feature-extraction", modelId: "Xenova/all-MiniLM-L6-v2", modelSizeMB: 23 },
+    { task: "feature-extraction", modelId: "Xenova/all-MiniLM-L6-v2", modelSizeMB: 23, mobileDtype: "q8" },
     mobileInfo,
   );
 

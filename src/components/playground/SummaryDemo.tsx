@@ -13,7 +13,7 @@ export function SummaryDemo() {
 
   const mobileInfo = useMobileDetect();
   const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
-    { task: "summarization", modelId: "Xenova/distilbart-cnn-6-6", modelSizeMB: 305 },
+    { task: "summarization", modelId: "Xenova/distilbart-cnn-6-6", modelSizeMB: 305, mobileDtype: "q8" },
     mobileInfo,
   );
 

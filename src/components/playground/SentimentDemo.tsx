@@ -34,7 +34,7 @@ export function SentimentDemo() {
 
   const mobileInfo = useMobileDetect();
   const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
-    { task: "sentiment-analysis", modelId: "Xenova/distilbert-base-uncased-finetuned-sst-2-english", modelSizeMB: 67 },
+    { task: "sentiment-analysis", modelId: "Xenova/distilbert-base-uncased-finetuned-sst-2-english", modelSizeMB: 67, mobileDtype: "q8" },
     mobileInfo,
   );
 
