@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { DemoShell } from "./DemoShell";
-import { useDevice } from "./useDevice";
+import { usePipelineManager } from "./usePipelineManager";
+import { useMobileDetect } from "./useMobileDetect";
+import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
 
 interface SentimentResult {
   label: string;
@@ -29,21 +31,12 @@ export function SentimentDemo() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState<SentimentResult[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModelLoading, setIsModelLoading] = useState(false);
-  const pipelineRef = useRef<any>(null);
-  const { device } = useDevice();
 
-  const loadModel = async () => {
-    if (pipelineRef.current) return pipelineRef.current;
-    setIsModelLoading(true);
-    const { pipeline } = await import("@huggingface/transformers");
-    const pipe = await pipeline("sentiment-analysis", "Xenova/distilbert-base-uncased-finetuned-sst-2-english", {
-      device,
-    });
-    pipelineRef.current = pipe;
-    setIsModelLoading(false);
-    return pipe;
-  };
+  const mobileInfo = useMobileDetect();
+  const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
+    { task: "sentiment-analysis", modelId: "Xenova/distilbert-base-uncased-finetuned-sst-2-english", modelSizeMB: 67 },
+    mobileInfo,
+  );
 
   const analyze = async (text?: string) => {
     const value = (text || input).trim();
@@ -53,6 +46,7 @@ export function SentimentDemo() {
     setResults(null);
     try {
       const pipe = await loadModel();
+      if (!pipe) return;
       const output = await pipe(value);
       setResults(output as SentimentResult[]);
     } catch (err) {
@@ -64,13 +58,63 @@ export function SentimentDemo() {
   const topResult = results?.[0];
   const sentimentKey = topResult?.label?.toUpperCase() || "";
 
+  if (status === "fallback") {
+    return (
+      <DemoShell
+        title="Sentiment Analysis"
+        howItWorks="A DistilBERT model analyzes your text and classifies its emotional tone as positive, negative, or neutral. Everything runs in your browser via WebAssembly."
+        modelName="distilbert-sst2"
+        isLoading={false}
+        isFallback={true}
+        fallbackReason="This model (67MB) is too large for your device"
+        modelSizeMB={67}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+          {PRERECORDED_RESULTS.sentiment.map((r, i) => {
+            const key = r.output.label?.toUpperCase() || "";
+            return (
+              <div
+                key={i}
+                style={{
+                  padding: "16px",
+                  borderRadius: "10px",
+                  border: `1px solid ${SENTIMENT_COLORS[key]}33`,
+                  background: `${SENTIMENT_COLORS[key]}08`,
+                }}
+              >
+                <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+                  {r.input.label}: &quot;{r.input.value}&quot;
+                </span>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <span style={{
+                    color: SENTIMENT_COLORS[key] || "#e6f1ff",
+                    fontSize: "20px",
+                    fontWeight: 700,
+                  }}>
+                    {SENTIMENT_LABELS[key] || r.output.label}
+                  </span>
+                  <span style={{ color: "#e6f1ff", fontSize: "16px", fontWeight: 700 }}>
+                    {(r.output.score * 100).toFixed(1)}%
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </DemoShell>
+    );
+  }
+
   return (
     <DemoShell
       title="Sentiment Analysis"
       howItWorks="A DistilBERT model analyzes your text and classifies its emotional tone as positive, negative, or neutral. Everything runs in your browser via WebAssembly."
       modelName="distilbert-sst2"
       isLoading={isModelLoading}
-      device={device}
+      progress={progress}
+      loadedBytes={loadedBytes}
+      totalBytes={totalBytes}
+      modelSizeMB={67}
     >
       {/* Examples */}
       <div style={{ marginBottom: "16px" }}>

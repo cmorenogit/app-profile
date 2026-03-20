@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { DemoShell } from "./DemoShell";
-import { useDevice } from "./useDevice";
+import { usePipelineManager } from "./usePipelineManager";
+import { useMobileDetect } from "./useMobileDetect";
+import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
 
 interface ClassificationResult {
   label: string;
@@ -11,23 +13,16 @@ export function ImageDemo() {
   const [results, setResults] = useState<ClassificationResult[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModelLoading, setIsModelLoading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
-  const pipelineRef = useRef<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { device } = useDevice();
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
-  const loadModel = async () => {
-    if (pipelineRef.current) return pipelineRef.current;
-    setIsModelLoading(true);
-    const { pipeline } = await import("@huggingface/transformers");
-    const pipe = await pipeline("image-classification", "Xenova/vit-base-patch16-224", {
-      device,
-    });
-    pipelineRef.current = pipe;
-    setIsModelLoading(false);
-    return pipe;
-  };
+  const mobileInfo = useMobileDetect();
+  const isMobile = mobileInfo.isMobile;
+  const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
+    { task: "image-classification", modelId: "Xenova/vit-base-patch16-224", modelSizeMB: 88 },
+    mobileInfo,
+  );
 
   const classify = async (file: File) => {
     if (!file.type.startsWith("image/")) return;
@@ -43,6 +38,7 @@ export function ImageDemo() {
 
     try {
       const pipe = await loadModel();
+      if (!pipe) return;
       const output = await pipe(url);
       setResults((output as ClassificationResult[]).slice(0, 5));
     } catch (err) {
@@ -63,17 +59,88 @@ export function ImageDemo() {
     if (file) classify(file);
   };
 
+  if (status === "fallback") {
+    return (
+      <DemoShell
+        title="Image Classification"
+        howItWorks="A Vision Transformer (ViT) model analyzes your image and identifies what it contains, with confidence scores for the top 5 predictions. Runs entirely in your browser."
+        modelName="vit-base-patch16-224"
+        isLoading={false}
+        isFallback={true}
+        fallbackReason="This model (88MB) is too large for your device"
+        modelSizeMB={88}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {PRERECORDED_RESULTS.image.map((r, i) => (
+            <div
+              key={i}
+              style={{
+                padding: "20px",
+                borderRadius: "10px",
+                border: "1px solid rgba(100, 255, 218, 0.15)",
+                background: "rgba(100, 255, 218, 0.05)",
+              }}
+            >
+              <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "12px" }}>
+                {r.input.label}
+              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                {(r.output.topResults as ClassificationResult[]).map((pred, j) => (
+                  <div key={j} style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+                        <span style={{
+                          color: j === 0 ? "#64ffda" : "#a8b2d1",
+                          fontSize: "13px",
+                          fontWeight: j === 0 ? 600 : 400,
+                          textTransform: "capitalize",
+                        }}>
+                          {pred.label.replace(/_/g, " ")}
+                        </span>
+                        <span style={{ color: "#8892b0", fontSize: "12px", fontFamily: "'Geist Mono', monospace" }}>
+                          {(pred.score * 100).toFixed(1)}%
+                        </span>
+                      </div>
+                      <div style={{
+                        height: "4px",
+                        borderRadius: "2px",
+                        background: "rgba(100, 255, 218, 0.1)",
+                        overflow: "hidden",
+                      }}>
+                        <div style={{
+                          height: "100%",
+                          width: `${pred.score * 100}%`,
+                          borderRadius: "2px",
+                          background: j === 0
+                            ? "linear-gradient(90deg, #64ffda, #a78bfa)"
+                            : "rgba(100, 255, 218, 0.3)",
+                        }} />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </DemoShell>
+    );
+  }
+
   return (
     <DemoShell
       title="Image Classification"
       howItWorks="A Vision Transformer (ViT) model analyzes your image and identifies what it contains, with confidence scores for the top 5 predictions. Runs entirely in your browser."
       modelName="vit-base-patch16-224"
       isLoading={isModelLoading}
-      device={device}
+      progress={progress}
+      loadedBytes={loadedBytes}
+      totalBytes={totalBytes}
+      modelSizeMB={88}
     >
       {/* Drop zone */}
       <div
-        onClick={() => fileInputRef.current?.click()}
+        onClick={() => !isMobile && fileInputRef.current?.click()}
         onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
@@ -82,7 +149,7 @@ export function ImageDemo() {
           borderRadius: "10px",
           border: `2px dashed ${dragOver ? "rgba(100, 255, 218, 0.4)" : "rgba(100, 255, 218, 0.15)"}`,
           background: dragOver ? "rgba(100, 255, 218, 0.05)" : "rgba(17, 34, 64, 0.3)",
-          cursor: "pointer",
+          cursor: isMobile ? "default" : "pointer",
           textAlign: "center",
           transition: "border-color 0.2s, background 0.2s",
           marginBottom: "16px",
@@ -92,6 +159,14 @@ export function ImageDemo() {
           ref={fileInputRef}
           type="file"
           accept="image/*"
+          onChange={handleFile}
+          style={{ display: "none" }}
+        />
+        <input
+          ref={cameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
           onChange={handleFile}
           style={{ display: "none" }}
         />
@@ -108,6 +183,45 @@ export function ImageDemo() {
               margin: "0 auto",
             }}
           />
+        ) : isMobile ? (
+          <>
+            <div style={{ fontSize: "32px", marginBottom: "12px" }}>📷</div>
+            <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+              <button
+                onClick={(e) => { e.stopPropagation(); cameraInputRef.current?.click(); }}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(100, 255, 218, 0.2)",
+                  background: "rgba(100, 255, 218, 0.1)",
+                  color: "#64ffda",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                }}
+              >
+                Take Photo
+              </button>
+              <button
+                onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                style={{
+                  padding: "10px 20px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(100, 255, 218, 0.2)",
+                  background: "rgba(17, 34, 64, 0.5)",
+                  color: "#a8b2d1",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                  cursor: "pointer",
+                }}
+              >
+                Choose from Gallery
+              </button>
+            </div>
+            <p style={{ color: "#8892b0", fontSize: "12px", margin: "12px 0 0 0" }}>
+              JPG, PNG, WebP — max 10MB
+            </p>
+          </>
         ) : (
           <>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>📷</div>

@@ -1,6 +1,8 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { DemoShell } from "./DemoShell";
-import { useDevice } from "./useDevice";
+import { usePipelineManager } from "./usePipelineManager";
+import { useMobileDetect } from "./useMobileDetect";
+import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
 
 const EXAMPLE_TEXT = `Artificial intelligence has transformed the software industry in fundamental ways. What once required teams of specialized engineers working for months can now be accomplished in days with the help of AI-powered tools. Code generation, automated testing, and intelligent debugging have become standard practices. However, the most significant impact has been in how developers think about problem-solving — shifting from writing every line manually to orchestrating AI agents that handle repetitive tasks while humans focus on architecture and creative decisions.`;
 
@@ -8,21 +10,12 @@ export function SummaryDemo() {
   const [input, setInput] = useState("");
   const [summary, setSummary] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isModelLoading, setIsModelLoading] = useState(false);
-  const pipelineRef = useRef<any>(null);
-  const { device } = useDevice();
 
-  const loadModel = async () => {
-    if (pipelineRef.current) return pipelineRef.current;
-    setIsModelLoading(true);
-    const { pipeline } = await import("@huggingface/transformers");
-    const pipe = await pipeline("summarization", "Xenova/distilbart-cnn-6-6", {
-      device,
-    });
-    pipelineRef.current = pipe;
-    setIsModelLoading(false);
-    return pipe;
-  };
+  const mobileInfo = useMobileDetect();
+  const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
+    { task: "summarization", modelId: "Xenova/distilbart-cnn-6-6", modelSizeMB: 305 },
+    mobileInfo,
+  );
 
   const summarize = async (text?: string) => {
     const value = (text || input).trim();
@@ -32,6 +25,7 @@ export function SummaryDemo() {
     setSummary("");
     try {
       const pipe = await loadModel();
+      if (!pipe) return;
       const output = await pipe(value, { max_new_tokens: 80, min_length: 10 });
       setSummary((output as any)[0]?.summary_text || "Could not generate summary.");
     } catch (err) {
@@ -44,6 +38,47 @@ export function SummaryDemo() {
   const wordCount = input.trim().split(/\s+/).filter(Boolean).length;
   const tooShort = wordCount > 0 && wordCount < 15;
 
+  if (status === "fallback") {
+    return (
+      <DemoShell
+        title="Text Summary"
+        howItWorks="A DistilBART model reads your text and generates a concise summary capturing the key points. Requires at least 15 words of input. Runs entirely in your browser."
+        modelName="distilbart-cnn-6-6"
+        isLoading={false}
+        isFallback={true}
+        fallbackReason="This model (305MB) is too large for your device"
+        modelSizeMB={305}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {PRERECORDED_RESULTS.summary.map((r, i) => (
+            <div
+              key={i}
+              style={{
+                padding: "20px",
+                borderRadius: "10px",
+                border: "1px solid rgba(100, 255, 218, 0.15)",
+                background: "rgba(100, 255, 218, 0.05)",
+              }}
+            >
+              <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+                {r.input.label}
+              </span>
+              <p style={{ color: "#a8b2d1", fontSize: "13px", lineHeight: 1.5, margin: "0 0 12px 0", fontStyle: "italic" }}>
+                &quot;{r.input.value}&quot;
+              </p>
+              <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+                Summary
+              </span>
+              <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
+                {r.output.summary_text}
+              </p>
+            </div>
+          ))}
+        </div>
+      </DemoShell>
+    );
+  }
+
   return (
     <DemoShell
       title="Text Summary"
@@ -51,7 +86,10 @@ export function SummaryDemo() {
       modelName="distilbart-cnn-6-6"
       isLoading={isModelLoading}
       loadingText="Loading summarization model... (first time takes ~15s)"
-      device={device}
+      progress={progress}
+      loadedBytes={loadedBytes}
+      totalBytes={totalBytes}
+      modelSizeMB={305}
     >
       {/* Example */}
       <div style={{ marginBottom: "16px" }}>

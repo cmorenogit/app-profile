@@ -1,0 +1,32 @@
+schema: spec-driven
+
+context: |
+  Tech stack: Astro 6 + React 19 + TypeScript 5 + Tailwind CSS 4
+  Architecture: Static portfolio with client-side AI playground (Transformers.js 3.8.1)
+  Testing: Vitest + Playwright
+  Style: Tailwind inline, Framer Motion, dark theme (navy + cyan accent)
+  Deploy: Vercel (preview per branch)
+
+rules:
+  proposal:
+    - Include rollback plan for risky changes
+    - Consider iOS Safari and Android Chrome as primary mobile targets
+  specs:
+    - Use Given/When/Then for scenarios
+    - Use RFC 2119 keywords (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Include sequence diagrams for complex flows
+    - Document architecture decisions with rationale
+  tasks:
+    - Group by phase, use hierarchical numbering
+    - Keep tasks completable in one session
+  apply:
+    - Follow existing code patterns
+    tdd: false
+    test_command: "npm run build"
+  verify:
+    test_command: "npm run build"
+    build_command: "npm run build"
+    coverage_threshold: 0
+  archive:
+    - Warn before merging destructive deltas

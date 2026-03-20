@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { DemoShell } from "./DemoShell";
-import { useDevice } from "./useDevice";
+import { usePipelineManager } from "./usePipelineManager";
+import { useMobileDetect } from "./useMobileDetect";
+import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
 
 interface ChunkResult {
   text: string;
@@ -38,12 +40,15 @@ export function RAGDemo() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState<ChunkResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [isModelLoading, setIsModelLoading] = useState(false);
   const [queryEmbeddingPreview, setQueryEmbeddingPreview] = useState<number[]>([]);
-  const pipelineRef = useRef<any>(null);
   const chunkEmbeddingsRef = useRef<number[][] | null>(null);
   const resultsRef = useRef<HTMLDivElement>(null);
-  const { device } = useDevice();
+
+  const mobileInfo = useMobileDetect();
+  const { loadModel, isLoading: isModelLoading, progress, loadedBytes, totalBytes, status } = usePipelineManager(
+    { task: "feature-extraction", modelId: "Xenova/all-MiniLM-L6-v2", modelSizeMB: 23 },
+    mobileInfo,
+  );
 
   // Scroll to results when they appear
   useEffect(() => {
@@ -52,24 +57,20 @@ export function RAGDemo() {
     }
   }, [results]);
 
-  const loadModel = async () => {
-    if (pipelineRef.current) return pipelineRef.current;
-    setIsModelLoading(true);
-    const { pipeline } = await import("@huggingface/transformers");
-    const pipe = await pipeline("feature-extraction", "Xenova/all-MiniLM-L6-v2", {
-      device,
-    });
-    pipelineRef.current = pipe;
+  const loadModelAndEmbeddings = async () => {
+    const pipe = await loadModel();
+    if (!pipe) return null;
 
-    // Pre-compute chunk embeddings
-    const embeddings: number[][] = [];
-    for (const chunk of PORTFOLIO_CHUNKS) {
-      const output = await pipe(chunk, { pooling: "mean", normalize: true });
-      embeddings.push(Array.from(output.data as Float32Array));
+    // Pre-compute chunk embeddings if not already done
+    if (!chunkEmbeddingsRef.current) {
+      const embeddings: number[][] = [];
+      for (const chunk of PORTFOLIO_CHUNKS) {
+        const output = await pipe(chunk, { pooling: "mean", normalize: true });
+        embeddings.push(Array.from(output.data as Float32Array));
+      }
+      chunkEmbeddingsRef.current = embeddings;
     }
-    chunkEmbeddingsRef.current = embeddings;
 
-    setIsModelLoading(false);
     return pipe;
   };
 
@@ -80,7 +81,8 @@ export function RAGDemo() {
     setIsLoading(true);
 
     try {
-      const pipe = await loadModel();
+      const pipe = await loadModelAndEmbeddings();
+      if (!pipe) return;
       const queryOutput = await pipe(value, { pooling: "mean", normalize: true });
       const queryEmb = Array.from(queryOutput.data as Float32Array);
       setQueryEmbeddingPreview(queryEmb.slice(0, 20));
@@ -98,6 +100,85 @@ export function RAGDemo() {
     setIsLoading(false);
   };
 
+  if (status === "fallback") {
+    return (
+      <DemoShell
+        title="RAG Explorer"
+        howItWorks="Your query is converted to a vector embedding, then compared against pre-embedded portfolio chunks using cosine similarity. The most relevant chunks surface as results. Everything runs in your browser — no server involved."
+        modelName="all-MiniLM-L6-v2"
+        isLoading={false}
+        isFallback={true}
+        fallbackReason="This model (23MB) is too large for your device"
+        modelSizeMB={23}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+          {PRERECORDED_RESULTS.rag.map((r, i) => (
+            <div
+              key={i}
+              style={{
+                padding: "20px",
+                borderRadius: "10px",
+                border: "1px solid rgba(100, 255, 218, 0.15)",
+                background: "rgba(100, 255, 218, 0.03)",
+              }}
+            >
+              <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+                Query: &quot;{r.input.value}&quot;
+              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+                {(r.output.results as { text: string; score: number }[]).map((chunk, j) => (
+                  <div
+                    key={j}
+                    style={{
+                      padding: "12px 16px",
+                      borderRadius: "8px",
+                      background: j === 0 ? "rgba(100, 255, 218, 0.06)" : "rgba(17, 34, 64, 0.3)",
+                      border: `1px solid ${j === 0 ? "rgba(100, 255, 218, 0.15)" : "rgba(100, 255, 218, 0.05)"}`,
+                    }}
+                  >
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+                      <span style={{
+                        color: j === 0 ? "#64ffda" : "#8892b0",
+                        fontSize: "11px",
+                        fontFamily: "'Geist Mono', monospace",
+                      }}>
+                        #{j + 1} — similarity: {(chunk.score * 100).toFixed(1)}%
+                      </span>
+                      <div style={{
+                        width: "60px",
+                        height: "4px",
+                        borderRadius: "2px",
+                        background: "rgba(100, 255, 218, 0.1)",
+                        overflow: "hidden",
+                      }}>
+                        <div style={{
+                          height: "100%",
+                          width: `${chunk.score * 100}%`,
+                          borderRadius: "2px",
+                          background: j === 0
+                            ? "linear-gradient(90deg, #64ffda, #a78bfa)"
+                            : "rgba(100, 255, 218, 0.3)",
+                        }} />
+                      </div>
+                    </div>
+                    <p style={{
+                      color: j === 0 ? "#e6f1ff" : "#a8b2d1",
+                      fontSize: "13px",
+                      lineHeight: 1.6,
+                      margin: 0,
+                    }}>
+                      {chunk.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </DemoShell>
+    );
+  }
+
   return (
     <DemoShell
       title="RAG Explorer"
@@ -105,7 +186,10 @@ export function RAGDemo() {
       modelName="all-MiniLM-L6-v2"
       isLoading={isModelLoading}
       loadingText="Loading embedding model + indexing portfolio... (first time takes ~10s)"
-      device={device}
+      progress={progress}
+      loadedBytes={loadedBytes}
+      totalBytes={totalBytes}
+      modelSizeMB={23}
     >
       {/* Examples */}
       <div style={{ marginBottom: "16px" }}>

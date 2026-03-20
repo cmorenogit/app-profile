@@ -1,6 +1,30 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { DemoShell } from "./DemoShell";
 import { useDevice } from "./useDevice";
+
+// Linear interpolation resampling from sourceRate to targetRate.
+// OfflineAudioContext fails below 44100Hz on Safari, so we use manual resampling.
+function resampleLinear(
+  input: Float32Array,
+  sourceRate: number,
+  targetRate: number,
+): Float32Array {
+  if (sourceRate === targetRate) return input;
+
+  const ratio = sourceRate / targetRate;
+  const outputLength = Math.floor(input.length / ratio);
+  const output = new Float32Array(outputLength);
+
+  for (let i = 0; i < outputLength; i++) {
+    const srcIndex = i * ratio;
+    const lower = Math.floor(srcIndex);
+    const upper = Math.min(lower + 1, input.length - 1);
+    const fraction = srcIndex - lower;
+    output[i] = input[lower] * (1 - fraction) + input[upper] * fraction;
+  }
+
+  return output;
+}
 
 export function WhisperDemo() {
   const [transcript, setTranscript] = useState("");
@@ -9,13 +33,27 @@ export function WhisperDemo() {
   const [isRecording, setIsRecording] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [recordingSeconds, setRecordingSeconds] = useState(0);
   const pipelineRef = useRef<any>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const sourceNodeRef = useRef<MediaStreamAudioSourceNode | null>(null);
   const processorRef = useRef<ScriptProcessorNode | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const audioBuffersRef = useRef<Float32Array[]>([]);
+  const nativeSampleRateRef = useRef<number>(48000);
+  const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const stateChangeHandlerRef = useRef<(() => void) | null>(null);
   const { device } = useDevice();
+
+  // Auto-stop recording at 30s on mobile
+  useEffect(() => {
+    if (recordingSeconds >= 30) {
+      const isMobile = "ontouchstart" in window && window.innerWidth < 768;
+      if (isMobile) {
+        stopRecording();
+      }
+    }
+  }, [recordingSeconds]);
 
   const loadModel = async () => {
     if (pipelineRef.current) return pipelineRef.current;
@@ -35,15 +73,31 @@ export function WhisperDemo() {
     setError(null);
     setTranscript("");
     setAudioUrl(null);
+    setRecordingSeconds(0);
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
-        audio: { sampleRate: 16000, channelCount: 1, echoCancellation: true },
+        audio: { channelCount: 1, echoCancellation: true },
       });
       streamRef.current = stream;
 
-      const audioContext = new AudioContext({ sampleRate: 16000 });
+      const audioContext = new AudioContext();
       audioContextRef.current = audioContext;
+      nativeSampleRateRef.current = audioContext.sampleRate;
+
+      // iOS requires explicit resume after user gesture
+      await audioContext.resume();
+
+      // Handle iOS interruptions (phone calls, Siri, lock screen)
+      const stateChangeHandler = () => {
+        if (audioContext.state === "interrupted" || audioContext.state === "suspended") {
+          audioContext.resume().catch(() => {
+            setError("Audio interrupted. Recording stopped — processing available audio.");
+          });
+        }
+      };
+      stateChangeHandlerRef.current = stateChangeHandler;
+      audioContext.addEventListener("statechange", stateChangeHandler);
 
       const source = audioContext.createMediaStreamSource(stream);
       sourceNodeRef.current = source;
@@ -62,6 +116,11 @@ export function WhisperDemo() {
       processor.connect(audioContext.destination);
 
       setIsRecording(true);
+
+      // Start recording timer
+      recordingTimerRef.current = setInterval(() => {
+        setRecordingSeconds((prev) => prev + 1);
+      }, 1000);
     } catch (err) {
       const msg = (err as Error).message || "";
       if (msg.includes("Permission denied") || msg.includes("NotAllowedError")) {
@@ -77,6 +136,13 @@ export function WhisperDemo() {
   const stopRecording = async () => {
     setIsRecording(false);
 
+    // Clear recording timer
+    if (recordingTimerRef.current) {
+      clearInterval(recordingTimerRef.current);
+      recordingTimerRef.current = null;
+    }
+    setRecordingSeconds(0);
+
     // Stop processing
     if (processorRef.current && sourceNodeRef.current) {
       sourceNodeRef.current.disconnect();
@@ -88,8 +154,12 @@ export function WhisperDemo() {
       streamRef.current.getTracks().forEach((t) => t.stop());
     }
 
-    // Close audio context
+    // Remove statechange listener and close audio context
     if (audioContextRef.current) {
+      if (stateChangeHandlerRef.current) {
+        audioContextRef.current.removeEventListener("statechange", stateChangeHandlerRef.current);
+        stateChangeHandlerRef.current = null;
+      }
       await audioContextRef.current.close();
     }
 
@@ -108,13 +178,16 @@ export function WhisperDemo() {
       offset += buf.length;
     }
 
-    // Create WAV blob for playback
-    const wavBlob = float32ToWav(merged, 16000);
+    // Create WAV blob for playback using native sample rate (correct speed)
+    const wavBlob = float32ToWav(merged, nativeSampleRateRef.current);
     const url = URL.createObjectURL(wavBlob);
     setAudioUrl(url);
 
-    // Transcribe the raw audio data
-    await transcribeAudio(merged);
+    // Resample to 16kHz for Whisper inference
+    const resampled = resampleLinear(merged, nativeSampleRateRef.current, 16000);
+
+    // Transcribe the resampled audio data
+    await transcribeAudio(resampled);
   };
 
   const transcribeAudio = async (audioData: Float32Array) => {
@@ -148,6 +221,8 @@ export function WhisperDemo() {
     }
     setIsLoading(false);
   };
+
+  const isMobile = typeof window !== "undefined" && "ontouchstart" in window && window.innerWidth < 768;
 
   return (
     <DemoShell
@@ -241,7 +316,9 @@ export function WhisperDemo() {
               animation: "pulse 1s ease-in-out infinite",
               display: "inline-block",
             }} />
-            Recording... (click Stop when done)
+            {isMobile
+              ? `Recording... ${recordingSeconds}s / 30s`
+              : "Recording... (click Stop when done)"}
             <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
           </span>
         )}

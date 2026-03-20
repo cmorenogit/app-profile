@@ -5,6 +5,7 @@ import { ImageDemo } from "./ImageDemo";
 import { RAGDemo } from "./RAGDemo";
 import { WhisperDemo } from "./WhisperDemo";
 import { useDevice } from "./useDevice";
+import { useMobileDetect } from "./useMobileDetect";
 
 const demos = [
   {
@@ -39,12 +40,27 @@ const demos = [
   },
 ] as const;
 
+const MODEL_SIZES: Record<string, number> = {
+  sentiment: 67,
+  summary: 305,
+  image: 88,
+  rag: 23,
+  whisper: 40,
+};
+
 type DemoId = (typeof demos)[number]["id"];
 
 export function PlaygroundApp() {
   const [activeDemo, setActiveDemo] = useState<DemoId | null>(null);
   const demoPanelRef = useRef<HTMLDivElement>(null);
   const { device, isDetecting, isWebGPU } = useDevice();
+  const mobileInfo = useMobileDetect();
+
+  useEffect(() => {
+    if (navigator.storage?.persist) {
+      navigator.storage.persist().catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     if (activeDemo && demoPanelRef.current) {
@@ -75,6 +91,24 @@ export function PlaygroundApp() {
               — GPU-powered inference
             </span>
           )}
+        </div>
+      )}
+      {!isDetecting && mobileInfo.isMobile && (
+        <div style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "6px",
+          padding: "4px 12px",
+          borderRadius: "6px",
+          background: "rgba(167, 139, 250, 0.08)",
+          border: "1px solid rgba(167, 139, 250, 0.12)",
+          fontSize: "12px",
+          color: "#a78bfa",
+          fontFamily: "'Geist Mono', monospace",
+          marginBottom: "20px",
+          marginLeft: "8px",
+        }}>
+          📱 {mobileInfo.deviceMemoryGB}GB estimated — {mobileInfo.recommendation === "full" ? "all demos available" : mobileInfo.recommendation === "mobile" ? "optimized models for mobile" : "limited demos available"}
         </div>
       )}
 
@@ -114,6 +148,19 @@ export function PlaygroundApp() {
             <p style={{ color: "#8892b0", fontSize: "13px", lineHeight: 1.5, margin: 0 }}>
               {demo.description}
             </p>
+            <span style={{
+              display: "inline-block",
+              padding: "2px 8px",
+              borderRadius: "4px",
+              background: "rgba(136, 146, 176, 0.08)",
+              border: "1px solid rgba(136, 146, 176, 0.1)",
+              fontSize: "11px",
+              color: "#8892b0",
+              fontFamily: "'Geist Mono', monospace",
+              marginTop: "8px",
+            }}>
+              ~{MODEL_SIZES[demo.id]} MB
+            </span>
           </button>
         ))}
       </div>
