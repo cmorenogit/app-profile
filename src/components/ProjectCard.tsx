@@ -6,7 +6,20 @@ export function ProjectCard({ project }: { project: Project }) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="group relative rounded-xl border border-transparent p-4 transition-all duration-300 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 lg:hover:bg-navy-light/50 lg:hover:border-accent/8 lg:hover:shadow-[0_0_20px_rgba(100,255,218,0.03)]">
+    <div
+      role="link"
+      tabIndex={0}
+      className="group relative cursor-pointer rounded-xl border border-transparent p-4 transition-all duration-300 lg:hover:!opacity-100 lg:group-hover/list:opacity-50 lg:hover:bg-navy-light/50 lg:hover:border-accent/8 lg:hover:shadow-[0_0_20px_rgba(100,255,218,0.03)]"
+      onClick={(e) => {
+        if ((e.target as HTMLElement).closest("a, button")) return;
+        window.location.href = `/projects/${project.slug}`;
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" && !(e.target as HTMLElement).closest("a, button")) {
+          window.location.href = `/projects/${project.slug}`;
+        }
+      }}
+    >
       <div>
         <h3 className="flex items-center gap-2 font-medium leading-snug text-slate-lightest">
           <a

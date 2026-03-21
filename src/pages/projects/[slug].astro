@@ -29,19 +29,30 @@ const { project, prev, next } = Astro.props;
       <span id="back-label">Back to home</span>
     </a>
     <script>
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('from') === 'archive') {
-        const link = document.getElementById('back-link') as HTMLAnchorElement;
-        const label = document.getElementById('back-label');
-        if (link) link.href = '/archive';
-        if (label) label.textContent = 'Back to archive';
+      document.addEventListener('astro:page-load', () => {
+        const params = new URLSearchParams(window.location.search);
 
-        // Propagate ?from=archive to prev/next links
-        document.querySelectorAll('nav a[href^="/projects/"]').forEach(a => {
-          const el = a as HTMLAnchorElement;
-          el.href = el.href + '?from=archive';
-        });
-      }
+        // Set origin in sessionStorage when arriving with ?from=archive
+        if (params.get('from') === 'archive') {
+          sessionStorage.setItem('project-origin', 'archive');
+        }
+
+        const fromArchive = sessionStorage.getItem('project-origin') === 'archive';
+        const isProjectPage = window.location.pathname.startsWith('/projects/');
+
+        // Clear origin when leaving project pages
+        if (!isProjectPage) {
+          sessionStorage.removeItem('project-origin');
+          return;
+        }
+
+        if (fromArchive) {
+          const link = document.getElementById('back-link') as HTMLAnchorElement;
+          const label = document.getElementById('back-label');
+          if (link) link.href = '/archive';
+          if (label) label.textContent = 'Back to archive';
+        }
+      });
     </script>
 
     <!-- Header -->

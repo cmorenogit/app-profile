@@ -75,6 +75,7 @@ const externalLinkSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="18" heig
 </table>
 
 <script>
+  document.addEventListener('astro:page-load', () => {
   document.querySelectorAll('.archive-row').forEach(row => {
     row.addEventListener('click', (e) => {
       if ((e.target as HTMLElement).closest('a')) return;
@@ -103,5 +104,6 @@ const externalLinkSvg = '<svg xmlns="http://www.w3.org/2000/svg" width="18" heig
         content.classList.add('max-h-60', 'opacity-100');
       }
     });
+  });
   });
 </script>
