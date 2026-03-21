@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { track } from "@vercel/analytics/react";
 import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
@@ -44,11 +45,13 @@ export function SentimentDemo() {
     if (text) setInput(text);
     setIsLoading(true);
     setResults(null);
+    const startTime = Date.now();
     try {
       const pipe = await loadModel();
       if (!pipe) return;
       const output = await pipe(value);
       setResults(output as SentimentResult[]);
+      track("demo_completed", { demo: "sentiment", duration_ms: Date.now() - startTime });
     } catch (err) {
       console.error("Sentiment analysis error:", err);
     }
