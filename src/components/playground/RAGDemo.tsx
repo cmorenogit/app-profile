@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { track } from "@vercel/analytics/react";
 import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
@@ -80,7 +79,6 @@ export function RAGDemo() {
     if (!value) return;
     if (text) setInput(text);
     setIsLoading(true);
-    const startTime = Date.now();
 
     try {
       const pipe = await loadModelAndEmbeddings();
@@ -96,7 +94,6 @@ export function RAGDemo() {
 
       scored.sort((a, b) => b.similarity - a.similarity);
       setResults(scored.slice(0, 4));
-      track("demo_completed", { demo: "rag", duration_ms: Date.now() - startTime });
     } catch (err) {
       console.error("RAG error:", err);
     }

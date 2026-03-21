@@ -16,8 +16,6 @@ const iconSvgs: Record<string, string> = {
       rel="noopener noreferrer"
       class="text-slate transition-colors duration-250 hover:text-accent"
       aria-label={link.name}
-      data-link-name={link.name}
-      onclick="window.va?.('event', { name: 'outbound_click', data: { destination: this.dataset.linkName } })"
     >
       <Fragment set:html={iconSvgs[link.icon]} />
     </a>

@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { track } from "@vercel/analytics/react";
 
 interface Message {
   role: "user" | "assistant";
@@ -123,7 +122,7 @@ export function ChatWidget() {
   if (!isOpen) {
     return (
       <button
-        onClick={() => { track("chat_opened"); setIsOpen(true); }}
+        onClick={() => setIsOpen(true)}
         aria-label="Open chat"
         style={{
           position: "fixed",

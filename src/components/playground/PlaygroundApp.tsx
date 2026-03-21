@@ -1,5 +1,4 @@
 import { useState, useRef, useEffect } from "react";
-import { track } from "@vercel/analytics/react";
 import { SentimentDemo } from "./SentimentDemo";
 import { SummaryDemo } from "./SummaryDemo";
 import { ImageDemo } from "./ImageDemo";
@@ -84,9 +83,6 @@ export function PlaygroundApp() {
   }, [activeDemo, isMobileView]);
 
   const handleSelectDemo = (demoId: DemoId) => {
-    if (activeDemo !== demoId) {
-      track("demo_started", { demo: demoId, device: isMobileView ? "mobile" : "desktop" });
-    }
     setActiveDemo(activeDemo === demoId ? null : demoId);
   };
 

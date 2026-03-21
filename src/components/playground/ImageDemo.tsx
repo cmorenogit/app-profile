@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { track } from "@vercel/analytics/react";
 import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
@@ -36,14 +35,12 @@ export function ImageDemo() {
     setPreview(url);
     setIsLoading(true);
     setResults([]);
-    const startTime = Date.now();
 
     try {
       const pipe = await loadModel();
       if (!pipe) return;
       const output = await pipe(url);
       setResults((output as ClassificationResult[]).slice(0, 5));
-      track("demo_completed", { demo: "image", duration_ms: Date.now() - startTime });
     } catch (err) {
       console.error("Image classification error:", err);
     }

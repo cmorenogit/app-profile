@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { track } from "@vercel/analytics/react";
 import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
@@ -24,13 +23,11 @@ export function SummaryDemo() {
     if (text) setInput(text);
     setIsLoading(true);
     setSummary("");
-    const startTime = Date.now();
     try {
       const pipe = await loadModel();
       if (!pipe) return;
       const output = await pipe(value, { max_new_tokens: 80, min_length: 10 });
       setSummary((output as any)[0]?.summary_text || "Could not generate summary.");
-      track("demo_completed", { demo: "summary", duration_ms: Date.now() - startTime });
     } catch (err) {
       console.error("Summary error:", err);
       setSummary("Error generating summary. Try a longer text.");
