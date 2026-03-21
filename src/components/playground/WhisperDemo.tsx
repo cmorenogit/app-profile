@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { track } from "@vercel/analytics/react";
 import { DemoShell } from "./DemoShell";
 import { useDevice } from "./useDevice";
 import { useMobileDetect } from "./useMobileDetect";
@@ -258,6 +259,7 @@ export function WhisperDemo() {
   const transcribeAudio = async (audioData: Float32Array) => {
     setIsLoading(true);
     setTranscript("");
+    const startTime = Date.now();
 
     const isIOS = "ontouchstart" in window &&
       (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -279,6 +281,7 @@ export function WhisperDemo() {
       });
       const text = (output as { text: string }).text?.trim();
       setTranscript(text || "No speech detected. Try speaking louder or closer to the microphone.");
+      track("demo_completed", { demo: "whisper", duration_ms: Date.now() - startTime });
     } catch (err) {
       console.error("Transcription error:", err);
       setTranscript("Error transcribing audio. Try again with a clearer recording.");
@@ -292,6 +295,7 @@ export function WhisperDemo() {
     setAudioUrl(url);
     setIsLoading(true);
     setTranscript("");
+    const startTime = Date.now();
 
     const isIOS = "ontouchstart" in window &&
       (/iPad|iPhone|iPod/.test(navigator.userAgent) ||
@@ -303,6 +307,7 @@ export function WhisperDemo() {
         ...(isIOS ? { max_new_tokens: 64, chunk_length_s: 15 } : {}),
       });
       setTranscript((output as { text: string }).text || "Could not transcribe audio.");
+      track("demo_completed", { demo: "whisper", duration_ms: Date.now() - startTime });
     } catch (err) {
       console.error("Transcription error:", err);
       setTranscript("Error transcribing. Try again.");
