@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { DemoShell } from "./DemoShell";
 import { useDevice } from "./useDevice";
+import { useMobileDetect } from "./useMobileDetect";
+import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
 
 // Linear interpolation resampling from sourceRate to targetRate.
 // OfflineAudioContext fails below 44100Hz on Safari, so we use manual resampling.
@@ -27,6 +29,8 @@ function resampleLinear(
 }
 
 export function WhisperDemo() {
+  const mobileInfo = useMobileDetect();
+  const { device } = useDevice();
   const [transcript, setTranscript] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isModelLoading, setIsModelLoading] = useState(false);
@@ -43,7 +47,50 @@ export function WhisperDemo() {
   const nativeSampleRateRef = useRef<number>(48000);
   const recordingTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const stateChangeHandlerRef = useRef<(() => void) | null>(null);
-  const { device } = useDevice();
+
+  // iOS Safari cannot run Whisper inference — the autoregressive decoder
+  // runs up to 448 steps with growing KV cache in WASM memory that iOS
+  // cannot handle. This is a known unresolved issue (transformers.js #1298).
+  if (mobileInfo.isIOS) {
+    const example = PRERECORDED_RESULTS.whisper[0];
+    return (
+      <DemoShell
+        title="Speech-to-Text"
+        howItWorks="OpenAI's Whisper model runs entirely in your browser. On iOS, we show a pre-computed example due to Safari memory limitations with autoregressive models."
+        modelName="whisper-tiny.en"
+        isLoading={false}
+        isFallback={true}
+        fallbackReason="Whisper's autoregressive decoder exceeds iOS Safari memory limits"
+        modelSizeMB={40}
+        device={device}
+      >
+        <div style={{
+          padding: "20px",
+          borderRadius: "10px",
+          border: "1px solid rgba(100, 255, 218, 0.15)",
+          background: "rgba(100, 255, 218, 0.05)",
+        }}>
+          <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "4px" }}>
+            Example: {example.input.label}
+          </span>
+          <span style={{ color: "#8892b0", fontSize: "11px", display: "block", marginBottom: "12px", fontStyle: "italic" }}>
+            {example.input.value}
+          </span>
+          <audio
+            controls
+            src="https://huggingface.co/datasets/Xenova/transformers.js-docs/resolve/main/jfk.wav"
+            style={{ width: "100%", maxWidth: "100%", boxSizing: "border-box", height: "36px", marginBottom: "12px" }}
+          />
+          <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
+            Transcript
+          </span>
+          <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
+            {example.output.text}
+          </p>
+        </div>
+      </DemoShell>
+    );
+  }
 
   // Auto-stop recording at 30s on mobile
   useEffect(() => {
