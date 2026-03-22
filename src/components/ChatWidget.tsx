@@ -102,69 +102,151 @@ const SUGGESTIONS = [
 ];
 
 interface FollowUpCategory {
+  id: string;
   keywords: string[];
   followUps: string[];
 }
 
 const FOLLOW_UP_MAP: FollowUpCategory[] = [
   {
-    keywords: ["ai", "llm", "machine learning", "ml", "gpt", "model"],
+    id: "ai",
+    keywords: ["ai", "llm", "machine learning", "ml", "gpt", "model", "agent", "prompt", "token"],
     followUps: [
       "What AI tools has he built in production?",
       "Does he fine-tune models or use APIs?",
       "What's his approach to AI architecture?",
+      "How does he handle token cost optimization?",
+      "What's his experience with multi-agent systems?",
+      "Has he built RAG or retrieval-augmented systems?",
     ],
   },
   {
-    keywords: ["available", "opportunities", "hire", "hiring", "freelance", "contract"],
+    id: "availability",
+    keywords: ["available", "opportunities", "hire", "hiring", "freelance", "contract", "open to"],
     followUps: [
       "What type of roles interest him?",
       "What's his preferred engagement model?",
       "Can he start on short notice?",
+      "Does he prefer full-time or contract work?",
+      "What's his expected compensation range?",
+      "Is he open to relocating?",
     ],
   },
   {
-    keywords: ["lead", "team", "manage", "engineering manager", "cto", "architect"],
+    id: "leadership",
+    keywords: ["lead", "team", "manage", "engineering manager", "cto", "architect", "mentor"],
     followUps: [
       "How large were the teams he's led?",
       "What's his leadership philosophy?",
       "Has he scaled engineering orgs?",
+      "How does he mentor junior developers?",
+      "What's his approach to cross-functional collaboration?",
+      "Has he managed remote/distributed teams?",
     ],
   },
   {
-    keywords: ["technologies", "stack", "tools", "languages", "framework"],
+    id: "stack",
+    keywords: ["technologies", "stack", "tools", "languages", "framework", "typescript", "react", "node"],
     followUps: [
       "What cloud platforms does he use?",
       "Does he have DevOps experience?",
       "What databases has he worked with?",
+      "What testing frameworks does he prefer?",
+      "How does he approach frontend architecture?",
+      "What's his backend stack of choice?",
     ],
   },
   {
-    keywords: ["project", "impactful", "built", "product", "work"],
+    id: "projects",
+    keywords: ["project", "impactful", "built", "product", "work", "portfolio", "github"],
     followUps: [
       "What metrics did the project achieve?",
-      "What technologies were used?",
-      "What was his specific role?",
+      "What was his specific role in the project?",
+      "How did he handle production challenges?",
+      "What open source projects has he published?",
+      "Tell me about his most complex architecture",
+      "How does he approach performance optimization?",
     ],
   },
   {
-    keywords: ["timezone", "remote", "us", "collaborate", "communication"],
+    id: "remote",
+    keywords: ["timezone", "remote", "us", "collaborate", "communication", "latam", "distributed"],
     followUps: [
       "What collaboration tools does he use?",
       "Has he worked with distributed teams?",
       "What's his availability for meetings?",
+      "How does he handle async communication?",
+      "What's his experience with US-based clients?",
+      "How does he manage across time zones?",
     ],
   },
 ];
 
-function getFollowUps(lastUserMessage: string, lastAssistantMessage: string): string[] {
-  const combined = (lastUserMessage + " " + lastAssistantMessage).toLowerCase();
-  for (const category of FOLLOW_UP_MAP) {
-    if (category.keywords.some((kw) => combined.includes(kw))) {
-      return category.followUps.slice(0, 3);
-    }
+const CLOSING_SUGGESTIONS = [
+  "How can I get in touch with him?",
+  "Can I see his GitHub profile?",
+  "Want to connect on LinkedIn?",
+  "What makes him stand out from other candidates?",
+  "Any red flags or areas of concern?",
+  "Give me a summary of his strengths",
+];
+
+const COVERED_TOPICS_KEY = "chat_covered_topics";
+
+function loadCoveredTopics(): Set<string> {
+  try {
+    const stored = sessionStorage.getItem(COVERED_TOPICS_KEY);
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  } catch {
+    return new Set();
   }
-  return ["What technologies does he use daily?", "Is he available for new opportunities?"];
+}
+
+function saveCoveredTopics(topics: Set<string>): void {
+  try {
+    sessionStorage.setItem(COVERED_TOPICS_KEY, JSON.stringify([...topics]));
+  } catch {
+    // ignore storage errors
+  }
+}
+
+function detectTopics(text: string): string[] {
+  const lower = text.toLowerCase();
+  return FOLLOW_UP_MAP
+    .filter((cat) => cat.keywords.some((kw) => lower.includes(kw)))
+    .map((cat) => cat.id);
+}
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const shuffled = [...arr];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
+function getFollowUps(messages: Message[]): string[] {
+  const covered = loadCoveredTopics();
+
+  // Track topics from entire conversation
+  for (const msg of messages) {
+    const topics = detectTopics(msg.content);
+    topics.forEach((t) => covered.add(t));
+  }
+  saveCoveredTopics(covered);
+
+  // Find uncovered categories and pick random follow-ups from them
+  const uncovered = FOLLOW_UP_MAP.filter((cat) => !covered.has(cat.id));
+
+  if (uncovered.length === 0) {
+    // All topics covered — show closing/action suggestions
+    return shuffleArray(CLOSING_SUGGESTIONS).slice(0, 3);
+  }
+
+  // Pick follow-ups from uncovered categories, randomized
+  const pool = uncovered.flatMap((cat) => cat.followUps);
+  return shuffleArray(pool).slice(0, 3);
 }
 
 // --- Component ---
@@ -314,14 +396,10 @@ export function ChatWidget() {
         },
         onDone: () => {
           setIsLoading(false);
-          // Show follow-up suggestions after response completes
+          // Show context-aware follow-up suggestions
           setMessages((prev) => {
-            const lastUser = [...prev].reverse().find((m) => m.role === "user");
-            const lastAssistant = [...prev].reverse().find((m) => m.role === "assistant");
-            if (lastUser && lastAssistant) {
-              setFollowUps(getFollowUps(lastUser.content, lastAssistant.content));
-              setShowFollowUps(true);
-            }
+            setFollowUps(getFollowUps(prev));
+            setShowFollowUps(true);
             return prev;
           });
         },
