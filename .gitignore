@@ -44,3 +44,7 @@ session-*.md
 .env
 brand_assets/
 audit-*.json
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
