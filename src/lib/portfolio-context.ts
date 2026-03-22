@@ -43,13 +43,13 @@ Spanish (native), English (professional — daily use with international teams).
 Chile, UTC-3 (UTC-4 DST). US Eastern overlap 9am–1pm ET. Works with US, LATAM, European teams.
 
 ## Summary
-Full Stack Engineer, AI specialist, 13+ years. Builds multi-model AI agent systems and scalable multi-tenant platforms. TypeScript-first, AI-native, ships to production across countries.
+Full Stack Engineer, AI specialist, 14+ years. Builds multi-model AI agent systems and scalable multi-tenant platforms. TypeScript-first, AI-native, ships to production across countries.
 
 ## Leadership & Philosophy
 Led 3-5 dev teams, mentors junior/mid engineers, cross-functional with product/design. Remote since 2020, async-first. Ships production-ready code from day one. AI-native, impact-oriented, pragmatic engineering.
 
 ## Expertise
-AI: Multi-model LLM orchestration (Claude, GPT-4, Gemini), AI agents, prompt engineering, 97.5% token cost reduction, RAG, multi-AI debate.
+AI: Multi-model LLM orchestration (Claude, OpenAI, Gemini), AI agents, prompt engineering, 97.5% token cost reduction, RAG, multi-AI debate.
 Backend: Node.js, NestJS, Express, GraphQL, 13+ microservices, PostgreSQL (RLS), MongoDB, multi-tenant (6 countries), real-time.
 Frontend: React 18/19, Next.js, Astro, Tailwind, shadcn/ui.
 DevOps: AWS, Vercel, Docker, GitHub Actions. Testing: Playwright, Vitest.

@@ -5,7 +5,7 @@ export const featuredProjects: Project[] = [
     slug: "agentes-hub",
     title: "Agentes Hub",
     description:
-      "Multi-agent system that automates PR code reviews with security-focused analysis. Supports Claude, GPT-4, and Gemini with 97.5% token savings through intelligent caching.",
+      "Multi-agent system that automates PR code reviews with security-focused analysis. Supports Claude, OpenAI, and Gemini with 97.5% token savings through intelligent caching.",
     longDescription: `
       <p>A production <strong>multi-agent orchestration system</strong> that automates code review workflows. Each agent specializes in a specific analysis domain:</p>
       <ul>
@@ -19,7 +19,7 @@ export const featuredProjects: Project[] = [
     `,
     features: [
       "97.5% token savings through intelligent caching",
-      "Multi-model support: Claude, GPT-4, Gemini",
+      "Multi-model support: Claude, OpenAI, Gemini",
       "Security-focused code analysis pipeline",
       "Configurable review templates per repository",
       "Parallel agent execution with conflict resolution",
@@ -66,7 +66,7 @@ export const featuredProjects: Project[] = [
     slug: "prism",
     title: "Prism",
     description:
-      "CLI tool that orchestrates structured debates between Claude, GPT, and Gemini. Six analysis modes produce bias-reduced insights through multi-perspective synthesis.",
+      "CLI tool that orchestrates structured debates between Claude, OpenAI, and Gemini. Six analysis modes produce bias-reduced insights through multi-perspective synthesis.",
     longDescription: `
       <p>A CLI tool that enables <strong>structured multi-model debates</strong> for complex decision-making. By orchestrating conversations between different LLMs, Prism produces bias-reduced analysis through adversarial and collaborative reasoning.</p>
       <p>Six analysis modes:</p>

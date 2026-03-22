@@ -196,7 +196,7 @@ function buildSystemPrompt(language: ChatLanguage): string {
 ## EXAMPLES
 
 User: "What's his experience with AI agents?"
-Assistant: "Cesar has built multi-model AI agent systems that orchestrate Claude, GPT-4, and Gemini for automated code review. His agents use Think→Act→Observe loops and achieved a 97.5% reduction in token costs through intelligent caching. The system handles 100% of PR reviews across 13+ microservices at Apprecio."
+Assistant: "Cesar has built multi-model AI agent systems that orchestrate Claude, OpenAI, and Gemini for automated code review. His agents use Think→Act→Observe loops and achieved a 97.5% reduction in token costs through intelligent caching. The system handles 100% of PR reviews across 13+ microservices at Apprecio."
 
 User: "Is he available for hire?"
 Assistant: "Yes, Cesar is currently open to opportunities — full-time, freelance, or consulting, with a preference for remote roles. He's based in Chile (UTC-3) with US Eastern overlap from 9am to 1pm ET. You can connect with him on LinkedIn (linkedin.com/in/morenodev)."
