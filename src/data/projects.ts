@@ -15,7 +15,7 @@ export const featuredProjects: Project[] = [
         <li><strong>Architecture Agent</strong> — Reviews patterns, coupling, and separation of concerns</li>
       </ul>
       <p>The system uses <strong>intelligent caching</strong> to reduce API token consumption by <strong>97.5%</strong> while maintaining review quality. Agents execute in parallel with a conflict resolution layer that merges overlapping findings.</p>
-      <p>Built as an internal tool at Apprecio, now handles <strong>100% of PR reviews</strong> across 13+ microservices with zero false positive escalations in production.</p>
+      <p>Built as an internal tool at Apprecio, now handles <strong>100% of PR reviews</strong> across 13+ microservices for a 5-engineer team with zero false positive escalations in production.</p>
     `,
     features: [
       "97.5% token savings through intelligent caching",

@@ -8,7 +8,7 @@ export const experiences: Experience[] = [
     companyUrl: "https://apprecio.com",
     location: "Santiago, Chile (Remote)",
     description:
-      "Lead AI agent development and full-stack automation across a multi-tenant rewards platform serving 6 LATAM countries. Built code review agents with multi-LLM orchestration (Claude, OpenAI, Gemini), achieving 97.5% token cost reduction through intelligent caching. Drove 40% faster product delivery by automating QA workflows and PR analysis. Optimized microservice performance by 25% across 13+ services spanning Node.js, NestJS, GraphQL, and React.",
+      "Lead a cross-functional team of 5 engineers, driving AI agent development and full-stack automation across a multi-tenant rewards platform serving 500K+ users in 6 LATAM countries. Built code review agents with multi-LLM orchestration (Claude, OpenAI, Gemini), achieving 97.5% token cost reduction through intelligent caching. Mentor junior and mid-level developers on AI-native workflows. Drove 40% faster product delivery by automating QA workflows and PR analysis. Optimized microservice performance by 25% across 13+ services handling peak loads during reward campaigns.",
     technologies: [
       "TypeScript",
       "Node.js",
@@ -27,7 +27,7 @@ export const experiences: Experience[] = [
     companyUrl: null,
     location: "Lima, Peru",
     description:
-      "Led development and integration of a customer management system for discovering valuable business opportunities and data analysis. Built RESTful APIs with Node.js and PHP, integrated SQL and MongoDB databases, developed frontends with React and Vue.js.",
+      "Led a team of 3 developers building and integrating a customer management system for discovering valuable business opportunities and data analysis. Scaled the platform to handle 10K+ daily transactions with high availability. Built RESTful APIs with Node.js and PHP, integrated SQL and MongoDB databases, developed frontends with React and Vue.js.",
     technologies: [
       "JavaScript",
       "Node.js",
