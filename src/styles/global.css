@@ -217,3 +217,51 @@ body::before {
     display: none;
   }
 }
+
+/* Project detail prose */
+.project-prose p {
+  font-size: 1rem;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.project-prose strong {
+  color: var(--color-white);
+  font-weight: 600;
+}
+
+.project-prose code {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.875rem;
+  background: rgba(100, 255, 218, 0.08);
+  color: var(--color-accent);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.project-prose ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.project-prose li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.project-prose li::before {
+  content: '';
+  margin-top: 0.5rem;
+  width: 6px;
+  height: 6px;
+  min-width: 6px;
+  border-radius: 50%;
+  background: rgba(100, 255, 218, 0.5);
+}

@@ -1,6 +1,5 @@
 ---
-import { featuredProjects } from '@/data/projects';
-import ProjectCard from './ProjectCard.astro';
+import { ProjectsSection } from './ProjectsSection';
 ---
 
 <section
@@ -8,13 +7,7 @@ import ProjectCard from './ProjectCard.astro';
   class="fade-in mb-24 scroll-mt-24 lg:mb-36 lg:scroll-mt-24"
 >
   <h2 class="section-heading">Projects</h2>
-  <div class="flex flex-col gap-4">
-    {featuredProjects.map((project) => (
-      <div class="fade-in-item">
-        <ProjectCard project={project} />
-      </div>
-    ))}
-  </div>
+  <ProjectsSection client:load />
 
   <div class="mt-12 flex flex-col gap-4 sm:flex-row sm:gap-8">
     <a

@@ -4,6 +4,7 @@ import '@fontsource/geist-sans/500.css';
 import '@fontsource/geist-sans/700.css';
 import '@fontsource/geist-mono/400.css';
 import '@/styles/global.css';
+import { ClientRouter } from 'astro:transitions';
 import { ChatWidget } from '@/components/ChatWidget';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
@@ -113,6 +114,7 @@ const jsonLd = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <ClientRouter />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
@@ -160,41 +162,43 @@ const jsonLd = {
     <SpeedInsights />
 
     <script>
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              const items = entry.target.querySelectorAll('.fade-in-item');
-              items.forEach((item, i) => {
-                setTimeout(() => item.classList.add('visible'), i * 100);
-              });
-              observer.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.1 }
-      );
-      document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
+      document.addEventListener('astro:page-load', () => {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                const items = entry.target.querySelectorAll('.fade-in-item');
+                items.forEach((item, i) => {
+                  setTimeout(() => item.classList.add('visible'), i * 100);
+                });
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
 
-      // Back to top button
-      const btn = document.getElementById('back-to-top');
-      if (btn) {
-        window.addEventListener('scroll', () => {
-          if (window.scrollY > 600) {
-            btn.style.opacity = '1';
-            btn.style.pointerEvents = 'auto';
-            btn.style.transform = 'translateY(0)';
-          } else {
-            btn.style.opacity = '0';
-            btn.style.pointerEvents = 'none';
-            btn.style.transform = 'translateY(8px)';
-          }
-        }, { passive: true });
-        btn.addEventListener('click', () => {
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-      }
+        // Back to top button
+        const btn = document.getElementById('back-to-top');
+        if (btn) {
+          window.addEventListener('scroll', () => {
+            if (window.scrollY > 600) {
+              btn.style.opacity = '1';
+              btn.style.pointerEvents = 'auto';
+              btn.style.transform = 'translateY(0)';
+            } else {
+              btn.style.opacity = '0';
+              btn.style.pointerEvents = 'none';
+              btn.style.transform = 'translateY(8px)';
+            }
+          }, { passive: true });
+          btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+      });
     </script>
   </body>
 </html>
