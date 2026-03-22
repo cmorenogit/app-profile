@@ -8,7 +8,6 @@ export default defineConfig({
   site: 'https://cesarmoreno.dev',
   adapter: vercel({
     webAnalytics: { enabled: true },
-    speedInsights: { enabled: true },
     imagesConfig: { sizes: [320, 640, 1280] },
   }),
   integrations: [
