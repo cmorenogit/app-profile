@@ -31,7 +31,7 @@ export function getPortfolioContext(): string {
     .map((p) => `${p.title} (${p.year}, ${p.madeAt || "Personal"})`)
     .join("; ");
 
-  return `# Cesar Moreno — Full Stack Engineer · AI
+  return `# Cesar Moreno — Full Stack · AI Engineer
 
 ## Availability
 Open to opportunities: full-time, freelance, consulting. Remote preferred. Available now.
@@ -43,19 +43,20 @@ Spanish (native), English (professional — daily use with international teams).
 Chile, UTC-3 (UTC-4 DST). US Eastern overlap 9am–1pm ET. Works with US, LATAM, European teams.
 
 ## Summary
-Full Stack Engineer, AI specialist, 14+ years. Builds multi-model AI agent systems and scalable multi-tenant platforms. TypeScript-first, AI-native, ships to production across countries.
+Full Stack · AI Engineer, 13+ years. Builds AI developer tools and multi-agent systems in production — from orchestration platforms to semantic memory, TypeScript to Rust. Currently building ContextForge, an MCP server in Rust for persistent semantic memory for AI coding assistants.
 
 ## Leadership & Philosophy
-Led 3-5 dev teams, mentors junior/mid engineers, cross-functional with product/design. Remote since 2020, async-first. Ships production-ready code from day one. AI-native, impact-oriented, pragmatic engineering.
+Led 3-5 dev teams, mentors junior/mid engineers, cross-functional with product/design. Remote since 2020, async-first. Ships production-ready code from day one. TypeScript for product, Rust for systems, production-tested always.
 
 ## Expertise
-AI: Multi-model LLM orchestration (Claude, OpenAI, Gemini), AI agents, prompt engineering, 97.5% token cost reduction, RAG, multi-AI debate.
+AI: Multi-model LLM orchestration (Claude, OpenAI, Gemini), AI agents, MCP protocol, prompt engineering, 97.5% token cost reduction, RAG, semantic memory, vector embeddings.
+Systems: Rust, MCP servers, libSQL, tree-sitter, semantic search (FTS5 + vector).
 Backend: Node.js, NestJS, Express, GraphQL, 13+ microservices, PostgreSQL (RLS), MongoDB, multi-tenant (6 countries), real-time.
 Frontend: React 18/19, Next.js, Astro, Tailwind, shadcn/ui.
 DevOps: AWS, Vercel, Docker, GitHub Actions. Testing: Playwright, Vitest.
 
 ## Achievements
-40% faster delivery (AI automation), 25% microservice perf improvement, 97.5% token cost reduction, multi-tenant platform (6 countries), automated PR review (security), multi-AI debate system.
+97.5% token cost reduction (intelligent caching), 40% faster delivery (AI automation), 25% microservice perf improvement, 500K+ users multi-tenant platform (6 countries), automated PR review (security), multi-AI debate system, MCP server in Rust (ContextForge — in development).
 
 ## Experience
 ${experienceText}
