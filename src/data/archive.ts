@@ -3,6 +3,24 @@ import { featuredProjects } from "./projects";
 
 const archiveOnlyProjects: ArchiveProject[] = [
   {
+    year: 2025,
+    title: "Prism",
+    description:
+      "CLI tool for structured multi-model debates between Claude, OpenAI, and Gemini with six analysis modes.",
+    madeAt: "Personal",
+    technologies: ["TypeScript", "Shell", "Multiple LLM APIs"],
+    url: "https://github.com/cmorenogit/prism",
+  },
+  {
+    year: 2025,
+    title: "Prompt Hub",
+    description:
+      "Centralized prompt management with versioning and performance tracking for AI workflows.",
+    madeAt: "Personal",
+    technologies: ["TypeScript", "Next.js", "PostgreSQL"],
+    url: "https://github.com/cmorenogit/prompt-hub",
+  },
+  {
     year: 2024,
     title: "AI Code Analysis Agent",
     description:

@@ -33,66 +33,34 @@ export const featuredProjects: Project[] = [
     status: "active",
   },
   {
-    slug: "prompt-hub",
-    title: "Prompt Hub",
+    slug: "contextforge",
+    title: "ContextForge",
     description:
-      "Centralized prompt management with versioning and performance tracking. Reduced prompt drift by 80% across teams and AI workflows.",
+      "MCP server in Rust for persistent semantic memory — AI coding assistants that remember decisions, understand codebases, and recover context across sessions.",
     longDescription: `
-      <p>A centralized platform for <strong>managing, versioning, and tracking AI prompts</strong> across teams. Provides a structured workflow for prompt development with full audit trail.</p>
-      <p>Key capabilities:</p>
+      <p>AI coding assistants forget everything between sessions. ContextForge fixes this with an <strong>MCP server</strong> that provides persistent semantic memory — hybrid search combining keyword matching and vector embeddings, automatic codebase analysis, and intelligent context recovery.</p>
       <ul>
-        <li><strong>Version control</strong> — Full diff tracking between prompt versions with rollback support</li>
-        <li><strong>A/B testing</strong> — Compare prompt variants with automated quality scoring</li>
-        <li><strong>Performance metrics</strong> — Track token usage, response quality, and latency per version</li>
-        <li><strong>Team collaboration</strong> — Approval workflows prevent untested prompts from reaching production</li>
+        <li><strong>Hybrid search</strong> — FTS5 keywords + vector embeddings find context by meaning, not just words</li>
+        <li><strong>Code intelligence</strong> — tree-sitter parses structure, exports, and dependencies across 50+ languages</li>
+        <li><strong>Git-aware</strong> — extracts architectural decisions from conventional commits automatically</li>
+        <li><strong>Zero config</strong> — single binary, brew install, works offline</li>
       </ul>
-      <p>Eliminated prompt drift issues that caused <strong>inconsistent AI outputs</strong> across different team members, achieving an <strong>80% reduction</strong> in prompt-related incidents.</p>
+      <p>Built in <strong>Rust</strong> with libSQL for storage and local embeddings via candle — no external APIs required.</p>
     `,
     features: [
-      "Version control for prompts with diff tracking",
-      "Performance metrics per prompt version",
-      "Team collaboration with approval workflows",
-      "80% reduction in prompt drift across teams",
+      "Hybrid semantic + keyword search (FTS5 + vector embeddings)",
+      "Automatic codebase analysis with tree-sitter (50+ languages)",
+      "Git commit parsing for architectural decision extraction",
+      "MCP native — plugs into Claude Code, Cursor, Copilot",
+      "Single Rust binary, ~4-8MB, zero external dependencies",
     ],
-    technologies: ["TypeScript", "Next.js", "PostgreSQL"],
-    year: 2025,
+    technologies: ["Rust", "MCP Protocol", "libSQL", "Vector Search", "tree-sitter"],
+    year: 2026,
     madeAt: "Personal",
-    githubUrl: "https://github.com/cmorenogit/prompt-hub",
+    githubUrl: "https://github.com/cmorenogit/contextforge",
     liveUrl: null,
-    image: null,
-    status: "active",
-  },
-  {
-    slug: "prism",
-    title: "Prism",
-    description:
-      "CLI tool that orchestrates structured debates between Claude, OpenAI, and Gemini. Six analysis modes produce bias-reduced insights through multi-perspective synthesis.",
-    longDescription: `
-      <p>A CLI tool that enables <strong>structured multi-model debates</strong> for complex decision-making. By orchestrating conversations between different LLMs, Prism produces bias-reduced analysis through adversarial and collaborative reasoning.</p>
-      <p>Six analysis modes:</p>
-      <ul>
-        <li><strong>Debate</strong> — Models argue opposing positions, moderator synthesizes</li>
-        <li><strong>Consensus</strong> — Iterative rounds until models converge on agreement</li>
-        <li><strong>Adversarial</strong> — Each model actively challenges others' assumptions</li>
-        <li><strong>Brainstorm</strong> — Free-form ideation with cross-pollination between models</li>
-        <li><strong>Critique</strong> — One model proposes, others systematically tear it apart</li>
-        <li><strong>Synthesis</strong> — Models build on each other's outputs progressively</li>
-      </ul>
-      <p>Each mode produces structured output with <strong>confidence scores</strong> and reasoning chains, enabling transparent decision-making for complex technical and strategic questions.</p>
-    `,
-    features: [
-      "Six analysis modes: debate, consensus, adversarial, brainstorm, critique, synthesis",
-      "Cross-model bias reduction through multi-perspective synthesis",
-      "Structured output with confidence scores",
-      "Configurable debate rounds and model selection",
-    ],
-    technologies: ["TypeScript", "Shell", "Multiple LLM APIs"],
-    year: 2025,
-    madeAt: "Personal",
-    githubUrl: "https://github.com/cmorenogit/prism",
-    liveUrl: null,
-    image: null,
-    status: "active",
+    image: "/images/contextforge.jpg",
+    status: "wip",
   },
   {
     slug: "claude-statusline",
