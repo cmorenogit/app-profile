@@ -256,7 +256,7 @@ describe("Chat API — Legitimate Questions", () => {
   it("answers about projects", async () => {
     const res = await sendMessage("Tell me about his projects");
     const text = await getResponseText(res);
-    expect(text.toLowerCase()).toMatch(/prism|agentes|prompt|apprecio/);
+    expect(text.toLowerCase()).toMatch(/contextforge|agentes|statusline|apprecio/);
   }, TEST_TIMEOUT);
 
   it("answers about experience", async () => {

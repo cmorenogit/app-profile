@@ -10,11 +10,11 @@ interface ChunkResult {
 }
 
 const PORTFOLIO_CHUNKS = [
-  "Cesar Moreno is a Full Stack Engineer specializing in AI with 13+ years of production experience. Currently at Apprecio building automation solutions with AI agents.",
+  "Cesar Moreno is a Full Stack · AI Engineer with 13+ years of production experience. Builds AI developer tools and multi-agent systems — from orchestration platforms to semantic memory, TypeScript to Rust. Currently at Apprecio and building ContextForge.",
   "Built multi-agent system for automated PR code reviews with security-focused analysis. Supports Claude, GPT-4, and Gemini with 97.5% token cost reduction through intelligent caching.",
   "Apprecio Rewards Platform serves 500K+ users across 6 LATAM countries. 13+ microservices with 25% performance improvement and 40% faster delivery through AI-powered automation.",
   "Core expertise: TypeScript, Node.js, NestJS, React, PostgreSQL with Row-Level Security, AWS, LangChain, Claude API. Multi-tenant architecture with data isolation.",
-  "Prism is a CLI tool that orchestrates structured debates between Claude, GPT, and Gemini. Six analysis modes produce bias-reduced insights through multi-perspective synthesis.",
+  "ContextForge is an MCP server in Rust for persistent semantic memory. AI coding assistants remember decisions, understand codebases, and recover context across sessions using hybrid search with FTS5 keywords and vector embeddings.",
   "AI Playground runs models entirely in the browser using Transformers.js and WebGPU. Sentiment analysis, text summarization, image classification — zero server cost, 100% private.",
   "Development workflow uses Spec-Driven Development (SDD), Claude Code CLI with MCP servers, Engram for persistent memory, and bd (beads) for issue tracking.",
   "Tech stack includes Astro, React 19, Tailwind CSS 4, Framer Motion, Playwright for E2E testing, Vitest for unit tests, and GitHub Actions for CI/CD.",
@@ -23,7 +23,7 @@ const PORTFOLIO_CHUNKS = [
 const EXAMPLES = [
   "What AI tools does Cesar use?",
   "How many countries does the platform serve?",
-  "What is Prism?",
+  "What is ContextForge?",
 ];
 
 function cosineSimilarity(a: number[], b: number[]): number {
