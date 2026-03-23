@@ -33,6 +33,36 @@ export const featuredProjects: Project[] = [
     status: "active",
   },
   {
+    slug: "contextforge",
+    title: "ContextForge",
+    description:
+      "MCP server in Rust for persistent semantic memory — AI coding assistants that remember decisions, understand codebases, and recover context across sessions.",
+    longDescription: `
+      <p>AI coding assistants forget everything between sessions. ContextForge fixes this with an <strong>MCP server</strong> that provides persistent semantic memory — hybrid search combining keyword matching and vector embeddings, automatic codebase analysis, and intelligent context recovery.</p>
+      <ul>
+        <li><strong>Hybrid search</strong> — FTS5 keywords + vector embeddings find context by meaning, not just words</li>
+        <li><strong>Code intelligence</strong> — tree-sitter parses structure, exports, and dependencies across 50+ languages</li>
+        <li><strong>Git-aware</strong> — extracts architectural decisions from conventional commits automatically</li>
+        <li><strong>Zero config</strong> — single binary, brew install, works offline</li>
+      </ul>
+      <p>Built in <strong>Rust</strong> with libSQL for storage and local embeddings via candle — no external APIs required.</p>
+    `,
+    features: [
+      "Hybrid semantic + keyword search (FTS5 + vector embeddings)",
+      "Automatic codebase analysis with tree-sitter (50+ languages)",
+      "Git commit parsing for architectural decision extraction",
+      "MCP native — plugs into Claude Code, Cursor, Copilot",
+      "Single Rust binary, ~4-8MB, zero external dependencies",
+    ],
+    technologies: ["Rust", "MCP Protocol", "libSQL", "Vector Search", "tree-sitter"],
+    year: 2026,
+    madeAt: "Personal",
+    githubUrl: "https://github.com/cmorenogit/contextforge",
+    liveUrl: null,
+    image: "/images/contextforge.jpg",
+    status: "wip",
+  },
+  {
     slug: "prompt-hub",
     title: "Prompt Hub",
     description:
