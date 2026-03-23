@@ -63,68 +63,6 @@ export const featuredProjects: Project[] = [
     status: "wip",
   },
   {
-    slug: "prompt-hub",
-    title: "Prompt Hub",
-    description:
-      "Centralized prompt management with versioning and performance tracking. Reduced prompt drift by 80% across teams and AI workflows.",
-    longDescription: `
-      <p>A centralized platform for <strong>managing, versioning, and tracking AI prompts</strong> across teams. Provides a structured workflow for prompt development with full audit trail.</p>
-      <p>Key capabilities:</p>
-      <ul>
-        <li><strong>Version control</strong> — Full diff tracking between prompt versions with rollback support</li>
-        <li><strong>A/B testing</strong> — Compare prompt variants with automated quality scoring</li>
-        <li><strong>Performance metrics</strong> — Track token usage, response quality, and latency per version</li>
-        <li><strong>Team collaboration</strong> — Approval workflows prevent untested prompts from reaching production</li>
-      </ul>
-      <p>Eliminated prompt drift issues that caused <strong>inconsistent AI outputs</strong> across different team members, achieving an <strong>80% reduction</strong> in prompt-related incidents.</p>
-    `,
-    features: [
-      "Version control for prompts with diff tracking",
-      "Performance metrics per prompt version",
-      "Team collaboration with approval workflows",
-      "80% reduction in prompt drift across teams",
-    ],
-    technologies: ["TypeScript", "Next.js", "PostgreSQL"],
-    year: 2025,
-    madeAt: "Personal",
-    githubUrl: "https://github.com/cmorenogit/prompt-hub",
-    liveUrl: null,
-    image: null,
-    status: "active",
-  },
-  {
-    slug: "prism",
-    title: "Prism",
-    description:
-      "CLI tool that orchestrates structured debates between Claude, OpenAI, and Gemini. Six analysis modes produce bias-reduced insights through multi-perspective synthesis.",
-    longDescription: `
-      <p>A CLI tool that enables <strong>structured multi-model debates</strong> for complex decision-making. By orchestrating conversations between different LLMs, Prism produces bias-reduced analysis through adversarial and collaborative reasoning.</p>
-      <p>Six analysis modes:</p>
-      <ul>
-        <li><strong>Debate</strong> — Models argue opposing positions, moderator synthesizes</li>
-        <li><strong>Consensus</strong> — Iterative rounds until models converge on agreement</li>
-        <li><strong>Adversarial</strong> — Each model actively challenges others' assumptions</li>
-        <li><strong>Brainstorm</strong> — Free-form ideation with cross-pollination between models</li>
-        <li><strong>Critique</strong> — One model proposes, others systematically tear it apart</li>
-        <li><strong>Synthesis</strong> — Models build on each other's outputs progressively</li>
-      </ul>
-      <p>Each mode produces structured output with <strong>confidence scores</strong> and reasoning chains, enabling transparent decision-making for complex technical and strategic questions.</p>
-    `,
-    features: [
-      "Six analysis modes: debate, consensus, adversarial, brainstorm, critique, synthesis",
-      "Cross-model bias reduction through multi-perspective synthesis",
-      "Structured output with confidence scores",
-      "Configurable debate rounds and model selection",
-    ],
-    technologies: ["TypeScript", "Shell", "Multiple LLM APIs"],
-    year: 2025,
-    madeAt: "Personal",
-    githubUrl: "https://github.com/cmorenogit/prism",
-    liveUrl: null,
-    image: null,
-    status: "active",
-  },
-  {
     slug: "claude-statusline",
     title: "Claude Statusline",
     description:
