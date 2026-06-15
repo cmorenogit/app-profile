@@ -2,27 +2,27 @@
 import Layout from '@/layouts/Layout.astro';
 import { SpotlightCursor } from '@/components/SpotlightCursor';
 import Sidebar from '@/components/Sidebar.astro';
-import About from '@/components/About.astro';
-import Stats from '@/components/Stats.astro';
+import Approach from '@/components/Approach.astro';
+import SelectedWork from '@/components/SelectedWork.astro';
+import BuiltWithAI from '@/components/BuiltWithAI.astro';
 import Experience from '@/components/Experience.astro';
-import Projects from '@/components/Projects.astro';
-import Footer from '@/components/Footer.astro';
+import Contact from '@/components/Contact.astro';
 ---
 
 <Layout
-  title="Cesar Moreno | Full Stack Engineer · AI"
-  description="Full Stack Engineer · AI with 13+ years building production systems. Specializing in multi-model AI agents, LLM orchestration, and automation across LATAM."
+  title="Cesar Moreno | Principal Engineer · AI Systems & Product"
+  description="Principal Engineer · AI Systems & Product. I build the right product with AI — and ship it to production fast. 13 years shipping production systems."
 >
   <SpotlightCursor client:media="(min-width: 1024px)" />
   <div class="mx-auto min-h-screen max-w-screen-xl px-6 py-12 md:px-12 md:py-12 lg:px-12 lg:py-0">
     <div class="lg:flex lg:justify-between lg:gap-4">
       <Sidebar />
-      <main class="pt-24 lg:w-1/2 lg:py-24">
-        <About />
-        <Stats />
+      <main class="pt-24 lg:w-3/5 lg:py-24 space-y-24">
+        <Approach />
+        <SelectedWork />
+        <BuiltWithAI />
         <Experience />
-        <Projects />
-        <Footer />
+        <Contact />
       </main>
     </div>
   </div>

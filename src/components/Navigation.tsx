@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 
 const navItems = [
-  { id: "about", label: "About" },
+  { id: "approach", label: "Approach" },
+  { id: "work", label: "Work" },
+  { id: "built", label: "Built with AI" },
   { id: "experience", label: "Experience" },
-  { id: "projects", label: "Projects" },
+  { id: "contact", label: "Contact" },
 ];
 
 export function Navigation() {
-  const [activeSection, setActiveSection] = useState("about");
+  const [activeSection, setActiveSection] = useState("approach");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,36 +17,27 @@ export function Navigation() {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
 
-      // Si estamos al final de la página, seleccionar "projects"
-      if (scrollY + windowHeight >= documentHeight - 100) {
-        setActiveSection("projects");
-        return;
-      }
-
-      // Si estamos cerca del top, seleccionar "about"
-      if (scrollY < 100) {
-        setActiveSection("about");
-        return;
-      }
-
-      // Encontrar la sección activa basándose en qué sección está más visible
-      const sections = navItems.map(({ id }) => {
+      // La sección activa es la ÚLTIMA cuyo top ya cruzó el punto de
+      // referencia (~35% del viewport). El offset es amplio a propósito:
+      // las secciones finales (Experience, Contact) tienen poco "runway" de
+      // scroll, así que con un offset chico nunca alcanzarían el top y no se
+      // marcarían. Esto las marca de forma robusta sin importar su tamaño.
+      const offset = Math.round(windowHeight * 0.35);
+      let current = navItems[0].id;
+      for (const { id } of navItems) {
         const el = document.getElementById(id);
-        if (!el) return { id, visible: 0 };
-        const rect = el.getBoundingClientRect();
-        const visibleTop = Math.max(0, rect.top);
-        const visibleBottom = Math.min(windowHeight, rect.bottom);
-        const visible = Math.max(0, visibleBottom - visibleTop);
-        return { id, visible };
-      });
-
-      const mostVisible = sections.reduce((prev, curr) =>
-        curr.visible > prev.visible ? curr : prev
-      );
-
-      if (mostVisible.visible > 0) {
-        setActiveSection(mostVisible.id);
+        if (el && el.getBoundingClientRect().top <= offset) {
+          current = id;
+        }
       }
+
+      // En el fondo absoluto, la última sección (Contact) no tiene runway
+      // para cruzar el offset — márcala explícitamente.
+      if (scrollY + windowHeight >= documentHeight - 4) {
+        current = navItems[navItems.length - 1].id;
+      }
+
+      setActiveSection(current);
     };
 
     handleScroll();

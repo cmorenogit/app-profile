@@ -265,3 +265,13 @@ body::before {
   border-radius: 50%;
   background: rgba(100, 255, 218, 0.5);
 }
+
+/* Tech tag pill */
+.tech-tag {
+  font-family: 'Geist Mono', monospace;
+  font-size: 0.6875rem;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(100, 255, 218, 0.08);
+  color: var(--color-accent);
+}
