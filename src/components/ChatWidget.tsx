@@ -711,16 +711,11 @@ export function ChatWidget({ lang = "en" }: ChatWidgetProps) {
                 flexShrink: 0,
               }}
             />
-            <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-              <span
-                style={{ color: "#e6f1ff", fontSize: "14px", fontWeight: 600 }}
-              >
-                {t.header}
-              </span>
-              <span style={{ color: "#8892b0", fontSize: "11px" }}>
-                {t.notice}
-              </span>
-            </div>
+            <span
+              style={{ color: "#e6f1ff", fontSize: "14px", fontWeight: 600 }}
+            >
+              {t.header}
+            </span>
           </div>
           <button
             ref={closeButtonRef}

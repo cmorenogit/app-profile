@@ -20,6 +20,13 @@ const lang = getLangFromUrl(Astro.url);
 const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
 const canonicalURL = new URL(Astro.url.pathname, 'https://cesarmoreno.dev');
 
+// hreflang alternates (EN at /, ES at /es)
+const path = Astro.url.pathname;
+const isEs = path === '/es' || path.startsWith('/es/');
+const basePath = isEs ? (path.replace(/^\/es/, '') || '/') : path;
+const enHref = new URL(basePath, 'https://cesarmoreno.dev').href;
+const esHref = new URL('/es' + (basePath === '/' ? '' : basePath), 'https://cesarmoreno.dev').href;
+
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -50,7 +57,7 @@ const jsonLd = {
       },
       hasOccupation: {
         "@type": "Occupation",
-        name: "Full Stack Engineer",
+        name: "Principal Engineer · AI Systems & Product",
         skills:
           "TypeScript, AI Agents, LLM Orchestration, Multi-Agent Systems, Node.js, React, NestJS, Microservices, PostgreSQL, AWS",
       },
@@ -114,17 +121,20 @@ const jsonLd = {
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content="Full Stack Engineer, AI Engineer, AI Agents, LLM Orchestration, TypeScript, Node.js, React, NestJS, Microservices, Automation, Multi-Agent Systems" />
+    <meta name="keywords" content="AI Product Engineer, Principal Engineer, AI Systems, LLM Orchestration, Multi-Agent Systems, Product Engineering, TypeScript, Rust, RAG, LATAM" />
     <meta name="author" content="Cesar Moreno" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL.href} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="es" href={esHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:locale" content={ogLocale} />
-    <meta property="og:url" content="https://cesarmoreno.dev" />
+    <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Building AI agents that automate complex workflows" />
+    <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Cesar Moreno" />
     <meta property="og:image" content="https://cesarmoreno.dev/og-image.png" />
     <meta property="og:image:width" content="2400" />
@@ -133,7 +143,7 @@ const jsonLd = {
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content="Building AI agents that automate complex workflows" />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://cesarmoreno.dev/og-image.png" />
 
     <!-- JSON-LD -->
