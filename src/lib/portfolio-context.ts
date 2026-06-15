@@ -31,32 +31,39 @@ export function getPortfolioContext(): string {
     .map((p) => `${p.title} (${p.year}, ${p.madeAt || "Personal"})`)
     .join("; ");
 
-  return `# Cesar Moreno — Full Stack · AI Engineer
+  return `# Cesar Moreno — Principal Engineer · AI Systems & Product
 
-## Availability
-Open to opportunities: full-time, freelance, consulting. Remote preferred. Available now.
+## Positioning
+Builds AI products with product judgment — not AI that just looks impressive. Most engineers can use AI; few know *which* product to build with it. He questions the requirement with real usage data, builds the scope that actually matters, and ships in weeks, not months. Signature: the right scope for each project's stage, designed to grow.
+
+## Freelance availability (IMPORTANT — answer carefully)
+He takes on a LIMITED number of freelance AI-product projects in parallel to his current Principal Engineer role — selective, hands-on engagements: AI features, AI products end to end, and work with agencies that need a real AI specialist. He is NOT looking for full-time employment and is NOT "open to work" — frame availability as selective freelance, never as job-seeking. Best fit: someone building something with AI, or who wants to. To start a conversation: hello@cesarmoreno.dev.
 
 ## Languages
 Spanish (native), English (professional — daily use with international teams).
 
 ## Location & Timezone
-Chile, UTC-3 (UTC-4 DST). US Eastern overlap 9am–1pm ET. Works with US, LATAM, European teams.
+Lima, Peru — UTC-5. Overlaps US Eastern business hours. Works remotely with US, LATAM and European teams and clients.
 
 ## Summary
-Full Stack · AI Engineer, 13+ years. Builds AI developer tools and multi-agent systems in production — from orchestration platforms to semantic memory, TypeScript to Rust. Currently building ContextForge, an MCP server in Rust for persistent semantic memory for AI coding assistants.
+Principal Engineer · AI Systems & Product, 13 years shipping production systems. Currently the technical reference for a multi-tenant rewards platform serving 500K+ users across 6 LATAM countries. Builds AI tooling (multi-agent code review, MCP servers, LLM orchestration) and ships client products end to end. His evolution: from writing software to building with product judgment, using AI to deliver in a fraction of the time.
 
 ## Leadership & Philosophy
-Led 3-5 dev teams, mentors junior/mid engineers, cross-functional with product/design. Remote since 2020, async-first. Ships production-ready code from day one. TypeScript for product, Rust for systems, production-tested always.
+Principal Engineer and cross-team technical reference (product, core, support). Led 5 engineers; integrates AI across the product cycle (from scope decision to delivery), sustaining ~40% faster delivery. Mentors engineers; remote/async since 2020. Ships production-ready, right-sized scope from day one.
 
 ## Expertise
-AI: Multi-model LLM orchestration (Claude, OpenAI, Gemini), AI agents, MCP protocol, prompt engineering, 97.5% token cost reduction, RAG, semantic memory, vector embeddings.
-Systems: Rust, MCP servers, libSQL, tree-sitter, semantic search (FTS5 + vector).
-Backend: Node.js, NestJS, Express, GraphQL, 13+ microservices, PostgreSQL (RLS), MongoDB, multi-tenant (6 countries), real-time.
-Frontend: React 18/19, Next.js, Astro, Tailwind, shadcn/ui.
+AI (product-focused): turning AI into features that move the business — agents, LLM orchestration (Claude, OpenAI, Gemini), RAG, semantic memory, prompt engineering, 97.5% token cost reduction.
+Systems: Rust, MCP servers, libSQL, tree-sitter, vector + FTS5 search.
+Backend: Node.js, NestJS, GraphQL, 13+ microservices, PostgreSQL (RLS), MongoDB, multi-tenant, real-time.
+Frontend: React 18/19, Next.js, Astro, Tailwind.
 DevOps: AWS, Vercel, Docker, GitHub Actions. Testing: Playwright, Vitest.
 
+## Selected client work
+Ubero (uberoproducts.com): a custom mini-CMS so the client manages their own product catalog — zero maintenance cost to start, designed to scale. From design to production in a single week.
+Also: unblocked a stalled SaaS B2B migration by analyzing real production usage — migrated most clients immediately instead of waiting months for a module only one client actually used.
+
 ## Achievements
-97.5% token cost reduction (intelligent caching), 40% faster delivery (AI automation), 25% microservice perf improvement, 500K+ users multi-tenant platform (6 countries), automated PR review (security), multi-AI debate system, MCP server in Rust (ContextForge — in development).
+97.5% token cost reduction (intelligent caching), ~40% faster delivery (AI automation), 25% microservice performance improvement, 500K+ users multi-tenant platform (6 LATAM countries), automated multi-agent PR review, MCP server in Rust (ContextForge).
 
 ## Experience
 ${experienceText}
@@ -68,12 +75,13 @@ ${projectsText}
 ${archiveText}
 
 ## Contact
-GitHub: github.com/cmorenogit | LinkedIn: linkedin.com/in/morenodev | Web: cesarmoreno.dev
+Email: hello@cesarmoreno.dev | GitHub: github.com/cmorenogit | LinkedIn: linkedin.com/in/morenodev | Web: cesarmoreno.dev
 
 ## Q&A
-Available? Yes, open to full-time/freelance/consulting, remote preferred.
-English? Yes, Spanish native + English professional (daily international use).
-Timezone? Chile UTC-3, overlaps US Eastern 9am-1pm ET.
-Lead teams? Yes, led 3-5 devs, mentors engineers, cross-functional.
-Freelance? Yes, available for freelance and consulting.`;
+Available? He takes on a limited number of freelance AI-product projects in parallel — selective and hands-on. Not seeking full-time employment.
+What does he do? Builds AI products with product judgment, end to end — and ships fast.
+English? Yes — Spanish native + English professional (daily international use).
+Timezone? Lima, Peru (UTC-5), overlaps US Eastern business hours.
+Lead teams? Yes — Principal Engineer and cross-team technical reference; led 5 engineers; mentors.
+Freelance? Yes — selective AI-product projects in parallel to his current role. To start: hello@cesarmoreno.dev.`;
 }
