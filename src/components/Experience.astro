@@ -1,18 +1,18 @@
 ---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section id="experience" class="fade-in scroll-mt-24">
-  <h2 class="mb-4 text-sm font-bold uppercase tracking-[0.1em] text-white">Experience</h2>
+  <h2 class="mb-4 text-sm font-bold uppercase tracking-[0.1em] text-white">{t('experience.heading')}</h2>
   <div class="glass-card p-6 space-y-3">
     <p class="text-slate-light">
-      13 years shipping software to production taught me the bottleneck isn't the code — it's
-      deciding <em class="not-italic text-white">what</em> to build. That was my evolution: from
-      writing software to building with product judgment, using AI to deliver in a fraction of the time.
+      {t('experience.p1.pre')}<em class="not-italic text-white">{t('experience.p1.highlight')}</em>{t('experience.p1.post')}
     </p>
     <p class="text-slate-light">
-      Today, as <span class="text-white">Principal Engineer at Apprecio</span>, I'm the technical
-      reference for a rewards platform across 6 LATAM countries. Before that — leading product and data
-      on a B2B platform — I learned to measure what matters: the seed of seeing software through the business.
+      {t('experience.p2.pre')}<span class="text-white">{t('experience.p2.highlight')}</span>{t('experience.p2.post')}
     </p>
   </div>
 </section>

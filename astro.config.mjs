@@ -6,6 +6,13 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   site: 'https://cesarmoreno.dev',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'es'],
+    routing: {
+      prefixDefaultLocale: false,
+    },
+  },
   adapter: vercel({
     webAnalytics: { enabled: true },
     imagesConfig: { sizes: [320, 640, 1280] },

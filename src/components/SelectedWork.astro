@@ -1,18 +1,21 @@
 ---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <section id="work" class="fade-in scroll-mt-24">
-  <h2 class="mb-2 text-sm font-bold uppercase tracking-[0.1em] text-white">Selected work</h2>
-  <p class="mb-5 text-sm text-slate">Real projects, shipped end to end.</p>
+  <h2 class="mb-2 text-sm font-bold uppercase tracking-[0.1em] text-white">{t('work.heading')}</h2>
+  <p class="mb-5 text-sm text-slate">{t('work.subtitle')}</p>
   <div class="space-y-4">
     <div class="glass-card p-6">
       <div class="flex items-baseline justify-between gap-4">
         <h3 class="font-semibold text-white">Ubero</h3>
-        <span class="font-mono text-xs uppercase tracking-wide text-accent shrink-0">design → production · 1 week</span>
+        <span class="font-mono text-xs uppercase tracking-wide text-accent shrink-0">{t('work.ubero.badge')}</span>
       </div>
       <p class="mt-3 text-sm text-slate-light">
-        A custom mini-CMS so the client manages their own product catalog. Zero maintenance cost to start,
-        designed to scale as they grow. From design to production in a single week — and it could have gone faster.
+        {t('work.ubero.body')}
       </p>
     </div>
   </div>

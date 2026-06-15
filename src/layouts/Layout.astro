@@ -8,6 +8,7 @@ import { ClientRouter } from 'astro:transitions';
 import { ChatWidget } from '@/components/ChatWidget';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
+import { getLangFromUrl } from '@/i18n/utils';
 
 interface Props {
   title: string;
@@ -15,6 +16,8 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
 const canonicalURL = new URL(Astro.url.pathname, 'https://cesarmoreno.dev');
 
 const jsonLd = {
@@ -102,7 +105,7 @@ const jsonLd = {
 };
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -118,7 +121,7 @@ const jsonLd = {
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={ogLocale} />
     <meta property="og:url" content="https://cesarmoreno.dev" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content="Building AI agents that automate complex workflows" />
