@@ -1,4 +1,5 @@
 import { type ReactNode } from "react";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
 interface DemoShellProps {
   title: string;
@@ -14,9 +15,10 @@ interface DemoShellProps {
   modelSizeMB?: number;
   isFallback?: boolean;
   fallbackReason?: string;
+  t?: PlaygroundStrings["shell"];
 }
 
-export function DemoShell({ title, howItWorks, modelName, children, isLoading, loadingText, device, progress, loadedBytes, totalBytes, modelSizeMB, isFallback, fallbackReason }: DemoShellProps) {
+export function DemoShell({ title, howItWorks, modelName, children, isLoading, loadingText, device, progress, loadedBytes, totalBytes, modelSizeMB, isFallback, fallbackReason, t = playgroundStrings.en.shell }: DemoShellProps) {
   const formatMB = (bytes: number) => (bytes / 1024 / 1024).toFixed(1);
   return (
     <div>
@@ -25,7 +27,7 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
           {title}
         </h3>
         <p style={{ color: "#8892b0", fontSize: "13px", lineHeight: 1.5, margin: "0 0 8px 0" }}>
-          <strong style={{ color: "#a8b2d1" }}>How it works:</strong> {howItWorks}
+          <strong style={{ color: "#a8b2d1" }}>{t.howItWorks}</strong> {howItWorks}
         </p>
         <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
           <span style={{
@@ -42,7 +44,7 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
             flexShrink: 0,
             whiteSpace: "nowrap",
           }}>
-            Model: {modelName}
+            {t.modelLabel} {modelName}
           </span>
           {device && (
             <span style={{
@@ -114,7 +116,7 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
                 }} />
               </div>
               <span style={{ color: "#a8b2d1", fontSize: "13px", textAlign: "center" }}>
-                Downloading model... {loadedBytes != null ? formatMB(loadedBytes) : "0.0"} / {totalBytes != null ? formatMB(totalBytes) : "?"} MB
+                {t.downloading} {loadedBytes != null ? formatMB(loadedBytes) : "0.0"} / {totalBytes != null ? formatMB(totalBytes) : "?"} MB
               </span>
             </>
           ) : (
@@ -129,7 +131,7 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
                 animation: "spin 0.8s linear infinite",
               }} />
               <span style={{ color: "#a8b2d1", fontSize: "13px" }}>
-                {loadingText || "Loading model... (first time takes ~10s)"}
+                {loadingText || t.loadingDefault}
               </span>
               <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
             </div>
@@ -151,10 +153,10 @@ export function DemoShell({ title, howItWorks, modelName, children, isLoading, l
             <span style={{ flexShrink: 0 }}>ℹ️</span>
             <div>
               <p style={{ color: "#a8b2d1", margin: 0 }}>
-                Showing pre-computed results — {fallbackReason || "this model requires more memory than your device can provide"}.
+                {t.fallbackPrefix}{fallbackReason || t.fallbackDefaultReason}.
               </p>
               <p style={{ color: "#8892b0", margin: "6px 0 0 0" }}>
-                Try on a desktop device for the full interactive experience.
+                {t.fallbackHint}
               </p>
             </div>
           </div>

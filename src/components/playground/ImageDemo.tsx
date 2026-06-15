@@ -3,13 +3,14 @@ import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
 import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
 interface ClassificationResult {
   label: string;
   score: number;
 }
 
-export function ImageDemo() {
+export function ImageDemo({ t = playgroundStrings.en }: { t?: PlaygroundStrings }) {
   const [results, setResults] = useState<ClassificationResult[]>([]);
   const [preview, setPreview] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,7 +28,7 @@ export function ImageDemo() {
   const classify = async (file: File) => {
     if (!file.type.startsWith("image/")) return;
     if (file.size > 10 * 1024 * 1024) {
-      alert("Image must be under 10MB");
+      alert(t.image.mustBeUnder);
       return;
     }
 
@@ -62,13 +63,14 @@ export function ImageDemo() {
   if (status === "fallback") {
     return (
       <DemoShell
-        title="Image Classification"
-        howItWorks="A Vision Transformer (ViT) model analyzes your image and identifies what it contains, with confidence scores for the top 5 predictions. Runs entirely in your browser."
+        title={t.demos.image.title}
+        howItWorks={t.image.howItWorks}
         modelName="vit-base-patch16-224"
         isLoading={false}
         isFallback={true}
-        fallbackReason="This model (88MB) is too large for your device"
+        fallbackReason={t.image.fallbackReason}
         modelSizeMB={88}
+        t={t.shell}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {PRERECORDED_RESULTS.image.map((r, i) => (
@@ -129,14 +131,15 @@ export function ImageDemo() {
 
   return (
     <DemoShell
-      title="Image Classification"
-      howItWorks="A Vision Transformer (ViT) model analyzes your image and identifies what it contains, with confidence scores for the top 5 predictions. Runs entirely in your browser."
+      title={t.demos.image.title}
+      howItWorks={t.image.howItWorks}
       modelName="vit-base-patch16-224"
       isLoading={isModelLoading}
       progress={progress}
       loadedBytes={loadedBytes}
       totalBytes={totalBytes}
       modelSizeMB={88}
+      t={t.shell}
     >
       {/* Drop zone */}
       <div
@@ -200,7 +203,7 @@ export function ImageDemo() {
                   cursor: "pointer",
                 }}
               >
-                Take Photo
+                {t.image.takePhoto}
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
@@ -215,21 +218,21 @@ export function ImageDemo() {
                   cursor: "pointer",
                 }}
               >
-                Choose from Gallery
+                {t.image.chooseGallery}
               </button>
             </div>
             <p style={{ color: "#8892b0", fontSize: "12px", margin: "12px 0 0 0" }}>
-              JPG, PNG, WebP — max 10MB
+              {t.image.fileHint}
             </p>
           </>
         ) : (
           <>
             <div style={{ fontSize: "32px", marginBottom: "12px" }}>📷</div>
             <p style={{ color: "#a8b2d1", fontSize: "14px", margin: "0 0 4px 0" }}>
-              Drop an image here or click to upload
+              {t.image.dropPrompt}
             </p>
             <p style={{ color: "#8892b0", fontSize: "12px", margin: 0 }}>
-              JPG, PNG, WebP — max 10MB
+              {t.image.fileHint}
             </p>
           </>
         )}
@@ -244,7 +247,7 @@ export function ImageDemo() {
             borderRadius: "50%",
             animation: "spin 0.8s linear infinite",
           }} />
-          <span style={{ color: "#a8b2d1", fontSize: "13px" }}>Classifying image...</span>
+          <span style={{ color: "#a8b2d1", fontSize: "13px" }}>{t.image.classifying}</span>
           <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
         </div>
       )}
@@ -258,7 +261,7 @@ export function ImageDemo() {
           background: "rgba(100, 255, 218, 0.05)",
         }}>
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "12px" }}>
-            Top predictions
+            {t.image.topPredictions}
           </span>
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
             {results.map((r, i) => (

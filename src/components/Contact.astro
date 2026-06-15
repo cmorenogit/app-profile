@@ -12,10 +12,23 @@ const t = useTranslations(lang);
       {t('contact.body')}
       <span class="mt-2 block text-sm text-slate">{t('contact.subtext')}</span>
     </p>
-    <a href="mailto:hello@cesarmoreno.dev" class="mt-6 inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-accent/10 px-6 py-3 font-mono text-sm font-semibold text-accent transition hover:bg-accent/20">
+    <a href="mailto:hello@cesarmoreno.dev" data-analytics="email" class="mt-6 inline-flex items-center gap-2 rounded-lg border border-accent/30 bg-accent/10 px-6 py-3 font-mono text-sm font-semibold text-accent transition hover:bg-accent/20">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
       {t('contact.cta')}
     </a>
   </div>
   <p class="mt-8 text-center font-mono text-xs text-slate lg:mt-[35vh]">{t('contact.byline')}</p>
 </section>
+
+<script>
+  import { track } from '@vercel/analytics';
+  function bindEmailTracking() {
+    document.querySelectorAll('[data-analytics="email"]').forEach((el) => {
+      if ((el as HTMLElement).dataset.bound) return;
+      (el as HTMLElement).dataset.bound = '1';
+      el.addEventListener('click', () => track('contact_email_click'));
+    });
+  }
+  document.addEventListener('astro:page-load', bindEmailTracking);
+  bindEmailTracking();
+</script>

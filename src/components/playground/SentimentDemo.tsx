@@ -3,6 +3,7 @@ import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
 import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
 interface SentimentResult {
   label: string;
@@ -21,13 +22,13 @@ const SENTIMENT_COLORS: Record<string, string> = {
   NEUTRAL: "#8892b0",
 };
 
-const SENTIMENT_LABELS: Record<string, string> = {
-  POSITIVE: "Positive",
-  NEGATIVE: "Negative",
-  NEUTRAL: "Neutral",
-};
+export function SentimentDemo({ t = playgroundStrings.en }: { t?: PlaygroundStrings }) {
+  const SENTIMENT_LABELS: Record<string, string> = {
+    POSITIVE: t.sentiment.labels.positive,
+    NEGATIVE: t.sentiment.labels.negative,
+    NEUTRAL: t.sentiment.labels.neutral,
+  };
 
-export function SentimentDemo() {
   const [input, setInput] = useState("");
   const [results, setResults] = useState<SentimentResult[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -61,13 +62,14 @@ export function SentimentDemo() {
   if (status === "fallback") {
     return (
       <DemoShell
-        title="Sentiment Analysis"
-        howItWorks="A DistilBERT model analyzes your text and classifies its emotional tone as positive, negative, or neutral. Everything runs in your browser via WebAssembly."
+        title={t.demos.sentiment.title}
+        howItWorks={t.sentiment.howItWorks}
         modelName="distilbert-sst2"
         isLoading={false}
         isFallback={true}
-        fallbackReason="This model (67MB) is too large for your device"
+        fallbackReason={t.sentiment.fallbackReason}
         modelSizeMB={67}
+        t={t.shell}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
           {PRERECORDED_RESULTS.sentiment.map((r, i) => {
@@ -107,19 +109,20 @@ export function SentimentDemo() {
 
   return (
     <DemoShell
-      title="Sentiment Analysis"
-      howItWorks="A DistilBERT model analyzes your text and classifies its emotional tone as positive, negative, or neutral. Everything runs in your browser via WebAssembly."
+      title={t.demos.sentiment.title}
+      howItWorks={t.sentiment.howItWorks}
       modelName="distilbert-sst2"
       isLoading={isModelLoading}
       progress={progress}
       loadedBytes={loadedBytes}
       totalBytes={totalBytes}
       modelSizeMB={67}
+      t={t.shell}
     >
       {/* Examples */}
       <div style={{ marginBottom: "16px" }}>
         <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-          Try an example:
+          {t.sentiment.tryExample}
         </span>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           {EXAMPLES.map((ex, i) => (
@@ -152,7 +155,7 @@ export function SentimentDemo() {
         <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type or paste any text to analyze..."
+          placeholder={t.sentiment.placeholder}
           maxLength={500}
           rows={3}
           style={{
@@ -189,7 +192,7 @@ export function SentimentDemo() {
           marginBottom: "16px",
         }}
       >
-        {isLoading ? "Analyzing..." : "Analyze Sentiment"}
+        {isLoading ? t.sentiment.analyzing : t.sentiment.analyze}
       </button>
 
       {/* Result */}
@@ -207,7 +210,7 @@ export function SentimentDemo() {
         }}>
           <div>
             <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "4px" }}>
-              Result
+              {t.sentiment.result}
             </span>
             <span style={{
               color: SENTIMENT_COLORS[sentimentKey] || "#e6f1ff",
@@ -219,7 +222,7 @@ export function SentimentDemo() {
           </div>
           <div style={{ textAlign: "right" }}>
             <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "4px" }}>
-              Confidence
+              {t.sentiment.confidence}
             </span>
             <span style={{ color: "#e6f1ff", fontSize: "24px", fontWeight: 700 }}>
               {(topResult.score * 100).toFixed(1)}%

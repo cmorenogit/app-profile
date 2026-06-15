@@ -107,6 +107,43 @@ export const ui = {
     'projects.heading': 'Projects',
     'projects.subtitle':
       "Things I've built — AI tooling, developer tools and production systems.",
+
+    // Shared
+    'common.backHome': 'Back to home',
+
+    // Playground page
+    'meta.playground.title': 'AI Playground | Cesar Moreno',
+    'meta.playground.description':
+      'Interactive AI demos running entirely in your browser. No server, no data collection — powered by Transformers.js.',
+    'playground.heading': 'AI Playground',
+    'playground.intro.pre': 'Interactive AI models running ',
+    'playground.intro.highlight': 'entirely in your browser',
+    'playground.intro.post':
+      '. No data is sent to any server — everything processes locally on your device.',
+    'playground.privacy.badge': '100% private — runs on your device',
+
+    // Uses page
+    'meta.uses.title': 'Uses | Cesar Moreno',
+    'meta.uses.description':
+      'Tools, technologies, and setup I use daily as a Full Stack Engineer specializing in AI agents and automation.',
+    'uses.heading': 'Uses',
+    'uses.intro.pre':
+      'Tools and technologies I use daily to build AI systems and ship production software. Inspired by ',
+    'uses.intro.link': 'uses.tech',
+
+    // Archive page
+    'meta.archive.title': 'Archive | Cesar Moreno',
+    'meta.archive.description':
+      "A comprehensive list of projects I've worked on.",
+    'archive.heading': 'All Projects',
+    'archive.subtitle': "A comprehensive list of projects I've worked on",
+    'archive.col.year': 'Year',
+    'archive.col.project': 'Project',
+    'archive.col.madeAt': 'Made at',
+    'archive.col.builtWith': 'Built with',
+    'archive.col.link': 'Link',
+    'archive.viewDetails': 'View Details →',
+    'archive.viewAria': 'View',
   },
   es: {
     // Meta
@@ -209,5 +246,42 @@ export const ui = {
     'projects.heading': 'Proyectos',
     'projects.subtitle':
       'Lo que he construido: soluciones de IA, herramientas para desarrolladores y sistemas en producción.',
+
+    // Shared
+    'common.backHome': 'Volver al inicio',
+
+    // Playground page
+    'meta.playground.title': 'AI Playground | Cesar Moreno',
+    'meta.playground.description':
+      'Demos interactivos de IA que se ejecutan por completo en tu navegador. Sin servidor, sin recolección de datos, con Transformers.js.',
+    'playground.heading': 'AI Playground',
+    'playground.intro.pre': 'Modelos de IA interactivos que se ejecutan ',
+    'playground.intro.highlight': 'por completo en tu navegador',
+    'playground.intro.post':
+      '. No se envían datos a ningún servidor: todo se procesa localmente en tu dispositivo.',
+    'playground.privacy.badge': '100% privado — se ejecuta en tu dispositivo',
+
+    // Uses page
+    'meta.uses.title': 'Lo que uso | Cesar Moreno',
+    'meta.uses.description':
+      'Herramientas, tecnologías y setup que uso a diario como Full Stack Engineer especializado en agentes de IA y automatización.',
+    'uses.heading': 'Lo que uso',
+    'uses.intro.pre':
+      'Herramientas y tecnologías que uso a diario para construir sistemas de IA y llevar software a producción. Inspirado por ',
+    'uses.intro.link': 'uses.tech',
+
+    // Archive page
+    'meta.archive.title': 'Archivo | Cesar Moreno',
+    'meta.archive.description':
+      'Una lista completa de los proyectos en los que he trabajado.',
+    'archive.heading': 'Todos los proyectos',
+    'archive.subtitle': 'Una lista completa de los proyectos en los que he trabajado',
+    'archive.col.year': 'Año',
+    'archive.col.project': 'Proyecto',
+    'archive.col.madeAt': 'Hecho en',
+    'archive.col.builtWith': 'Construido con',
+    'archive.col.link': 'Enlace',
+    'archive.viewDetails': 'Ver detalles →',
+    'archive.viewAria': 'Ver',
   },
 } as const;

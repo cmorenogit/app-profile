@@ -6,43 +6,14 @@ import { RAGDemo } from "./RAGDemo";
 import { WhisperDemo } from "./WhisperDemo";
 import { useDevice } from "./useDevice";
 import { useMobileDetect } from "./useMobileDetect";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
-const demos = [
-  {
-    id: "sentiment",
-    title: "Sentiment Analysis",
-    shortTitle: "Sentiment",
-    description: "Detects if a text is positive, negative, or neutral",
-    icon: "😊",
-  },
-  {
-    id: "summary",
-    title: "Text Summary",
-    shortTitle: "Summary",
-    description: "Condenses a paragraph into a short summary",
-    icon: "📝",
-  },
-  {
-    id: "image",
-    title: "Image Classification",
-    shortTitle: "Image",
-    description: "Identifies what's in a photo",
-    icon: "🖼️",
-  },
-  {
-    id: "rag",
-    title: "RAG Explorer",
-    shortTitle: "RAG",
-    description: "Semantic search with embeddings and cosine similarity",
-    icon: "🔍",
-  },
-  {
-    id: "whisper",
-    title: "Speech-to-Text",
-    shortTitle: "Speech",
-    description: "Transcribe audio from your microphone with Whisper",
-    icon: "🎙️",
-  },
+const DEMO_META = [
+  { id: "sentiment", icon: "😊" },
+  { id: "summary", icon: "📝" },
+  { id: "image", icon: "🖼️" },
+  { id: "rag", icon: "🔍" },
+  { id: "whisper", icon: "🎙️" },
 ] as const;
 
 const MODEL_SIZES: Record<string, number> = {
@@ -53,9 +24,18 @@ const MODEL_SIZES: Record<string, number> = {
   whisper: 40,
 };
 
-type DemoId = (typeof demos)[number]["id"];
+type DemoId = (typeof DEMO_META)[number]["id"];
 
-export function PlaygroundApp() {
+export function PlaygroundApp({ t = playgroundStrings.en }: { t?: PlaygroundStrings }) {
+  // Build the localized demo list — ids and icons are language-independent.
+  const demos = DEMO_META.map((d) => ({
+    id: d.id,
+    icon: d.icon,
+    title: t.demos[d.id].title,
+    shortTitle: t.demos[d.id].shortTitle,
+    description: t.demos[d.id].description,
+  }));
+
   const [activeDemo, setActiveDemo] = useState<DemoId | null>(null);
   const demoPanelRef = useRef<HTMLDivElement>(null);
   const pillBarRef = useRef<HTMLDivElement>(null);
@@ -105,10 +85,10 @@ export function PlaygroundApp() {
             color: isWebGPU ? "#64ffda" : "#8892b0",
             fontFamily: "'Geist Mono', monospace",
           }}>
-            {isWebGPU ? "⚡ WebGPU accelerated" : "🔧 Running on WASM (CPU)"}
+            {isWebGPU ? t.device.webgpu : t.device.wasm}
             {isWebGPU && (
               <span style={{ color: "#8892b0", fontSize: "11px" }}>
-                — GPU-powered inference
+                {t.device.webgpuSuffix}
               </span>
             )}
           </div>
@@ -125,7 +105,7 @@ export function PlaygroundApp() {
               color: "#a78bfa",
               fontFamily: "'Geist Mono', monospace",
             }}>
-              {mobileInfo.recommendation === "full" ? "📱 all demos" : mobileInfo.recommendation === "mobile" ? "📱 optimized for mobile" : "📱 limited demos"}
+              {mobileInfo.recommendation === "full" ? t.device.mobileAll : mobileInfo.recommendation === "mobile" ? t.device.mobileOptimized : t.device.mobileLimited}
             </div>
           )}
         </div>
@@ -260,11 +240,11 @@ export function PlaygroundApp() {
                 background: "rgba(17, 34, 64, 0.4)",
               }}
             >
-              {activeDemo === "sentiment" && <SentimentDemo />}
-              {activeDemo === "summary" && <SummaryDemo />}
-              {activeDemo === "image" && <ImageDemo />}
-              {activeDemo === "rag" && <RAGDemo />}
-              {activeDemo === "whisper" && <WhisperDemo />}
+              {activeDemo === "sentiment" && <SentimentDemo t={t} />}
+              {activeDemo === "summary" && <SummaryDemo t={t} />}
+              {activeDemo === "image" && <ImageDemo t={t} />}
+              {activeDemo === "rag" && <RAGDemo t={t} />}
+              {activeDemo === "whisper" && <WhisperDemo t={t} />}
             </div>
           )}
         </>
@@ -334,11 +314,11 @@ export function PlaygroundApp() {
                 background: "rgba(17, 34, 64, 0.4)",
               }}
             >
-              {activeDemo === "sentiment" && <SentimentDemo />}
-              {activeDemo === "summary" && <SummaryDemo />}
-              {activeDemo === "image" && <ImageDemo />}
-              {activeDemo === "rag" && <RAGDemo />}
-              {activeDemo === "whisper" && <WhisperDemo />}
+              {activeDemo === "sentiment" && <SentimentDemo t={t} />}
+              {activeDemo === "summary" && <SummaryDemo t={t} />}
+              {activeDemo === "image" && <ImageDemo t={t} />}
+              {activeDemo === "rag" && <RAGDemo t={t} />}
+              {activeDemo === "whisper" && <WhisperDemo t={t} />}
             </div>
           )}
         </>
