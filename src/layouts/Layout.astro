@@ -8,6 +8,7 @@ import { ClientRouter } from 'astro:transitions';
 import { ChatWidget } from '@/components/ChatWidget';
 import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
+import { getLangFromUrl } from '@/i18n/utils';
 
 interface Props {
   title: string;
@@ -15,7 +16,16 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const lang = getLangFromUrl(Astro.url);
+const ogLocale = lang === 'es' ? 'es_ES' : 'en_US';
 const canonicalURL = new URL(Astro.url.pathname, 'https://cesarmoreno.dev');
+
+// hreflang alternates (EN at /, ES at /es)
+const path = Astro.url.pathname;
+const isEs = path === '/es' || path.startsWith('/es/');
+const basePath = isEs ? (path.replace(/^\/es/, '') || '/') : path;
+const enHref = new URL(basePath, 'https://cesarmoreno.dev').href;
+const esHref = new URL('/es' + (basePath === '/' ? '' : basePath), 'https://cesarmoreno.dev').href;
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -47,7 +57,7 @@ const jsonLd = {
       },
       hasOccupation: {
         "@type": "Occupation",
-        name: "Full Stack Engineer",
+        name: "Principal Engineer · AI Systems & Product",
         skills:
           "TypeScript, AI Agents, LLM Orchestration, Multi-Agent Systems, Node.js, React, NestJS, Microservices, PostgreSQL, AWS",
       },
@@ -102,26 +112,29 @@ const jsonLd = {
 };
 ---
 
-<html lang="en">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <ClientRouter />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="keywords" content="Full Stack Engineer, AI Engineer, AI Agents, LLM Orchestration, TypeScript, Node.js, React, NestJS, Microservices, Automation, Multi-Agent Systems" />
+    <meta name="keywords" content="AI Product Engineer, Principal Engineer, AI Systems, LLM Orchestration, Multi-Agent Systems, Product Engineering, TypeScript, Rust, RAG, LATAM" />
     <meta name="author" content="Cesar Moreno" />
     <meta name="robots" content="index, follow" />
     <link rel="canonical" href={canonicalURL.href} />
+    <link rel="alternate" hreflang="en" href={enHref} />
+    <link rel="alternate" hreflang="es" href={esHref} />
+    <link rel="alternate" hreflang="x-default" href={enHref} />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:url" content="https://cesarmoreno.dev" />
+    <meta property="og:locale" content={ogLocale} />
+    <meta property="og:url" content={canonicalURL.href} />
     <meta property="og:title" content={title} />
-    <meta property="og:description" content="Building AI agents that automate complex workflows" />
+    <meta property="og:description" content={description} />
     <meta property="og:site_name" content="Cesar Moreno" />
     <meta property="og:image" content="https://cesarmoreno.dev/og-image.png" />
     <meta property="og:image:width" content="2400" />
@@ -130,7 +143,7 @@ const jsonLd = {
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content="Building AI agents that automate complex workflows" />
+    <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content="https://cesarmoreno.dev/og-image.png" />
 
     <!-- JSON-LD -->
@@ -142,14 +155,14 @@ const jsonLd = {
     <!-- Back to top (mobile) -->
     <button
       id="back-to-top"
-      aria-label="Back to top"
+      aria-label={lang === 'es' ? 'Volver arriba' : 'Back to top'}
       class="fixed bottom-20 left-4 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-accent/15 bg-navy-light/90 text-accent backdrop-blur-sm transition-all duration-300 hover:border-accent/30 hover:bg-accent/10 lg:hidden"
       style="opacity: 0; pointer-events: none; transform: translateY(8px);"
     >
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
     </button>
 
-    <ChatWidget client:idle />
+    <ChatWidget lang={lang} client:idle />
     <Analytics />
     <SpeedInsights />
 

@@ -1,14 +1,33 @@
 import { useEffect, useState } from "react";
 
-const navItems = [
-  { id: "approach", label: "Approach" },
-  { id: "work", label: "Work" },
-  { id: "built", label: "Built with AI" },
-  { id: "experience", label: "Experience" },
-  { id: "contact", label: "Contact" },
-];
+interface NavLabels {
+  approach: string;
+  work: string;
+  built: string;
+  experience: string;
+  contact: string;
+}
 
-export function Navigation() {
+const defaultLabels: NavLabels = {
+  approach: "Approach",
+  work: "Work",
+  built: "Built with AI",
+  experience: "Experience",
+  contact: "Contact",
+};
+
+// Section ids are language-independent — the scroll-spy never depends on labels.
+const SECTION_IDS = ["approach", "work", "built", "experience", "contact"] as const;
+
+export function Navigation({ labels = defaultLabels }: { labels?: NavLabels }) {
+  const navItems = [
+    { id: "approach", label: labels.approach },
+    { id: "work", label: labels.work },
+    { id: "built", label: labels.built },
+    { id: "experience", label: labels.experience },
+    { id: "contact", label: labels.contact },
+  ];
+
   const [activeSection, setActiveSection] = useState("approach");
 
   useEffect(() => {
@@ -23,8 +42,8 @@ export function Navigation() {
       // scroll, así que con un offset chico nunca alcanzarían el top y no se
       // marcarían. Esto las marca de forma robusta sin importar su tamaño.
       const offset = Math.round(windowHeight * 0.35);
-      let current = navItems[0].id;
-      for (const { id } of navItems) {
+      let current: string = SECTION_IDS[0];
+      for (const id of SECTION_IDS) {
         const el = document.getElementById(id);
         if (el && el.getBoundingClientRect().top <= offset) {
           current = id;
@@ -34,7 +53,7 @@ export function Navigation() {
       // En el fondo absoluto, la última sección (Contact) no tiene runway
       // para cruzar el offset — márcala explícitamente.
       if (scrollY + windowHeight >= documentHeight - 4) {
-        current = navItems[navItems.length - 1].id;
+        current = SECTION_IDS[SECTION_IDS.length - 1];
       }
 
       setActiveSection(current);

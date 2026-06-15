@@ -1,10 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <defs>
-    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#64ffda"/>
-      <stop offset="100%" stop-color="#a78bfa"/>
-    </linearGradient>
-  </defs>
-  <rect width="32" height="32" rx="6" fill="#0a192f"/>
-  <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui" font-weight="700" font-size="18" fill="url(#g)">CM</text>
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="64" height="64" rx="16" fill="#0B1020"/>
+  <path d="M43.5 17.5C39.6 13.8 34.1 12 28.4 12.6C18.2 13.6 10.5 21.9 10.5 32C10.5 42.1 18.2 50.4 28.4 51.4C34.1 52 39.6 50.2 43.5 46.5" stroke="#F8FAFC" stroke-width="7.5" stroke-linecap="round"/>
+  <path d="M27 24L38 32L27 40" stroke="#38D996" stroke-width="4.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="27" cy="24" r="3.4" fill="#7DD3FC"/>
+  <circle cx="38" cy="32" r="3.8" fill="#38D996"/>
+  <circle cx="27" cy="40" r="3.4" fill="#7DD3FC"/>
 </svg>

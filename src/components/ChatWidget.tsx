@@ -2,6 +2,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 
 // --- B1: Streaming Refactor ---
 
+type Lang = "en" | "es";
+
 interface Message {
   role: "user" | "assistant";
   content: string;
@@ -13,15 +15,13 @@ interface StreamResponseOptions {
   onChunk: (accumulatedText: string) => void;
   onError: (errorMessage: string) => void;
   onDone: () => void;
+  errorMessage: string;
+  connectionError: string;
 }
 
-const ERROR_MESSAGE =
-  "Something went wrong. You can reach Cesar directly on LinkedIn (linkedin.com/in/morenodev).";
-const CONNECTION_ERROR =
-  "Connection error. You can reach Cesar directly on LinkedIn (linkedin.com/in/morenodev).";
-
 async function streamResponse(options: StreamResponseOptions): Promise<void> {
-  const { url, body, onChunk, onError, onDone } = options;
+  const { url, body, onChunk, onError, onDone, errorMessage, connectionError } =
+    options;
   try {
     const response = await fetch(url, {
       method: "POST",
@@ -31,7 +31,7 @@ async function streamResponse(options: StreamResponseOptions): Promise<void> {
 
     if (!response.ok) {
       const error = await response.json();
-      onError(error.error || ERROR_MESSAGE);
+      onError(error.error || errorMessage);
       return;
     }
 
@@ -69,7 +69,7 @@ async function streamResponse(options: StreamResponseOptions): Promise<void> {
 
     onDone();
   } catch {
-    onError(CONNECTION_ERROR);
+    onError(connectionError);
   }
 }
 
@@ -89,107 +89,260 @@ function simpleHash(str: string): string {
 const STORAGE_KEY = `chat_messages_v${CHAT_VERSION}_${simpleHash("app-profile-chat")}`;
 const VERSION_KEY = `chat_version`;
 
-const WELCOME_MESSAGE =
-  "Hi! I'm Cesar's AI assistant. Ask me about his experience, tech stack, availability, or anything else. I'm here to help!";
-
-const SUGGESTIONS = [
-  "What's his AI and LLM experience?",
-  "Is he available for new opportunities?",
-  "Can he lead engineering teams?",
-  "What technologies does he use daily?",
-  "Tell me about his most impactful project",
-  "Does he work with US timezone clients?",
-];
-
 interface FollowUpCategory {
   id: string;
   keywords: string[];
   followUps: string[];
 }
 
-const FOLLOW_UP_MAP: FollowUpCategory[] = [
-  {
-    id: "ai",
-    keywords: ["ai", "llm", "machine learning", "ml", "gpt", "model", "agent", "prompt", "token"],
-    followUps: [
-      "What AI tools has he built in production?",
-      "Does he fine-tune models or use APIs?",
-      "What's his approach to AI architecture?",
-      "How does he handle token cost optimization?",
-      "What's his experience with multi-agent systems?",
-      "Has he built RAG or retrieval-augmented systems?",
-    ],
-  },
-  {
-    id: "availability",
-    keywords: ["available", "opportunities", "hire", "hiring", "freelance", "contract", "open to"],
-    followUps: [
-      "What type of roles interest him?",
-      "What's his preferred engagement model?",
-      "Can he start on short notice?",
-      "Does he prefer full-time or contract work?",
-      "What's his expected compensation range?",
-      "Is he open to relocating?",
-    ],
-  },
-  {
-    id: "leadership",
-    keywords: ["lead", "team", "manage", "engineering manager", "cto", "architect", "mentor"],
-    followUps: [
-      "How large were the teams he's led?",
-      "What's his leadership philosophy?",
-      "Has he scaled engineering orgs?",
-      "How does he mentor junior developers?",
-      "What's his approach to cross-functional collaboration?",
-      "Has he managed remote/distributed teams?",
-    ],
-  },
-  {
-    id: "stack",
-    keywords: ["technologies", "stack", "tools", "languages", "framework", "typescript", "react", "node"],
-    followUps: [
-      "What cloud platforms does he use?",
-      "Does he have DevOps experience?",
-      "What databases has he worked with?",
-      "What testing frameworks does he prefer?",
-      "How does he approach frontend architecture?",
-      "What's his backend stack of choice?",
-    ],
-  },
-  {
-    id: "projects",
-    keywords: ["project", "impactful", "built", "product", "work", "portfolio", "github"],
-    followUps: [
-      "What metrics did the project achieve?",
-      "What was his specific role in the project?",
-      "How did he handle production challenges?",
-      "What open source projects has he published?",
-      "Tell me about his most complex architecture",
-      "How does he approach performance optimization?",
-    ],
-  },
-  {
-    id: "remote",
-    keywords: ["timezone", "remote", "us", "collaborate", "communication", "latam", "distributed"],
-    followUps: [
-      "What collaboration tools does he use?",
-      "Has he worked with distributed teams?",
-      "What's his availability for meetings?",
-      "How does he handle async communication?",
-      "What's his experience with US-based clients?",
-      "How does he manage across time zones?",
-    ],
-  },
-];
+interface ChatStrings {
+  header: string;
+  notice: string;
+  welcome: string;
+  placeholder: string;
+  errorMessage: string;
+  connectionError: string;
+  aria: {
+    openChat: string;
+    closeChat: string;
+    dialog: string;
+    typeMessage: string;
+    sendMessage: string;
+  };
+  suggestions: string[];
+  followUpMap: FollowUpCategory[];
+  closingSuggestions: string[];
+}
 
-const CLOSING_SUGGESTIONS = [
-  "How can I get in touch with him?",
-  "Can I see his GitHub profile?",
-  "Want to connect on LinkedIn?",
-  "What makes him stand out from other candidates?",
-  "Any red flags or areas of concern?",
-  "Give me a summary of his strengths",
-];
+// Keywords are intentionally NOT translated — topic detection runs over the
+// English LLM responses regardless of UI locale.
+const FOLLOW_UP_KEYWORDS: Record<string, string[]> = {
+  ai: ["ai", "llm", "machine learning", "ml", "gpt", "model", "agent", "prompt", "token"],
+  availability: ["available", "opportunities", "hire", "hiring", "freelance", "contract", "open to"],
+  leadership: ["lead", "team", "manage", "engineering manager", "cto", "architect", "mentor"],
+  stack: ["technologies", "stack", "tools", "languages", "framework", "typescript", "react", "node"],
+  projects: ["project", "impactful", "built", "product", "work", "portfolio", "github"],
+  remote: ["timezone", "remote", "us", "collaborate", "communication", "latam", "distributed"],
+};
+
+const CHAT_I18N: Record<Lang, ChatStrings> = {
+  en: {
+    header: "Ask about Cesar",
+    notice: "Replies in English for now",
+    welcome:
+      "Hi! I'm Cesar's AI assistant. Ask me about his experience, tech stack, availability, or anything else. I'm here to help!",
+    placeholder: "Ask something...",
+    errorMessage:
+      "Something went wrong. You can reach Cesar directly on LinkedIn (linkedin.com/in/morenodev).",
+    connectionError:
+      "Connection error. You can reach Cesar directly on LinkedIn (linkedin.com/in/morenodev).",
+    aria: {
+      openChat: "Open chat",
+      closeChat: "Close chat",
+      dialog: "Chat with Cesar's AI assistant",
+      typeMessage: "Type your message",
+      sendMessage: "Send message",
+    },
+    suggestions: [
+      "What's his AI and LLM experience?",
+      "Is he available for new opportunities?",
+      "Can he lead engineering teams?",
+      "What technologies does he use daily?",
+      "Tell me about his most impactful project",
+      "Does he work with US timezone clients?",
+    ],
+    followUpMap: [
+      {
+        id: "ai",
+        keywords: FOLLOW_UP_KEYWORDS.ai,
+        followUps: [
+          "What AI tools has he built in production?",
+          "Does he fine-tune models or use APIs?",
+          "What's his approach to AI architecture?",
+          "How does he handle token cost optimization?",
+          "What's his experience with multi-agent systems?",
+          "Has he built RAG or retrieval-augmented systems?",
+        ],
+      },
+      {
+        id: "availability",
+        keywords: FOLLOW_UP_KEYWORDS.availability,
+        followUps: [
+          "What type of roles interest him?",
+          "What's his preferred engagement model?",
+          "Can he start on short notice?",
+          "Does he prefer full-time or contract work?",
+          "What's his expected compensation range?",
+          "Is he open to relocating?",
+        ],
+      },
+      {
+        id: "leadership",
+        keywords: FOLLOW_UP_KEYWORDS.leadership,
+        followUps: [
+          "How large were the teams he's led?",
+          "What's his leadership philosophy?",
+          "Has he scaled engineering orgs?",
+          "How does he mentor junior developers?",
+          "What's his approach to cross-functional collaboration?",
+          "Has he managed remote/distributed teams?",
+        ],
+      },
+      {
+        id: "stack",
+        keywords: FOLLOW_UP_KEYWORDS.stack,
+        followUps: [
+          "What cloud platforms does he use?",
+          "Does he have DevOps experience?",
+          "What databases has he worked with?",
+          "What testing frameworks does he prefer?",
+          "How does he approach frontend architecture?",
+          "What's his backend stack of choice?",
+        ],
+      },
+      {
+        id: "projects",
+        keywords: FOLLOW_UP_KEYWORDS.projects,
+        followUps: [
+          "What metrics did the project achieve?",
+          "What was his specific role in the project?",
+          "How did he handle production challenges?",
+          "What open source projects has he published?",
+          "Tell me about his most complex architecture",
+          "How does he approach performance optimization?",
+        ],
+      },
+      {
+        id: "remote",
+        keywords: FOLLOW_UP_KEYWORDS.remote,
+        followUps: [
+          "What collaboration tools does he use?",
+          "Has he worked with distributed teams?",
+          "What's his availability for meetings?",
+          "How does he handle async communication?",
+          "What's his experience with US-based clients?",
+          "How does he manage across time zones?",
+        ],
+      },
+    ],
+    closingSuggestions: [
+      "How can I get in touch with him?",
+      "Can I see his GitHub profile?",
+      "Want to connect on LinkedIn?",
+      "What makes him stand out from other candidates?",
+      "Any red flags or areas of concern?",
+      "Give me a summary of his strengths",
+    ],
+  },
+  es: {
+    header: "Pregúntame sobre Cesar",
+    notice: "Por ahora respondo en inglés",
+    welcome:
+      "¡Hola! Soy el asistente de IA de Cesar. Pregúntame sobre su experiencia, su stack, su disponibilidad o lo que necesites saber. ¡Con gusto te ayudo!",
+    placeholder: "Escribe tu pregunta...",
+    errorMessage:
+      "Algo salió mal. Puedes contactar a Cesar directamente en LinkedIn (linkedin.com/in/morenodev).",
+    connectionError:
+      "Error de conexión. Puedes contactar a Cesar directamente en LinkedIn (linkedin.com/in/morenodev).",
+    aria: {
+      openChat: "Abrir chat",
+      closeChat: "Cerrar chat",
+      dialog: "Chat con el asistente de IA de Cesar",
+      typeMessage: "Escribe tu mensaje",
+      sendMessage: "Enviar mensaje",
+    },
+    suggestions: [
+      "¿Cuál es su experiencia con IA y LLM?",
+      "¿Está disponible para nuevas oportunidades?",
+      "¿Puede liderar equipos de ingeniería?",
+      "¿Qué tecnologías usa a diario?",
+      "Cuéntame sobre su proyecto de mayor impacto",
+      "¿Trabaja con clientes en la zona horaria de EE. UU.?",
+    ],
+    followUpMap: [
+      {
+        id: "ai",
+        keywords: FOLLOW_UP_KEYWORDS.ai,
+        followUps: [
+          "¿Qué herramientas de IA ha construido en producción?",
+          "¿Hace fine-tuning de modelos o usa APIs?",
+          "¿Cuál es su enfoque para la arquitectura de IA?",
+          "¿Cómo maneja la optimización del costo de tokens?",
+          "¿Cuál es su experiencia con sistemas multiagente?",
+          "¿Ha construido sistemas RAG o de recuperación aumentada?",
+        ],
+      },
+      {
+        id: "availability",
+        keywords: FOLLOW_UP_KEYWORDS.availability,
+        followUps: [
+          "¿Qué tipo de roles le interesan?",
+          "¿Cuál es su modelo de colaboración preferido?",
+          "¿Puede empezar con poca anticipación?",
+          "¿Prefiere trabajo de tiempo completo o por contrato?",
+          "¿Cuál es su rango de compensación esperado?",
+          "¿Está abierto a reubicarse?",
+        ],
+      },
+      {
+        id: "leadership",
+        keywords: FOLLOW_UP_KEYWORDS.leadership,
+        followUps: [
+          "¿Qué tan grandes fueron los equipos que ha liderado?",
+          "¿Cuál es su filosofía de liderazgo?",
+          "¿Ha escalado organizaciones de ingeniería?",
+          "¿Cómo mentorea a desarrolladores junior?",
+          "¿Cuál es su enfoque para la colaboración entre equipos?",
+          "¿Ha gestionado equipos remotos o distribuidos?",
+        ],
+      },
+      {
+        id: "stack",
+        keywords: FOLLOW_UP_KEYWORDS.stack,
+        followUps: [
+          "¿Qué plataformas en la nube usa?",
+          "¿Tiene experiencia en DevOps?",
+          "¿Con qué bases de datos ha trabajado?",
+          "¿Qué frameworks de testing prefiere?",
+          "¿Cómo aborda la arquitectura de frontend?",
+          "¿Cuál es su stack de backend preferido?",
+        ],
+      },
+      {
+        id: "projects",
+        keywords: FOLLOW_UP_KEYWORDS.projects,
+        followUps: [
+          "¿Qué métricas logró el proyecto?",
+          "¿Cuál fue su rol específico en el proyecto?",
+          "¿Cómo manejó los retos de producción?",
+          "¿Qué proyectos de código abierto ha publicado?",
+          "Cuéntame sobre su arquitectura más compleja",
+          "¿Cómo aborda la optimización de rendimiento?",
+        ],
+      },
+      {
+        id: "remote",
+        keywords: FOLLOW_UP_KEYWORDS.remote,
+        followUps: [
+          "¿Qué herramientas de colaboración usa?",
+          "¿Ha trabajado con equipos distribuidos?",
+          "¿Cuál es su disponibilidad para reuniones?",
+          "¿Cómo maneja la comunicación asíncrona?",
+          "¿Cuál es su experiencia con clientes de EE. UU.?",
+          "¿Cómo se coordina entre zonas horarias?",
+        ],
+      },
+    ],
+    closingSuggestions: [
+      "¿Cómo puedo ponerme en contacto con él?",
+      "¿Puedo ver su perfil de GitHub?",
+      "¿Quieres conectar en LinkedIn?",
+      "¿Qué lo distingue de otros candidatos?",
+      "¿Hay algún punto de atención o preocupación?",
+      "Dame un resumen de sus fortalezas",
+    ],
+  },
+};
 
 const COVERED_TOPICS_KEY = "chat_covered_topics";
 
@@ -210,9 +363,9 @@ function saveCoveredTopics(topics: Set<string>): void {
   }
 }
 
-function detectTopics(text: string): string[] {
+function detectTopics(text: string, followUpMap: FollowUpCategory[]): string[] {
   const lower = text.toLowerCase();
-  return FOLLOW_UP_MAP
+  return followUpMap
     .filter((cat) => cat.keywords.some((kw) => lower.includes(kw)))
     .map((cat) => cat.id);
 }
@@ -226,22 +379,23 @@ function shuffleArray<T>(arr: T[]): T[] {
   return shuffled;
 }
 
-function getFollowUps(messages: Message[]): string[] {
+function getFollowUps(messages: Message[], strings: ChatStrings): string[] {
+  const { followUpMap, closingSuggestions } = strings;
   const covered = loadCoveredTopics();
 
   // Track topics from entire conversation
   for (const msg of messages) {
-    const topics = detectTopics(msg.content);
+    const topics = detectTopics(msg.content, followUpMap);
     topics.forEach((t) => covered.add(t));
   }
   saveCoveredTopics(covered);
 
   // Find uncovered categories and pick random follow-ups from them
-  const uncovered = FOLLOW_UP_MAP.filter((cat) => !covered.has(cat.id));
+  const uncovered = followUpMap.filter((cat) => !covered.has(cat.id));
 
   if (uncovered.length === 0) {
     // All topics covered — show closing/action suggestions
-    return shuffleArray(CLOSING_SUGGESTIONS).slice(0, 3);
+    return shuffleArray(closingSuggestions).slice(0, 3);
   }
 
   // Pick follow-ups from uncovered categories, randomized
@@ -251,7 +405,12 @@ function getFollowUps(messages: Message[]): string[] {
 
 // --- Component ---
 
-export function ChatWidget() {
+interface ChatWidgetProps {
+  lang?: Lang;
+}
+
+export function ChatWidget({ lang = "en" }: ChatWidgetProps) {
+  const t = CHAT_I18N[lang] ?? CHAT_I18N.en;
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -373,6 +532,8 @@ export function ChatWidget() {
       streamResponse({
         url: "/api/chat",
         body: { message: messageText, history: history.slice(-6) },
+        errorMessage: t.errorMessage,
+        connectionError: t.connectionError,
         onChunk: (accumulatedText) => {
           setMessages((prev) => {
             const updated = [...prev];
@@ -398,14 +559,14 @@ export function ChatWidget() {
           setIsLoading(false);
           // Show context-aware follow-up suggestions
           setMessages((prev) => {
-            setFollowUps(getFollowUps(prev));
+            setFollowUps(getFollowUps(prev, t));
             setShowFollowUps(true);
             return prev;
           });
         },
       });
     },
-    []
+    [t]
   );
 
   const sendMessage = useCallback(() => {
@@ -431,7 +592,7 @@ export function ChatWidget() {
       <button
         ref={openButtonRef}
         onClick={() => setIsOpen(true)}
-        aria-label="Open chat"
+        aria-label={t.aria.openChat}
         style={{
           position: "fixed",
           bottom: "24px",
@@ -506,7 +667,7 @@ export function ChatWidget() {
         ref={chatPanelRef}
         className="chat-panel"
         role="dialog"
-        aria-label="Chat with Cesar's AI assistant"
+        aria-label={t.aria.dialog}
         style={{
           position: "fixed",
           bottom: "0",
@@ -547,12 +708,13 @@ export function ChatWidget() {
                 borderRadius: "50%",
                 background: "#64ffda",
                 animation: "pulse-dot 2s ease-in-out infinite",
+                flexShrink: 0,
               }}
             />
             <span
               style={{ color: "#e6f1ff", fontSize: "14px", fontWeight: 600 }}
             >
-              Ask about Cesar
+              {t.header}
             </span>
           </div>
           <button
@@ -562,7 +724,7 @@ export function ChatWidget() {
               setIsOpen(false);
               setTimeout(() => openButtonRef.current?.focus(), 0);
             }}
-            aria-label="Close chat"
+            aria-label={t.aria.closeChat}
             style={{
               background: "none",
               border: "none",
@@ -627,7 +789,7 @@ export function ChatWidget() {
                     lineHeight: "1.5",
                   }}
                 >
-                  {WELCOME_MESSAGE}
+                  {t.welcome}
                 </div>
               </div>
 
@@ -640,7 +802,7 @@ export function ChatWidget() {
                   padding: "4px 0",
                 }}
               >
-                {SUGGESTIONS.map((suggestion) => (
+                {t.suggestions.map((suggestion) => (
                   <button
                     key={suggestion}
                     onClick={() => {
@@ -804,10 +966,10 @@ export function ChatWidget() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask something..."
+            placeholder={t.placeholder}
             maxLength={500}
             disabled={isLoading}
-            aria-label="Type your message"
+            aria-label={t.aria.typeMessage}
             style={{
               flex: 1,
               background: "rgba(17, 34, 64, 0.5)",
@@ -833,7 +995,7 @@ export function ChatWidget() {
             ref={sendButtonRef}
             onClick={sendMessage}
             disabled={isLoading || !input.trim()}
-            aria-label="Send message"
+            aria-label={t.aria.sendMessage}
             style={{
               background:
                 isLoading || !input.trim()
