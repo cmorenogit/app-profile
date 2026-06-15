@@ -3,6 +3,7 @@ import { DemoShell } from "./DemoShell";
 import { useDevice } from "./useDevice";
 import { useMobileDetect } from "./useMobileDetect";
 import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
 // Linear interpolation resampling from sourceRate to targetRate.
 // OfflineAudioContext fails below 44100Hz on Safari, so we use manual resampling.
@@ -28,7 +29,7 @@ function resampleLinear(
   return output;
 }
 
-export function WhisperDemo() {
+export function WhisperDemo({ t = playgroundStrings.en }: { t?: PlaygroundStrings }) {
   const mobileInfo = useMobileDetect();
   const { device } = useDevice();
   const [transcript, setTranscript] = useState("");
@@ -55,14 +56,15 @@ export function WhisperDemo() {
     const example = PRERECORDED_RESULTS.whisper[0];
     return (
       <DemoShell
-        title="Speech-to-Text"
-        howItWorks="OpenAI's Whisper model runs entirely in your browser. On iOS, we show a pre-computed example due to Safari memory limitations with autoregressive models."
+        title={t.demos.whisper.title}
+        howItWorks={t.whisper.howItWorksIOS}
         modelName="whisper-tiny.en"
         isLoading={false}
         isFallback={true}
-        fallbackReason="Whisper's autoregressive decoder exceeds iOS Safari memory limits"
+        fallbackReason={t.whisper.fallbackReasonIOS}
         modelSizeMB={40}
         device={device}
+        t={t.shell}
       >
         <div style={{
           padding: "20px",
@@ -71,7 +73,7 @@ export function WhisperDemo() {
           background: "rgba(100, 255, 218, 0.05)",
         }}>
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "4px" }}>
-            Example: {example.input.label}
+            {t.whisper.exampleLabel} {example.input.label}
           </span>
           <span style={{ color: "#8892b0", fontSize: "11px", display: "block", marginBottom: "12px", fontStyle: "italic" }}>
             {example.input.value}
@@ -82,7 +84,7 @@ export function WhisperDemo() {
             style={{ width: "100%", maxWidth: "100%", boxSizing: "border-box", height: "36px", marginBottom: "12px" }}
           />
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-            Transcript
+            {t.whisper.transcript}
           </span>
           <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
             {example.output.text}
@@ -157,7 +159,7 @@ export function WhisperDemo() {
       const stateChangeHandler = () => {
         if (audioContext.state === "interrupted" || audioContext.state === "suspended") {
           audioContext.resume().catch(() => {
-            setError("Audio interrupted. Recording stopped — processing available audio.");
+            setError(t.whisper.errors.interrupted);
           });
         }
       };
@@ -189,11 +191,11 @@ export function WhisperDemo() {
     } catch (err) {
       const msg = (err as Error).message || "";
       if (msg.includes("Permission denied") || msg.includes("NotAllowedError")) {
-        setError("Microphone access denied. Please allow microphone permissions and try again.");
+        setError(t.whisper.errors.micDenied);
       } else if (msg.includes("NotFoundError")) {
-        setError("No microphone found. Please connect a microphone.");
+        setError(t.whisper.errors.micNotFound);
       } else {
-        setError("Could not access microphone. Please check your browser permissions.");
+        setError(t.whisper.errors.micGeneric);
       }
     }
   };
@@ -231,7 +233,7 @@ export function WhisperDemo() {
     // Merge audio buffers into a single Float32Array
     const buffers = audioBuffersRef.current;
     if (buffers.length === 0) {
-      setError("No audio recorded. Try holding the Record button longer.");
+      setError(t.whisper.errors.noAudio);
       return;
     }
 
@@ -278,10 +280,10 @@ export function WhisperDemo() {
         ...(isIOS ? { max_new_tokens: 64, chunk_length_s: 15 } : {}),
       });
       const text = (output as { text: string }).text?.trim();
-      setTranscript(text || "No speech detected. Try speaking louder or closer to the microphone.");
+      setTranscript(text || t.whisper.noSpeech);
     } catch (err) {
       console.error("Transcription error:", err);
-      setTranscript("Error transcribing audio. Try again with a clearer recording.");
+      setTranscript(t.whisper.errorTranscribing);
     }
     setIsLoading(false);
   };
@@ -302,10 +304,10 @@ export function WhisperDemo() {
       const output = await pipe(url, {
         ...(isIOS ? { max_new_tokens: 64, chunk_length_s: 15 } : {}),
       });
-      setTranscript((output as { text: string }).text || "Could not transcribe audio.");
+      setTranscript((output as { text: string }).text || t.whisper.couldNotTranscribe);
     } catch (err) {
       console.error("Transcription error:", err);
-      setTranscript("Error transcribing. Try again.");
+      setTranscript(t.whisper.errorTranscribingShort);
     }
     setIsLoading(false);
   };
@@ -314,12 +316,13 @@ export function WhisperDemo() {
 
   return (
     <DemoShell
-      title="Speech-to-Text"
-      howItWorks="OpenAI's Whisper model runs entirely in your browser. Record from your microphone or try an example — audio is transcribed locally without sending data to any server."
+      title={t.demos.whisper.title}
+      howItWorks={t.whisper.howItWorks}
       modelName="whisper-tiny.en"
       isLoading={isModelLoading}
-      loadingText="Loading Whisper model... (first time takes ~15s, ~40MB download)"
+      loadingText={t.whisper.loadingText}
       device={device}
+      t={t.shell}
     >
       {/* Example button */}
       <div style={{ marginBottom: "16px" }}>
@@ -340,7 +343,7 @@ export function WhisperDemo() {
           onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.25)")}
           onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.1)")}
         >
-          Try example: JFK speech clip
+          {t.whisper.tryExample}
         </button>
       </div>
 
@@ -379,7 +382,7 @@ export function WhisperDemo() {
                 display: "inline-block",
                 flexShrink: 0,
               }} />
-              Stop Recording
+              {t.whisper.stopRecording}
             </>
           ) : (
             <>
@@ -391,7 +394,7 @@ export function WhisperDemo() {
                 display: "inline-block",
                 flexShrink: 0,
               }} />
-              Record
+              {t.whisper.record}
             </>
           )}
         </button>
@@ -415,8 +418,8 @@ export function WhisperDemo() {
               flexShrink: 0,
             }} />
             {isMobile
-              ? `Recording... ${recordingSeconds}s / 30s`
-              : "Recording... (click Stop when done)"}
+              ? t.whisper.recordingMobile(recordingSeconds)
+              : t.whisper.recordingDesktop}
             <style>{`@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }`}</style>
           </div>
         )}
@@ -455,7 +458,7 @@ export function WhisperDemo() {
             animation: "spin 0.8s linear infinite",
             flexShrink: 0,
           }} />
-          <span style={{ color: "#a8b2d1", fontSize: "13px" }}>Transcribing audio...</span>
+          <span style={{ color: "#a8b2d1", fontSize: "13px" }}>{t.whisper.transcribing}</span>
           <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
         </div>
       )}
@@ -469,7 +472,7 @@ export function WhisperDemo() {
           background: "rgba(100, 255, 218, 0.05)",
         }}>
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-            Transcript
+            {t.whisper.transcript}
           </span>
           <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
             {transcript}

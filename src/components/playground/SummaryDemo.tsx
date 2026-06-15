@@ -3,10 +3,11 @@ import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
 import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
 const EXAMPLE_TEXT = `Artificial intelligence has transformed the software industry in fundamental ways. What once required teams of specialized engineers working for months can now be accomplished in days with the help of AI-powered tools. Code generation, automated testing, and intelligent debugging have become standard practices. However, the most significant impact has been in how developers think about problem-solving — shifting from writing every line manually to orchestrating AI agents that handle repetitive tasks while humans focus on architecture and creative decisions.`;
 
-export function SummaryDemo() {
+export function SummaryDemo({ t = playgroundStrings.en }: { t?: PlaygroundStrings }) {
   const [input, setInput] = useState("");
   const [summary, setSummary] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -27,10 +28,10 @@ export function SummaryDemo() {
       const pipe = await loadModel();
       if (!pipe) return;
       const output = await pipe(value, { max_new_tokens: 80, min_length: 10 });
-      setSummary((output as any)[0]?.summary_text || "Could not generate summary.");
+      setSummary((output as any)[0]?.summary_text || t.summary.couldNotGenerate);
     } catch (err) {
       console.error("Summary error:", err);
-      setSummary("Error generating summary. Try a longer text.");
+      setSummary(t.summary.errorGenerating);
     }
     setIsLoading(false);
   };
@@ -41,13 +42,14 @@ export function SummaryDemo() {
   if (status === "fallback") {
     return (
       <DemoShell
-        title="Text Summary"
-        howItWorks="A DistilBART model reads your text and generates a concise summary capturing the key points. Requires at least 15 words of input. Runs entirely in your browser."
+        title={t.demos.summary.title}
+        howItWorks={t.summary.howItWorks}
         modelName="distilbart-cnn-6-6"
         isLoading={false}
         isFallback={true}
-        fallbackReason="This model (305MB) is too large for your device"
+        fallbackReason={t.summary.fallbackReason}
         modelSizeMB={305}
+        t={t.shell}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {PRERECORDED_RESULTS.summary.map((r, i) => (
@@ -67,7 +69,7 @@ export function SummaryDemo() {
                 &quot;{r.input.value}&quot;
               </p>
               <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-                Summary
+                {t.summary.summary}
               </span>
               <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
                 {r.output.summary_text}
@@ -81,15 +83,16 @@ export function SummaryDemo() {
 
   return (
     <DemoShell
-      title="Text Summary"
-      howItWorks="A DistilBART model reads your text and generates a concise summary capturing the key points. Requires at least 15 words of input. Runs entirely in your browser."
+      title={t.demos.summary.title}
+      howItWorks={t.summary.howItWorks}
       modelName="distilbart-cnn-6-6"
       isLoading={isModelLoading}
-      loadingText="Loading summarization model... (first time takes ~15s)"
+      loadingText={t.summary.loadingText}
       progress={progress}
       loadedBytes={loadedBytes}
       totalBytes={totalBytes}
       modelSizeMB={305}
+      t={t.shell}
     >
       {/* Example */}
       <div style={{ marginBottom: "16px" }}>
@@ -109,7 +112,7 @@ export function SummaryDemo() {
           onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.25)")}
           onMouseLeave={(e) => (e.currentTarget.style.borderColor = "rgba(100, 255, 218, 0.1)")}
         >
-          Try example: AI impact on software development
+          {t.summary.tryExample}
         </button>
       </div>
 
@@ -117,7 +120,7 @@ export function SummaryDemo() {
       <textarea
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste a paragraph (at least 15 words) to summarize..."
+        placeholder={t.summary.placeholder}
         maxLength={2000}
         rows={5}
         style={{
@@ -141,7 +144,7 @@ export function SummaryDemo() {
 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
         <span style={{ color: tooShort ? "#ff6b6b" : "#8892b0", fontSize: "12px" }}>
-          {wordCount} words {tooShort && "— need at least 15"}
+          {wordCount} {t.summary.words} {tooShort && t.summary.needAtLeast}
         </span>
       </div>
 
@@ -161,7 +164,7 @@ export function SummaryDemo() {
           marginBottom: "16px",
         }}
       >
-        {isLoading ? "Summarizing..." : "Summarize"}
+        {isLoading ? t.summary.summarizing : t.summary.summarize}
       </button>
 
       {/* Result */}
@@ -173,7 +176,7 @@ export function SummaryDemo() {
           background: "rgba(100, 255, 218, 0.05)",
         }}>
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-            Summary
+            {t.summary.summary}
           </span>
           <p style={{ color: "#e6f1ff", fontSize: "15px", lineHeight: 1.6, margin: 0 }}>
             {summary}

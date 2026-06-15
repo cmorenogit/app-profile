@@ -3,6 +3,7 @@ import { DemoShell } from "./DemoShell";
 import { usePipelineManager } from "./usePipelineManager";
 import { useMobileDetect } from "./useMobileDetect";
 import { PRERECORDED_RESULTS } from "../../data/prerecorded-results";
+import { playgroundStrings, type PlaygroundStrings } from "../../i18n/playground";
 
 interface ChunkResult {
   text: string;
@@ -36,7 +37,7 @@ function cosineSimilarity(a: number[], b: number[]): number {
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-export function RAGDemo() {
+export function RAGDemo({ t = playgroundStrings.en }: { t?: PlaygroundStrings }) {
   const [input, setInput] = useState("");
   const [results, setResults] = useState<ChunkResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -103,13 +104,14 @@ export function RAGDemo() {
   if (status === "fallback") {
     return (
       <DemoShell
-        title="RAG Explorer"
-        howItWorks="Your query is converted to a vector embedding, then compared against pre-embedded portfolio chunks using cosine similarity. The most relevant chunks surface as results. Everything runs in your browser — no server involved."
+        title={t.demos.rag.title}
+        howItWorks={t.rag.howItWorks}
         modelName="all-MiniLM-L6-v2"
         isLoading={false}
         isFallback={true}
-        fallbackReason="This model (23MB) is too large for your device"
+        fallbackReason={t.rag.fallbackReason}
         modelSizeMB={23}
+        t={t.shell}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {PRERECORDED_RESULTS.rag.map((r, i) => (
@@ -123,7 +125,7 @@ export function RAGDemo() {
               }}
             >
               <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-                Query: &quot;{r.input.value}&quot;
+                {t.rag.queryPrefix}&quot;{r.input.value}&quot;
               </span>
               <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
                 {(r.output.results as { text: string; score: number }[]).map((chunk, j) => (
@@ -142,7 +144,7 @@ export function RAGDemo() {
                         fontSize: "11px",
                         fontFamily: "'Geist Mono', monospace",
                       }}>
-                        #{j + 1} — similarity: {(chunk.score * 100).toFixed(1)}%
+                        #{j + 1} — {t.rag.similarity} {(chunk.score * 100).toFixed(1)}%
                       </span>
                       <div style={{
                         width: "60px",
@@ -181,20 +183,21 @@ export function RAGDemo() {
 
   return (
     <DemoShell
-      title="RAG Explorer"
-      howItWorks="Your query is converted to a vector embedding, then compared against pre-embedded portfolio chunks using cosine similarity. The most relevant chunks surface as results. Everything runs in your browser — no server involved."
+      title={t.demos.rag.title}
+      howItWorks={t.rag.howItWorks}
       modelName="all-MiniLM-L6-v2"
       isLoading={isModelLoading}
-      loadingText="Loading embedding model + indexing portfolio... (first time takes ~10s)"
+      loadingText={t.rag.loadingText}
       progress={progress}
       loadedBytes={loadedBytes}
       totalBytes={totalBytes}
       modelSizeMB={23}
+      t={t.shell}
     >
       {/* Examples */}
       <div style={{ marginBottom: "16px" }}>
         <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "8px" }}>
-          Try a query:
+          {t.rag.tryQuery}
         </span>
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           {EXAMPLES.map((ex, i) => (
@@ -228,7 +231,7 @@ export function RAGDemo() {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && search()}
-          placeholder="Ask anything about Cesar's portfolio..."
+          placeholder={t.rag.placeholder}
           maxLength={200}
           style={{
             flex: 1,
@@ -261,7 +264,7 @@ export function RAGDemo() {
             whiteSpace: "nowrap",
           }}
         >
-          {isLoading ? "Searching..." : "Search"}
+          {isLoading ? t.rag.searching : t.rag.search}
         </button>
       </div>
 
@@ -285,7 +288,7 @@ export function RAGDemo() {
             animation: "spin 0.8s linear infinite",
           }} />
           <span style={{ color: "#a8b2d1", fontSize: "13px" }}>
-            Computing embeddings and searching...
+            {t.rag.computing}
           </span>
           <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
         </div>
@@ -301,7 +304,7 @@ export function RAGDemo() {
           marginBottom: "16px",
         }}>
           <span style={{ color: "#a78bfa", fontSize: "11px", fontFamily: "'Geist Mono', monospace", display: "block", marginBottom: "6px" }}>
-            Query embedding (first 20 of 384 dimensions):
+            {t.rag.embeddingPreview}
           </span>
           <div style={{ display: "flex", gap: "2px", flexWrap: "wrap" }}>
             {queryEmbeddingPreview.map((v, i) => (
@@ -337,7 +340,7 @@ export function RAGDemo() {
           }}
         >
           <span style={{ color: "#8892b0", fontSize: "12px", display: "block", marginBottom: "12px" }}>
-            Top matching chunks (by cosine similarity)
+            {t.rag.topChunks}
           </span>
           <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
             {results.map((r, i) => (
@@ -356,7 +359,7 @@ export function RAGDemo() {
                     fontSize: "11px",
                     fontFamily: "'Geist Mono', monospace",
                   }}>
-                    #{i + 1} — similarity: {(r.similarity * 100).toFixed(1)}%
+                    #{i + 1} — {t.rag.similarity} {(r.similarity * 100).toFixed(1)}%
                   </span>
                   {/* Similarity bar */}
                   <div style={{
