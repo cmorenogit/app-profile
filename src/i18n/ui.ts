@@ -112,18 +112,18 @@ export const ui = {
     // Meta
     'meta.title': 'Cesar Moreno | Ingeniero Principal · IA y Producto',
     'meta.description':
-      'Ingeniero Principal · IA y Producto. Construyo el producto correcto con IA — y lo llevo a producción rápido. 13 años llevando sistemas a producción.',
+      'Ingeniero Principal · IA y Producto. Construyo el producto correcto con IA y lo llevo a producción rápido. 13 años llevando sistemas a producción.',
     'meta.projects.title': 'Proyectos — Cesar Moreno',
     'meta.projects.description':
-      'Cosas que construí — tooling de IA, herramientas para devs y sistemas en producción.',
+      'Lo que he construido: soluciones de IA, herramientas para desarrolladores y sistemas en producción.',
 
     // Sidebar
-    'sidebar.badge': 'Construyo productos con IA, de punta a punta',
+    'sidebar.badge': 'Construyo productos con IA, de principio a fin',
     'sidebar.role': 'Ingeniero Principal · IA y Producto',
     'sidebar.tagline':
-      'Construyo el producto correcto con IA — y lo llevo a producción rápido',
+      'Construyo el producto correcto con IA y lo llevo a producción rápido',
     'sidebar.description':
-      '13 años de ingeniería senior. Combino criterio de producto real con IA aplicada para construir lo que de verdad mueve tu negocio — y lo entrego rápido.',
+      '13 años de ingeniería senior. Combino criterio de producto real con IA aplicada para construir lo que de verdad mueve tu negocio, y lo entrego rápido.',
     'lang.switch.aria': 'Idioma',
 
     // Navigation
@@ -137,50 +137,50 @@ export const ui = {
     'approach.heading.pre': 'Construyo ',
     'approach.heading.highlight': 'productos con IA',
     'approach.heading.post':
-      ' que mueven tu negocio — no IA que solo impresiona.',
-    'approach.body.pre': 'Casi todos pueden usar IA. Pocos saben ',
+      ' que mueven tu negocio, no IA que solo impresiona.',
+    'approach.body.pre': 'Casi cualquiera puede usar IA. Pocos saben ',
     'approach.body.highlight': 'QUÉ',
     'approach.body.mid':
-      ' producto construir con ella. Cuestiono el requerimiento con datos de uso real, construyo el scope que de verdad importa, y lo entrego en ',
+      ' producto construir con ella. Cuestiono el requerimiento con datos de uso real, construyo el alcance que de verdad importa y lo entrego en ',
     'approach.body.emph': 'semanas, no meses',
     'approach.body.post': '.',
     'approach.pillar1.title': 'Criterio de producto primero',
     'approach.pillar1.body':
-      'No construyo lo que pediste — construyo lo que mueve tu métrica.',
-    'approach.pillar2.title': 'IA de verdad, no hype',
+      'No construyo lo que pediste, construyo lo que mueve tu métrica.',
+    'approach.pillar2.title': 'IA real, sin exageraciones',
     'approach.pillar2.body':
-      'Sistemas multi-agente y orquestación de LLMs en producción. Construyo las herramientas, no solo llamo a una API.',
+      'Sistemas multiagente y orquestación de LLM en producción. Construyo las herramientas, no solo consumo una API.',
     'approach.pillar3.title': 'Entregado, no prototipado',
     'approach.pillar3.body':
-      'El scope justo para tu etapa, diseñado para escalar.',
+      'El alcance justo para tu etapa, diseñado para escalar.',
     'approach.signature':
-      '// el scope justo para tu etapa — diseñado para crecer',
+      '// el alcance justo para tu etapa — diseñado para crecer',
 
     // Selected work
     'work.heading': 'Trabajo seleccionado',
-    'work.subtitle': 'Proyectos reales, entregados de punta a punta.',
+    'work.subtitle': 'Proyectos reales, entregados de principio a fin.',
     'work.ubero.badge': 'diseño → producción · 1 semana',
     'work.ubero.body':
-      'Un mini-CMS a medida para que el cliente gestione su propio catálogo de productos. Costo de mantenimiento cero al inicio, diseñado para escalar a medida que crece. De diseño a producción en una sola semana — y pudo ser más rápido.',
+      'Un mini-CMS a la medida para que el cliente administre su propio catálogo de productos. Costo de mantenimiento cero al inicio, diseñado para escalar conforme crece. De diseño a producción en una sola semana, y pudo ser aún más rápido.',
 
     // Built with AI
     'built.heading': 'Construido con IA',
     'built.subtitle':
-      'Prueba de que domino IA en serio — construyo las herramientas, no solo las uso.',
+      'Prueba de que domino la IA a fondo: construyo las herramientas, no solo las uso.',
     'built.agentes.body':
-      'Un sistema multi-agente que automatiza el code review — agentes de seguridad, performance, calidad y arquitectura corriendo en paralelo, sobre Claude, OpenAI y Gemini.',
+      'Un sistema multiagente que automatiza la revisión de código: agentes de seguridad, rendimiento, calidad y arquitectura ejecutándose en paralelo, sobre Claude, OpenAI y Gemini.',
     'built.contextforge.body':
-      'Un servidor MCP que da memoria semántica persistente a los asistentes de IA de código — búsqueda híbrida (keyword + vectorial), inteligencia de código en 50+ lenguajes, en un único binario Rust.',
+      'Un servidor MCP que da memoria semántica persistente a los asistentes de IA para programar: búsqueda híbrida (por palabra clave y vectorial), inteligencia de código en más de 50 lenguajes, en un solo binario de Rust.',
     'built.statusline.body':
-      'Una statusline en tiempo real para el CLI de Claude Code — uso de contexto, rate limits y estado de git, renderizado en menos de 50ms. Publicada en npm.',
-    'built.playground.title': 'Probá el AI Playground — en vivo en tu navegador',
+      'Una barra de estado en tiempo real para el CLI de Claude Code: uso de contexto, límites de uso y estado de git, renderizada en menos de 50 ms. Publicada en npm.',
+    'built.playground.title': 'Prueba el AI Playground, en vivo en tu navegador',
     'built.playground.body.pre':
-      'Sentiment, RAG, summarización, speech-to-text y modelos de imagen corriendo del lado del cliente. ',
+      'Análisis de sentimiento, RAG, resúmenes, voz a texto y modelos de imagen ejecutándose en el navegador. ',
     'built.playground.body.highlight':
       'El botón de chat de la esquina es uno de ellos.',
     'built.playground.body.post':
-      ' El tipo de feature de IA-producto que integro en productos reales.',
-    'built.playground.cta': 'Probá el playground →',
+      ' El tipo de funcionalidad de IA que integro en productos reales.',
+    'built.playground.cta': 'Prueba el playground →',
     'built.seeAll': 'Ver todos los proyectos →',
 
     // Experience
@@ -189,25 +189,25 @@ export const ui = {
       '13 años llevando software a producción me enseñaron que el código no es el cuello de botella: lo es decidir ',
     'experience.p1.highlight': 'QUÉ',
     'experience.p1.post':
-      ' construir. Mi evolución fue esa — de escribir software a construir con criterio de producto, usando la IA para entregar en una fracción del tiempo.',
+      ' construir. Esa fue mi evolución: de escribir software a construir con criterio de producto, usando la IA para entregar en una fracción del tiempo.',
     'experience.p2.pre': 'Hoy, como ',
     'experience.p2.highlight': 'Ingeniero Principal en Apprecio',
     'experience.p2.post':
-      ', soy referente técnico de una plataforma de rewards en 6 países de LATAM. Antes, liderando producto y datos en una plataforma B2B, aprendí a medir lo que importa: el germen de mirar el software desde el negocio.',
+      ', soy el referente técnico de una plataforma de rewards en 6 países de LATAM. Antes, liderando producto y datos en una plataforma B2B, aprendí a medir lo que importa: el origen de mirar el software desde el negocio.',
 
     // Contact
-    'contact.heading': '¿Tenés algo en mente?',
+    'contact.heading': '¿Tienes algo en mente?',
     'contact.body':
-      'Si estás construyendo algo con IA — o querés hacerlo — escribime un email y contame.',
+      'Si estás construyendo algo con IA, o quieres hacerlo, escríbeme un correo y cuéntame.',
     'contact.subtext':
-      '¿Solo explorando? El chat de la esquina responde lo que sea sobre mi trabajo.',
-    'contact.cta': 'Escribime un email →',
+      '¿Solo estás explorando? El chat de la esquina responde cualquier pregunta sobre mi trabajo.',
+    'contact.cta': 'Escríbeme un correo →',
     'contact.byline': 'Diseñado y construido por Cesar Moreno',
 
     // Projects page
     'projects.back': '← Volver al inicio',
     'projects.heading': 'Proyectos',
     'projects.subtitle':
-      'Cosas que construí — tooling de IA, herramientas para devs y sistemas en producción.',
+      'Lo que he construido: soluciones de IA, herramientas para desarrolladores y sistemas en producción.',
   },
 } as const;
